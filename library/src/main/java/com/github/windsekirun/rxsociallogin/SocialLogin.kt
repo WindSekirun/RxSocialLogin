@@ -88,7 +88,7 @@ abstract class SocialLogin(activity: Activity) {
         @JvmStatic
         fun addType(socialType: SocialType, socialConfig: SocialConfig) {
             if (application == null) {
-                throw RuntimeException("No context is available, please add context by declare SocialLogin.init(this) in Application class")
+                throw RuntimeException("No context is available, please declare SocialLogin.init(this) in Application class")
             }
 
             availableTypeMap[socialType] = socialConfig

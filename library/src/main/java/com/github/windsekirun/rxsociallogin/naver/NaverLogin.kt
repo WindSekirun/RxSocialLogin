@@ -8,6 +8,7 @@ import com.github.windsekirun.rxsociallogin.intenal.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.nhn.android.naverlogin.OAuthLogin
+import com.nhn.android.naverlogin.OAuthLoginDefine
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,6 +28,8 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     override fun onLogin() {
+        OAuthLoginDefine.MARKET_LINK_WORKING = false
+
         val config = getConfig(SocialType.NAVER) as NaverConfig
         authLogin.init(activity, config.authClientId, config.authClientSecret, config.clientName)
         authLogin.startOauthLoginActivity(activity, NaverLoginHandler())
@@ -52,13 +55,11 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
     private inner class NaverLoginHandler : OAuthLoginHandler() {
 
         override fun run(success: Boolean) {
-            if (!success) {
-                responseFail(SocialType.NAVER)
+            if (success) {
+                val accessToken = authLogin.getAccessToken(activity)
+                val authHeader = "Bearer $accessToken"
+                requestProfile(authHeader)
             }
-
-            val accessToken = authLogin.getAccessToken(activity)
-            val authHeader = "Bearer $accessToken"
-            requestProfile(authHeader)
         }
     }
 

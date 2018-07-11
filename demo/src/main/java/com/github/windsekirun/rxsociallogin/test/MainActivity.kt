@@ -8,6 +8,7 @@ import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,6 +17,7 @@ import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 class MainActivity : AppCompatActivity() {
     private lateinit var kakaoLogin: KakaoLogin
     private lateinit var facebookLogin: FacebookLogin
+    private lateinit var naverLogin: NaverLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         kakaoLogin = KakaoLogin(this)
         facebookLogin = FacebookLogin(this)
+        naverLogin = NaverLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -44,19 +47,23 @@ class MainActivity : AppCompatActivity() {
         val facebookDisposable = RxSocialLogin.facebook(facebookLogin)
                 .subscribe(consumer, error)
 
+        val naverDisposable = RxSocialLogin.naver(naverLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
+        compositeDisposable.add(naverDisposable)
 
         btnKakao.setOnClickListener {
-            if (::kakaoLogin.isInitialized) {
-                kakaoLogin.onLogin()
-            }
+            kakaoLogin.onLogin()
         }
 
         btnFacebook.setOnClickListener {
-            if (::facebookLogin.isInitialized) {
-                facebookLogin.onLogin()
-            }
+            facebookLogin.onLogin()
+        }
+
+        btnNaver.setOnClickListener {
+            naverLogin.onLogin()
         }
     }
 
@@ -67,12 +74,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (::kakaoLogin.isInitialized) {
-            kakaoLogin.onActivityResult(requestCode, resultCode, data)
-        }
-
-        if (::facebookLogin.isInitialized) {
-            facebookLogin.onActivityResult(requestCode, resultCode, data)
-        }
+        kakaoLogin.onActivityResult(requestCode, resultCode, data)
+        facebookLogin.onActivityResult(requestCode, resultCode, data)
+        naverLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

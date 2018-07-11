@@ -5,12 +5,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-        <activity
-            android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"
-            android:label="OAuth2.0 In-app" />
+        <!--<activity-->
+            <!--android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
+        <!--<activity-->
+            <!--android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"-->
+            <!--android:label="OAuth2.0 In-app" />-->
 
     </application>
 </manifest>

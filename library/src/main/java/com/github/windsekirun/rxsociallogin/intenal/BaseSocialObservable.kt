@@ -27,7 +27,7 @@ open class BaseSocialObservable<T : SocialLogin>(private val login: T) : Observa
         observer?.onSubscribe(listener)
     }
 
-    private class Listener<T : SocialLogin>(val login: T, val observer: Observer<in LoginResultItem>?) :
+    private class Listener<out T : SocialLogin>(val login: T, val observer: Observer<in LoginResultItem>?) :
             MainThreadDisposable(), OnResponseListener {
 
         override fun onDispose() {
@@ -39,7 +39,7 @@ open class BaseSocialObservable<T : SocialLogin>(private val login: T) : Observa
                 val result = item.result
                 if (result) { //
                     observer?.onNext(item)
-                } else {
+                } else if (!isDisposed) {
                     observer?.onError(LoginFailedException("login failed: ${item.type}"))
                 }
             }

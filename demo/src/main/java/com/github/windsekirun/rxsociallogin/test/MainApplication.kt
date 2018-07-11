@@ -41,7 +41,6 @@ class MainApplication : Application() {
 
         SocialLogin.addType(SocialType.KAKAO, kakaoConfig)
 
-        SocialLogin.init(this)
         val naverConfig = NaverConfig.Builder()
                 .setAuthClientId(getString(R.string.naver_api_id))
                 .setAuthClientSecret(getString(R.string.naver_api_secret))

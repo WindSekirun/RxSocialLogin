@@ -16,11 +16,11 @@ android {
         versionName "1.0"
         resValue "string", "kakao_api_key", properties.getProperty("default.kakao.api", "")
         resValue "string", "facebook_api_key", properties.getProperty("default.facebook.api", "")
-//        resValue "string", "naver_api_id", properties.getProperty("default.naver.id", "")
-//        resValue "string", "naver_api_secret", properties.getProperty("default.naver.secret", "")
-//        resValue "string", "line_api_channel", properties.getProperty("default.line.api", "")
-//        resValue "string", "twitter_api_id", properties.getProperty("default.twitter.api", "")
-//        resValue "string", "twitter_api_secret", properties.getProperty("default.twitter.secret", "")
+        resValue "string", "naver_api_id", properties.getProperty("default.naver.id", "")
+        resValue "string", "naver_api_secret", properties.getProperty("default.naver.secret", "")
+        resValue "string", "line_api_channel", properties.getProperty("default.line.api", "")
+        resValue "string", "twitter_api_id", properties.getProperty("default.twitter.api", "")
+        resValue "string", "twitter_api_secret", properties.getProperty("default.twitter.secret", "")
     }
 
     buildTypes {

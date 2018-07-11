@@ -8,6 +8,8 @@ import com.github.windsekirun.rxsociallogin.intenal.Preconditions
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.RxKakaoLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.naver.NaverLogin
+import com.github.windsekirun.rxsociallogin.naver.RxNaverLogin
 import io.reactivex.Observable
 
 /**
@@ -32,5 +34,12 @@ object RxSocialLogin {
     fun kakao(login: KakaoLogin): Observable<LoginResultItem> {
         Preconditions.checkNotNull(login, "KakaoLogin")
         return RxKakaoLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun naver(login: NaverLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "KakaoLogin")
+        return RxNaverLogin(login)
     }
 }

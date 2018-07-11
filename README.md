@@ -91,7 +91,7 @@ repositories {
 ```
 
 ```
-  implementation 'com.kakao.sdk:usermgmt:1.11.1'
+implementation 'com.kakao.sdk:usermgmt:1.11.1'
 ```
 
 #### AndroidManifest.xml
@@ -115,7 +115,7 @@ SocialLogin.addType(SocialType.KAKAO, kakaoConfig);
 
 #### build.gradle
 ```
-   implementation 'com.facebook.android:facebook-android-sdk:4.23.0'
+implementation 'com.facebook.android:facebook-android-sdk:4.23.0'
 ```
 
 #### AndroidManifest.xml
@@ -143,7 +143,12 @@ SocialLogin.addType(SocialType.FACEBOOK, facebookConfig);
 
 ### Naver
 
-### MainApplication
+#### build.gradle
+```
+implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.0'
+```
+
+#### MainApplication
 ```Java
 SocialLogin.init(this);
 NaverConfig naverConfig = new NaverConfig.Builder()

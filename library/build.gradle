@@ -37,8 +37,6 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // appcompat
-    implementation 'com.android.support:appcompat-v7:27.1.1'
     // RichUtils
     implementation 'com.github.WindSekirun:RichUtilsKt:2.3.1'
     // OKHTTP
@@ -47,6 +45,8 @@ dependencies {
     implementation 'com.kakao.sdk:usermgmt:1.11.1'
     // Facebook SDK
     implementation 'com.facebook.android:facebook-android-sdk:4.33.0'
+    // Naver SDK
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.0'
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
