@@ -4,6 +4,8 @@ import android.support.annotation.CheckResult
 
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.facebook.RxFacebookLogin
+import com.github.windsekirun.rxsociallogin.google.GoogleLogin
+import com.github.windsekirun.rxsociallogin.google.RxGoogleLogin
 import com.github.windsekirun.rxsociallogin.intenal.Preconditions
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.RxKakaoLogin
@@ -12,16 +14,10 @@ import com.github.windsekirun.rxsociallogin.line.RxLineLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.naver.RxNaverLogin
+import com.github.windsekirun.rxsociallogin.twitter.RxTwitterLogin
+import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import io.reactivex.Observable
 
-/**
- * RxSocialLogin
- * Class: RxSocialLogin
- * Created by pyxis on 18. 7. 11.
- *
- *
- * Description:
- */
 object RxSocialLogin {
 
     @CheckResult
@@ -50,5 +46,19 @@ object RxSocialLogin {
     fun line(login: LineLogin): Observable<LoginResultItem> {
         Preconditions.checkNotNull(login, "LineLogin")
         return RxLineLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun twitter(login: TwitterLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "TwitterLogin")
+        return RxTwitterLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun google(login: GoogleLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "GoogleLogin")
+        return RxGoogleLogin(login)
     }
 }

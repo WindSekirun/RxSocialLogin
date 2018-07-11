@@ -53,10 +53,6 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
 
     }
 
-    override fun logout() {
-        logout(false)
-    }
-
     override fun logout(clearToken: Boolean) {
         LoginManager.getInstance().logOut()
     }

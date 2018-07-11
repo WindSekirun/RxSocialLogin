@@ -3,10 +3,12 @@ package com.github.windsekirun.rxsociallogin.test
 import android.app.Application
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
+import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 import com.github.windsekirun.rxsociallogin.line.LineConfig
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
+import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 
 
 /**
@@ -54,7 +56,19 @@ class MainApplication : Application() {
                 .setChannelId(getString(R.string.line_api_channel))
                 .build()
 
-
         SocialLogin.addType(SocialType.LINE, lineConfig)
+
+        val twitterConfig = TwitterConfig.Builder()
+                .setConsumerKey(getString(R.string.twitter_api_id))
+                .setConsumerSecret(getString(R.string.twitter_api_secret))
+                .build()
+
+        SocialLogin.addType(SocialType.TWITTER, twitterConfig)
+
+        val googleConfig = GoogleConfig.Builder()
+                .setRequireEmail()
+                .build()
+
+        SocialLogin.addType(SocialType.GOOGLE, googleConfig)
     }
 }

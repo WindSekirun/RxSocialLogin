@@ -40,10 +40,6 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
         compositeDisposable.clear()
     }
 
-    override fun logout() {
-        logout(false)
-    }
-
     override fun logout(clearToken: Boolean) {
         if (clearToken) {
             OAuthLogin.getInstance().logoutAndDeleteToken(activity)

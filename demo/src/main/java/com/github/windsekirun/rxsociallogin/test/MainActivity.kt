@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
+import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
+import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var facebookLogin: FacebookLogin
     private lateinit var naverLogin: NaverLogin
     private lateinit var lineLogin: LineLogin
+    private lateinit var twitterLogin: TwitterLogin
+    private lateinit var googleLogin: GoogleLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         facebookLogin = FacebookLogin(this)
         naverLogin = NaverLogin(this)
         lineLogin = LineLogin(this)
+        twitterLogin = TwitterLogin(this)
+        googleLogin = GoogleLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -56,10 +62,18 @@ class MainActivity : AppCompatActivity() {
         val lineDisposable = RxSocialLogin.line(lineLogin)
                 .subscribe(consumer, error)
 
+        val twitterDisposable = RxSocialLogin.twitter(twitterLogin)
+                .subscribe(consumer, error)
+
+        val googleDisposable = RxSocialLogin.google(googleLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
         compositeDisposable.add(lineDisposable)
+        compositeDisposable.add(twitterDisposable)
+        compositeDisposable.add(googleDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -78,11 +92,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnTwiitter.setOnClickListener {
-
+            twitterLogin.onLogin()
         }
 
         btnGoogle.setOnClickListener {
-
+            googleLogin.onLogin()
         }
     }
 
@@ -97,5 +111,7 @@ class MainActivity : AppCompatActivity() {
         facebookLogin.onActivityResult(requestCode, resultCode, data)
         naverLogin.onActivityResult(requestCode, resultCode, data)
         lineLogin.onActivityResult(requestCode, resultCode, data)
+        twitterLogin.onActivityResult(requestCode, resultCode, data)
+        googleLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

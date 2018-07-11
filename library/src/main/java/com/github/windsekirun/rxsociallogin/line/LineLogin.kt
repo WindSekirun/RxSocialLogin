@@ -26,14 +26,6 @@ class LineLogin(activity: Activity) : SocialLogin(activity) {
 
     }
 
-    override fun logout() {
-        logout(false)
-    }
-
-    override fun logout(clearToken: Boolean) {
-
-    }
-
     private fun onResultLineLogin(data: Intent?) {
         val result = LineLoginApi.getLoginResultFromIntent(data)
         when (result.responseCode) {

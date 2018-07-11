@@ -10,7 +10,10 @@ import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.kakao.auth.KakaoSDK
+import com.twitter.sdk.android.core.Twitter
+import com.twitter.sdk.android.core.TwitterAuthConfig
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -37,9 +40,10 @@ abstract class SocialLogin(activity: Activity) {
 
     abstract fun onDestroy()
 
-    abstract fun logout()
+    @JvmOverloads
+    open fun logout(clearToken: Boolean = false) {
 
-    abstract fun logout(clearToken: Boolean)
+    }
 
     protected fun responseFail(socialType: SocialType) {
         responseSuccess(LoginResultItem.createFail(socialType))
@@ -88,7 +92,7 @@ abstract class SocialLogin(activity: Activity) {
         @JvmStatic
         fun addType(socialType: SocialType, socialConfig: SocialConfig) {
             if (application == null) {
-                throw RuntimeException("No context is available, please declare SocialLogin.init(this) in Application class")
+                throw RuntimeException("No context is available, please declare SocialLogin.init(this)")
             }
 
             availableTypeMap[socialType] = socialConfig
@@ -114,13 +118,15 @@ abstract class SocialLogin(activity: Activity) {
                 alreadyInitializedList.add(key)
                 when (key) {
                     SocialType.KAKAO -> initializeKakaoSDK()
-//                    SocialType.TWITTER -> initializeTwitterSDK(value as TwitterConfig)
+                    SocialType.TWITTER -> initializeTwitterSDK(value as TwitterConfig)
                     SocialType.FACEBOOK -> initializeFacebookSDK(value as FacebookConfig)
+                    else -> {
+                    }
                 }
             }
         }
 
-        internal fun initializeKakaoSDK() {
+        private fun initializeKakaoSDK() {
             KakaoSDK.init(KakaoSDKAdapter(application!!.applicationContext))
         }
 
@@ -129,17 +135,17 @@ abstract class SocialLogin(activity: Activity) {
             FacebookSdk.sdkInitialize(application)
         }
 
-//        internal fun initializeTwitterSDK(config: TwitterConfig) {
-//            val twitterConfig = com.twitter.sdk.android.core.TwitterConfig.Builder(mContext!!)
-//                    .twitterAuthConfig(TwitterAuthConfig(config.getConsumerKey(), config.getConsumerSecret()))
-//                    .build()
-//
-//            Twitter.initialize(twitterConfig)
-//        }
+        private fun initializeTwitterSDK(config: TwitterConfig) {
+            val twitterConfig = com.twitter.sdk.android.core.TwitterConfig.Builder(application!!)
+                    .twitterAuthConfig(TwitterAuthConfig(config.consumerKey, config.consumerSecret))
+                    .build()
+
+            Twitter.initialize(twitterConfig)
+        }
 
         internal fun getConfig(type: SocialType): SocialConfig {
             if (!availableTypeMap.containsKey(type)) {
-                throw RuntimeException(String.format("No config is available, please add proper config :: SocialType -> %s", type.name))
+                throw RuntimeException(String.format("No config is available :: SocialType -> ${type.name}"))
             }
 
             return availableTypeMap[type]!!

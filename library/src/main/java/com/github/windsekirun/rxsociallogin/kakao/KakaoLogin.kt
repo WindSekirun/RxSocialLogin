@@ -45,10 +45,6 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun logout() {
-        logout(false)
-    }
-
     override fun logout(clearToken: Boolean) {
         checkSession()
 
