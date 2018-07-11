@@ -7,6 +7,7 @@ import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
+import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import io.reactivex.disposables.CompositeDisposable
@@ -18,17 +19,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var kakaoLogin: KakaoLogin
     private lateinit var facebookLogin: FacebookLogin
     private lateinit var naverLogin: NaverLogin
+    private lateinit var lineLogin: LineLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}," + " apiKey: ${getString(R.string.kakao_api_key)}")
+        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
         kakaoLogin = KakaoLogin(this)
         facebookLogin = FacebookLogin(this)
         naverLogin = NaverLogin(this)
+        lineLogin = LineLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -50,9 +53,13 @@ class MainActivity : AppCompatActivity() {
         val naverDisposable = RxSocialLogin.naver(naverLogin)
                 .subscribe(consumer, error)
 
+        val lineDisposable = RxSocialLogin.line(lineLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
+        compositeDisposable.add(lineDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -64,6 +71,18 @@ class MainActivity : AppCompatActivity() {
 
         btnNaver.setOnClickListener {
             naverLogin.onLogin()
+        }
+
+        btnLine.setOnClickListener {
+            lineLogin.onLogin()
+        }
+
+        btnTwiitter.setOnClickListener {
+
+        }
+
+        btnGoogle.setOnClickListener {
+
         }
     }
 
@@ -77,5 +96,6 @@ class MainActivity : AppCompatActivity() {
         kakaoLogin.onActivityResult(requestCode, resultCode, data)
         facebookLogin.onActivityResult(requestCode, resultCode, data)
         naverLogin.onActivityResult(requestCode, resultCode, data)
+        lineLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
+import com.github.windsekirun.rxsociallogin.line.LineConfig
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 
@@ -47,7 +48,13 @@ class MainApplication : Application() {
                 .setClientName(getString(R.string.app_name))
                 .build()
 
-
         SocialLogin.addType(SocialType.NAVER, naverConfig)
+
+        val lineConfig = LineConfig.Builder()
+                .setChannelId(getString(R.string.line_api_channel))
+                .build()
+
+
+        SocialLogin.addType(SocialType.LINE, lineConfig)
     }
 }

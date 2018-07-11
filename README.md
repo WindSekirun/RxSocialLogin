@@ -17,6 +17,9 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 |Facebook|O|id, name, email, profilePicture, gender, firstName|setRequireEmail, setRequireWritePermission, setApplicationId, setRequireFriends, setBehaviorOnCancel, setPictureSize|
 |Kakao|O|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|setRequireEmail, setRequireAgeRange, setRequireBirthday, setRequireGender|
 |Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
+|Line|X|id, name, accessToken|setChannelId|
+|Twitter|X|id, name|setConsumerKey, setConsumerSecret|
+|Google|O|id, name, email, accessToken|setRequireEmail|
 
 ## Usages
 **Warning, this library has pre-released.**
@@ -159,6 +162,59 @@ NaverConfig naverConfig = new NaverConfig.Builder()
 
 
 SocialLogin.addType(SocialType.NAVER, naverConfig);
+```
+
+### LineLogin
+
+#### MainApplication
+```Java
+SocialLogin.init(this);
+LineConfig lineConfig = new LineConfig.Builder()
+                .setChannelId("<YOUR-API-KEY>")
+                .build();
+
+
+SocialLogin.addType(SocialType.LINE, lineConfig);
+```
+
+### Twitter
+
+#### build.gradle
+```
+implementation 'com.twitter.sdk.android:twitter:3.3.0'
+```
+
+#### MainApplication
+```Java
+SocialLogin.init(this);
+TwitterConfig twitterConfig = new TwitterConfig.Builder()
+                .setConsumerKey("<YOUR-API-KEY>")
+                .setConsumerSecret("<YOUR-API-KEY>")
+                .build();
+
+
+SocialLogin.addType(SocialType.TWITTER, twitterConfig);
+```
+
+### Google
+
+#### google-services.json
+put your google-services.json in app module which can get at [Google Sign-in for Android](https://developers.google.com/identity/sign-in/android/start)
+
+#### build.gradle
+```
+implementation 'com.google.android.gms:play-services-auth:15.0.1'
+```
+
+#### MainApplication
+```Java
+SocialLogin.init(this);
+GoogleConfig googleConfig = new GoogleConfig.Builder()
+                .setRequireEmail()
+                .build();
+
+
+SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 ```
 
 ## License

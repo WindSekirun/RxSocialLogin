@@ -2,15 +2,6 @@ package com.github.windsekirun.rxsociallogin.naver
 
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 
-/**
- * SocialLogin
- * Class: TwitterConfig
- * Created by Pyxis on 2017-10-27.
- *
- *
- * Description:
- */
-
 class NaverConfig private constructor(val authClientId: String?, val authClientSecret: String?,
                                       val clientName: String?) : SocialConfig() {
 
