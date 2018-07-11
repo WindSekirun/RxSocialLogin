@@ -1,17 +1,13 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 
-Integrated Social Login feature such as Facebook, Kakao, Naver, Line, Twitter, Google
-
-This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun).
+Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
 ### Difference from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
-- RxJava2 Integrated
-- Written in Kotlin
-- rewrite all methods 
-- change callback object - LoginResultItem
-- no need to call onDestroy()
-- hold ```Activity``` in WeakReference to solve memory leak
-- login with FirebaseAuth in GoogleLogin
+- RxJava2 integrated.
+- CircleCI integrated.
+- Firebase Authentication integrated when use GoogleLogin.
+- Rewrite all methods in Kotlin
+- Hold Context in WeakReference to solve memory leak
 
 ## Available Feature
 |Service|logout|Return Data|Config|
@@ -21,7 +17,7 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 |Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
 |Line|X|id, name, accessToken|setChannelId|
 |Twitter|X|id, name|setConsumerKey, setConsumerSecret|
-|Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail|
+|Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
 
 ## Usages
 **Warning, this library has pre-released.**
@@ -44,9 +40,8 @@ dependencies {
 ```
 
 ## Guide
-It can be copy-paste because each service has same constructure.
 
-### Declare xxxLogin variabnle to use
+### Declare xxxLogin variable to use
 ```java
 private KakaoLogin mKakaoLogin;
 
@@ -75,8 +70,9 @@ RxSocialLogin.kakao(mKakaoLogin)
 ```
 
 #### Limitations
-1. Subscribe and observe should occur on Main Thread. if you try to change thread such as ```Schedulers.io```, it will be call ```onError()```  ```AndroidSchedulers.mainThread()``` will be fine.
+1. Subscribe and observe should occur on Main Thread. if you try to change thread such as ```Schedulers.io``` using ```subscribeOn```, it will be call ```onError()```. instead, ```AndroidSchedulers.mainThread()``` will be fine.
 2. You should use ```subscribe(Consumer onNext, Consumer onError)```, not ```subscribe(Consumer onNext)``` whether you don't need onError callback.
+3. Sometimes it happen 'UndeliverableException'. if you prevent this exception, use ```RxJavaPlugins.setErrorHandler { e -> }``` statement. this methods occur change global error handler of RxJava, please use it only when you know exactly what you are doing. You can see [RxJava2 Wiki](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling)
 
 ### Call login() methods on anywhere
 ```java
@@ -87,6 +83,7 @@ kakaoLogin.onLogin()
 Requirements are different by service.
 
 ### Kakao
+It support v2 of Kakao User API. See [Document](https://developers.kakao.com/docs/android/user-management)
 
 #### build.gradle
 ```
@@ -166,7 +163,7 @@ NaverConfig naverConfig = new NaverConfig.Builder()
 SocialLogin.addType(SocialType.NAVER, naverConfig);
 ```
 
-### LineLogin
+### Line
 
 #### MainApplication
 ```Java
@@ -202,8 +199,8 @@ SocialLogin.addType(SocialType.TWITTER, twitterConfig);
 
 #### Precondition
 1. Connect with Firebase Auth, and put google-services.json to app folder
-2. Go to [Firebase Authorization Provider Setting](https://console.firebase.google.com/u/0/project/rxsociallogin/authentication/providers) and enable Google
-3. Find 'Web Client ID' in Web Section in Google Section in Firebase Authorization Provider Setting.
+2. Go to [Firebase Authentication Provider Setting](https://console.firebase.google.com/u/0/project/rxsociallogin/authentication/providers) and enable Google
+3. Find 'Web Client ID' in Web Section in Google Section in Firebase Authentication Provider Setting.
 4. declare client-id which find in 2 in MainApplication by setClientTokenId
 
 #### build.gradle
