@@ -1,6 +1,6 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 
-Integrated login feature with Social such Facebook, Kakao
+Integrated login feature with Social such Facebook, Kakao, Naver, Line, Twitter, Google
 
 This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by me, but i need Rx- version to use my application. So i divide repository and put same feature into this repository.
 
@@ -10,6 +10,7 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 - change callback object - LoginResultItem
 - no need to call onDestroy()
 - hold ```Activity``` in WeakReference to solve memory leak
+- login with FirebaseAuth in GoogleLogin
 
 ## Available Feature
 |Service|logout|Return Data|Config|
@@ -19,7 +20,7 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 |Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
 |Line|X|id, name, accessToken|setChannelId|
 |Twitter|X|id, name|setConsumerKey, setConsumerSecret|
-|Google|O|id, name, email, accessToken|setRequireEmail|
+|Google|O|id, name, email, profilePicture, |setRequireEmail|
 
 ## Usages
 **Warning, this library has pre-released.**
@@ -198,12 +199,16 @@ SocialLogin.addType(SocialType.TWITTER, twitterConfig);
 
 ### Google
 
-#### google-services.json
-put your google-services.json in app module which can get at [Google Sign-in for Android](https://developers.google.com/identity/sign-in/android/start)
+#### Precondition
+1. Connect with Firebase Auth, and put google-services.json to app folder
+2. Go to [Firebase Authorization Provider Setting](https://console.firebase.google.com/u/0/project/rxsociallogin/authentication/providers) and enable Google
+3. Find 'Web Client ID' in Web Section in Google Section in Firebase Authorization Provider Setting.
+4. declare client-id which find in 2 in MainApplication by setClientTokenId
 
 #### build.gradle
 ```
-implementation 'com.google.android.gms:play-services-auth:15.0.1'
+implementation 'com.google.android.gms:play-services-auth:15.0.0'
+implementation 'com.google.firebase:firebase-auth:15.0.0'
 ```
 
 #### MainApplication
@@ -211,8 +216,8 @@ implementation 'com.google.android.gms:play-services-auth:15.0.1'
 SocialLogin.init(this);
 GoogleConfig googleConfig = new GoogleConfig.Builder()
                 .setRequireEmail()
+                .setClientTokenId("<YOUR-API-KEY>")
                 .build();
-
 
 SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 ```

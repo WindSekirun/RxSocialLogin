@@ -26,6 +26,13 @@ class MainApplication : Application() {
         super.onCreate()
         SocialLogin.init(this)
 
+        val twitterConfig = TwitterConfig.Builder()
+                .setConsumerKey(getString(R.string.twitter_api_id))
+                .setConsumerSecret(getString(R.string.twitter_api_secret))
+                .build()
+
+        SocialLogin.addType(SocialType.TWITTER, twitterConfig)
+
         val facebookConfig = FacebookConfig.Builder()
                 .setApplicationId(getString(R.string.facebook_api_key))
                 .setRequireEmail()
@@ -58,15 +65,9 @@ class MainApplication : Application() {
 
         SocialLogin.addType(SocialType.LINE, lineConfig)
 
-        val twitterConfig = TwitterConfig.Builder()
-                .setConsumerKey(getString(R.string.twitter_api_id))
-                .setConsumerSecret(getString(R.string.twitter_api_secret))
-                .build()
-
-        SocialLogin.addType(SocialType.TWITTER, twitterConfig)
-
         val googleConfig = GoogleConfig.Builder()
                 .setRequireEmail()
+                .setClientTokenId(getString(R.string.server_client_id))
                 .build()
 
         SocialLogin.addType(SocialType.GOOGLE, googleConfig)

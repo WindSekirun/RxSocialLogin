@@ -16,6 +16,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
 import pyxis.uzuki.live.richutilskt.utils.getKeyHash
+import io.reactivex.plugins.RxJavaPlugins
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var kakaoLogin: KakaoLogin
@@ -31,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
+
+        // optional, if you happen 'UndeliverableException', use this methods.
+        // warning, this value is global handler.
+        // you can see wiki at https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
+        RxJavaPlugins.setErrorHandler { e -> }
 
         kakaoLogin = KakaoLogin(this)
         facebookLogin = FacebookLogin(this)
