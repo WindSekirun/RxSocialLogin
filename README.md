@@ -1,10 +1,10 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 
-Integrated login feature with Social such Facebook, Kakao, Naver, Line, Twitter, Google
+Integrated Social Login feature such as Facebook, Kakao, Naver, Line, Twitter, Google
 
-This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by me, but i need Rx- version to use my application. So i divide repository and put same feature into this repository.
+This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun).
 
-### Diff from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
+### Difference from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
 - RxJava2 Integrated
 - Written in Kotlin
 - rewrite all methods 
