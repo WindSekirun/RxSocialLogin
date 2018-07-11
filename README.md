@@ -20,7 +20,7 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 |Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
 |Line|X|id, name, accessToken|setChannelId|
 |Twitter|X|id, name|setConsumerKey, setConsumerSecret|
-|Google|O|id, name, email, profilePicture, |setRequireEmail|
+|Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail|
 
 ## Usages
 **Warning, this library has pre-released.**
