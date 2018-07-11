@@ -1,11 +1,11 @@
 package com.github.windsekirun.rxsociallogin.test
 
 import android.app.Application
-
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
+import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 
 
 /**
@@ -40,5 +40,15 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(SocialType.KAKAO, kakaoConfig)
+
+        SocialLogin.init(this)
+        val naverConfig = NaverConfig.Builder()
+                .setAuthClientId(getString(R.string.naver_api_id))
+                .setAuthClientSecret(getString(R.string.naver_api_secret))
+                .setClientName(getString(R.string.app_name))
+                .build()
+
+
+        SocialLogin.addType(SocialType.NAVER, naverConfig)
     }
 }

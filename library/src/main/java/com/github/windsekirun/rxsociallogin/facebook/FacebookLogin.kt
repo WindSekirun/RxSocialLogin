@@ -39,12 +39,12 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 if (config.isBehaviorOnCancel) {
                     getUserInfo()
                 } else {
-                    responseListener?.onResult(LoginResultItem.createFail(SocialType.FACEBOOK))
+                    responseFail(SocialType.FACEBOOK)
                 }
             }
 
             override fun onError(error: FacebookException) {
-                responseListener?.onResult(LoginResultItem.createFail(SocialType.FACEBOOK))
+                responseFail(SocialType.FACEBOOK)
             }
         })
     }
@@ -66,6 +66,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
             if (obj == null) {
+                responseFail(SocialType.FACEBOOK)
                 return@GraphJSONObjectCallback
             }
 
@@ -83,7 +84,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 this.result = true
             }
 
-            responseListener?.onResult(item)
+            responseSuccess(item)
         }
 
         var originField = "id, name, email, gender, birthday, first_name, "

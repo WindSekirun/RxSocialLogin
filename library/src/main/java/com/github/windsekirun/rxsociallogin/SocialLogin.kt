@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
+import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.kakao.auth.KakaoSDK
@@ -39,6 +40,14 @@ abstract class SocialLogin(activity: Activity) {
     abstract fun logout()
 
     abstract fun logout(clearToken: Boolean)
+
+    protected fun responseFail(socialType: SocialType) {
+        responseSuccess(LoginResultItem.createFail(socialType))
+    }
+
+    protected fun responseSuccess(loginResultItem: LoginResultItem) {
+        responseListener?.onResult(loginResultItem)
+    }
 
     companion object {
         private var availableTypeMap: MutableMap<SocialType, SocialConfig> = HashMap()

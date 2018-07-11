@@ -75,7 +75,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
             val message = exception?.message ?: ""
             Log.d("SessionCallback", "OpenFailed:: $message")
 
-            responseListener?.onResult(LoginResultItem.createFail(SocialType.KAKAO))
+            responseFail(SocialType.KAKAO)
         }
     }
 
@@ -84,7 +84,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
 
         UserManagement.getInstance().me(config.requestOptions, object : MeV2ResponseCallback() {
             override fun onSessionClosed(errorResult: ErrorResult) {
-                responseListener?.onResult(LoginResultItem.createFail(SocialType.KAKAO))
+                responseFail(SocialType.KAKAO)
             }
 
             override fun onSuccess(result: MeV2Response) {
@@ -133,7 +133,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
                     this.type = SocialType.KAKAO
                 }
 
-                responseListener?.onResult(item)
+                responseSuccess(item)
             }
         })
     }

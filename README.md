@@ -16,6 +16,7 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 |---|---|---|---|
 |Facebook|O|id, name, email, profilePicture, gender, firstName|setRequireEmail, setRequireWritePermission, setApplicationId, setRequireFriends, setBehaviorOnCancel, setPictureSize|
 |Kakao|O|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|setRequireEmail, setRequireAgeRange, setRequireBirthday, setRequireGender|
+|Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
 
 ## Usages
 **Warning, this library has pre-released.**
@@ -138,6 +139,21 @@ FacebookConfig facebookConfig = new FacebookConfig.Builder()
 
 
 SocialLogin.addType(SocialType.FACEBOOK, facebookConfig);
+```
+
+### Naver
+
+### MainApplication
+```Java
+SocialLogin.init(this);
+NaverConfig naverConfig = new NaverConfig.Builder()
+                .setAuthClientId("YOUR-API-KEY")
+                .setAuthClientSecret("YOUR-API-KEY")
+                .setClientName(getString(R.string.app_name))
+                .build();
+
+
+SocialLogin.addType(SocialType.NAVER, naverConfig);
 ```
 
 ## License
