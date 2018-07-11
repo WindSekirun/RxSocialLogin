@@ -7,6 +7,7 @@ This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLo
 ### Diff from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
 - RxJava2 Integrated
 - Written in Kotlin
+- rewrite all methods 
 - change callback object - LoginResultItem
 - no need to call onDestroy()
 - hold ```Activity``` in WeakReference to solve memory leak
