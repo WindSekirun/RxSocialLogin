@@ -4,7 +4,7 @@ Integrated login feature with Social such Facebook, Kakao, Naver, Line, Twitter,
 
 This is enhance version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by me, but i need Rx- version to use my application. So i divide repository and put same feature into this repository.
 
-##### Diff from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
+### Diff from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
 - RxJava2 Integrated
 - Written in Kotlin
 - change callback object - LoginResultItem
@@ -221,6 +221,10 @@ GoogleConfig googleConfig = new GoogleConfig.Builder()
 
 SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 ```
+
+## Sample
+- [MainActivity.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainActivity.kt)
+- [MainApplication.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt)
 
 ## License
 ```
