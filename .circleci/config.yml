@@ -14,6 +14,9 @@ jobs:
       - run :
           name: chmod
           command: chmod +x gradlew
+      - run :
+          name: touch local.properties
+          command: touch local.properties
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
       - run:
