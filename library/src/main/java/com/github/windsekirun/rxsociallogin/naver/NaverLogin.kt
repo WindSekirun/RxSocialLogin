@@ -10,7 +10,7 @@ import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginDefine
 import com.nhn.android.naverlogin.OAuthLoginHandler
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -20,6 +20,7 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class NaverLogin(activity: Activity) : SocialLogin(activity) {
     private val compositeDisposable = CompositeDisposable()
+    private val requestUrl = "https://openapi.naver.com/v1/nid/me"
 
     private val authLogin = OAuthLogin.getInstance()
 
@@ -64,10 +65,9 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     private fun requestProfile(authHeader: String) {
-        val disposable = Observable.just("https://openapi.naver.com/v1/nid/me")
-                .subscribeOn(Schedulers.io())
+        val disposable = requestUrl.toRequest(authHeader)
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map { OkHttpHelper[it, authHeader] }
                 .subscribe({
                     val jsonObject = it.createJSONObject()
                     val responseObject = getJSONObject(jsonObject, "response")
@@ -86,6 +86,8 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
                         this.age = responseObject.getJSONString("age")
                         this.birthday = responseObject.getJSONString("birthday")
                         this.profilePicture = responseObject.getJSONString("profile_image")
+                        this.type = SocialType.NAVER
+                        this.result = true
                     }
 
                     responseSuccess(item)
@@ -94,5 +96,9 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
                 }
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun String.toRequest(authorization: String): Single<String> {
+        return OkHttpHelper.get(this, authorization)
     }
 }
