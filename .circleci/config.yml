@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/BindAdapters
+    working_directory: ~/RxSocialLogin
     docker:
       - image: circleci/android:api-26-alpha
     environment:
