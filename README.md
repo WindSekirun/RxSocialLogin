@@ -2,6 +2,8 @@
 
 Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
+이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
+
 ### Difference from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
 - RxJava2 integrated.
 - CircleCI integrated.
