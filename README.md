@@ -20,7 +20,6 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google] w
 |Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
 
 ## Usages
-**Warning, this library has pre-released.**
 
 *rootProject/build.gradle*
 ```
