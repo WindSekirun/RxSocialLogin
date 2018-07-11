@@ -11,6 +11,9 @@ jobs:
       - run :
           name: display directory
           command: ls -la
+      - run :
+          name: chmod
+          command: chmod +x gradlew
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
       - run:
