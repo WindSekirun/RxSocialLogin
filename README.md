@@ -200,10 +200,12 @@ SocialLogin.addType(SocialType.TWITTER, twitterConfig);
 ### Google
 
 #### Precondition
-1. Connect with Firebase Auth, and put google-services.json to app folder
-2. Go to [Firebase Authentication Provider Setting](https://console.firebase.google.com/u/0/project/rxsociallogin/authentication/providers) and enable Google
-3. Find 'Web Client ID' in Web Section in Google Section in Firebase Authentication Provider Setting.
-4. declare client-id which find in 2 in MainApplication by setClientTokenId
+1. Configure API Project in [here](https://developers.google.com/identity/sign-in/android/start-integrating)
+2. In AS 3.1, enter 'Firebase' and click 'Authentication' and click 'Connect to Firebase' and 'Add Firebase Authentication to your app'
+ -  in this step, you will save your 'google-services.json' in your app module directory.
+3. Enable Google as authentication provider in Firebase Console
+4. Find 'Web Client ID' in Firebase console. you can find this information in sub-section of authentication provider.
+5. Provide your 'Web Client ID' into GoogleConfig.setClientTokenId()
 
 #### build.gradle
 ```
