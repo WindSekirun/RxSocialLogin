@@ -218,7 +218,7 @@ implementation 'com.google.firebase:firebase-auth:15.0.0'
 SocialLogin.init(this);
 GoogleConfig googleConfig = new GoogleConfig.Builder()
                 .setRequireEmail()
-                .setClientTokenId("<YOUR-API-KEY>")
+                .setClientTokenId("<YOUR-WEB-CLIENT-ID>")
                 .build();
 
 SocialLogin.addType(SocialType.GOOGLE, googleConfig);
