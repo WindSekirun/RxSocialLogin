@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         naverLogin = NaverLogin(this)
         lineLogin = LineLogin(this)
         twitterLogin = TwitterLogin(this)
-        googleLogin = GoogleLogin(this)
+//        googleLogin = GoogleLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -72,15 +72,15 @@ class MainActivity : AppCompatActivity() {
         val twitterDisposable = RxSocialLogin.twitter(twitterLogin)
                 .subscribe(consumer, error)
 
-        val googleDisposable = RxSocialLogin.google(googleLogin)
-                .subscribe(consumer, error)
+//        val googleDisposable = RxSocialLogin.google(googleLogin)
+//                .subscribe(consumer, error)
 
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
         compositeDisposable.add(lineDisposable)
         compositeDisposable.add(twitterDisposable)
-        compositeDisposable.add(googleDisposable)
+//        compositeDisposable.add(googleDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnGoogle.setOnClickListener {
-            googleLogin.onLogin()
+//            googleLogin.onLogin()
         }
     }
 
@@ -119,6 +119,6 @@ class MainActivity : AppCompatActivity() {
         naverLogin.onActivityResult(requestCode, resultCode, data)
         lineLogin.onActivityResult(requestCode, resultCode, data)
         twitterLogin.onActivityResult(requestCode, resultCode, data)
-        googleLogin.onActivityResult(requestCode, resultCode, data)
+//        googleLogin.onActivityResult(requestCode, resultCode, data)
     }
 }
