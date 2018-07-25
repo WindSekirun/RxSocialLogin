@@ -1,3 +1,12 @@
+## appcompat
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
 ## OKHttp
 -dontwarn javax.annotation.**
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
@@ -42,19 +51,19 @@
 -dontwarn com.facebook.**
 
 ## Twitter
--dontwarn com.squareup.okhttp.**
--dontwarn com.google.appengine.api.urlfetch.**
--dontwarn rx.**
--dontwarn retrofit.**
--keepnames class com.twitter.sdk.android.core.identity.TwitterAuthClient
 -keepattributes *Annotation*
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--keep class retrofit.** { *; }
+-dontwarn java.nio.file.**
+-dontwarn org.codehaus.mojo.animal_sniffer.**
+-dontwarn javax.annotation.*
+-dontwarn javax.annotation.concurrent.*
+-dontnote retrofit2.Platform
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
 -keepclasseswithmembers class * {
-    @retrofit.http.* <methods>;
+  @retrofit2.http.* <methods>;
 }
--dontwarn com.twitter.**
 
 # Don't note a bunch of dynamically referenced classes
 -dontnote com.google.**
