@@ -228,9 +228,16 @@ SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 - [MainActivity.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainActivity.kt)
 - [MainApplication.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt)
 
+## Proguard
+
+**Warning, I can't verify this proguard rule is operate successful. I'm waiting your feedback**
+
+for usages with Proguard, please apply [these rules](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) according [issue #2](https://github.com/WindSekirun/RxSocialLogin/issues/2). 
+
+
 ## License
 ```
-Copyright 2017 WindSekirun (DongGil, Seo)
+Copyright 2017 - 2018 WindSekirun (DongGil, Seo)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
