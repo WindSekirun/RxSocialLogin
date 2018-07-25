@@ -1,9 +1,14 @@
 ## OKHttp
-
 -dontwarn javax.annotation.**
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 -dontwarn org.codehaus.mojo.animal_sniffer.*
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+-dontwarn okhttp3.internal.platform.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 ## Kakao
 -keep class com.kakao.** { *; }
@@ -64,3 +69,10 @@
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -keepattributes Exceptions
+
+## line
+-keep class com.linecorp.**
+-dontwarn com.linecorp.**
+
+## RichutilsKt
+-dontwarn pyxis.uzuki.live.richutilskt.**
