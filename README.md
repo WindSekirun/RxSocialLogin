@@ -237,9 +237,7 @@ SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 
 ## Proguard
 
-**Warning, I can't verify this proguard rule is operate successful. I'm waiting your feedback**
-
-for usages with Proguard, please apply [these rules](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) according [issue #2](https://github.com/WindSekirun/RxSocialLogin/issues/2). 
+For usages with Proguard, please apply [these rules](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) according [issue #2](https://github.com/WindSekirun/RxSocialLogin/issues/2). 
 
 
 ## License
