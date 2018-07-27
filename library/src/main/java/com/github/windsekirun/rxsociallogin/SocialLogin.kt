@@ -126,6 +126,14 @@ abstract class SocialLogin(activity: Activity) {
             }
         }
 
+        fun getConfig(type: SocialType): SocialConfig {
+            if (!availableTypeMap.containsKey(type)) {
+                throw RuntimeException(String.format("No config is available :: SocialType -> ${type.name}"))
+            }
+
+            return availableTypeMap[type]!!
+        }
+
         private fun initializeKakaoSDK() {
             KakaoSDK.init(KakaoSDKAdapter(application!!.applicationContext))
         }
@@ -141,14 +149,6 @@ abstract class SocialLogin(activity: Activity) {
                     .build()
 
             Twitter.initialize(twitterConfig)
-        }
-
-        internal fun getConfig(type: SocialType): SocialConfig {
-            if (!availableTypeMap.containsKey(type)) {
-                throw RuntimeException(String.format("No config is available :: SocialType -> ${type.name}"))
-            }
-
-            return availableTypeMap[type]!!
         }
 
         private fun clear() {

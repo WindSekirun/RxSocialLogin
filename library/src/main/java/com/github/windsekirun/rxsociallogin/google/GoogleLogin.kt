@@ -87,9 +87,8 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity as Activity) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
+                .addOnCompleteListener(activity as Activity) {
+                    if (it.isSuccessful) {
                         val user = firebaseAuth.currentUser
                         handleSignInResult(user)
                     } else {

@@ -9,10 +9,10 @@ import java.io.IOException
 object OkHttpHelper {
     private val client = OkHttpClient()
 
-    private fun getResponse(url: String, authorization: String): String {
+    private fun getResponse(url: String, key: String, value: String): String {
         val request = Request.Builder()
+                .addHeader(key, value)
                 .url(url)
-                .addHeader("Authorization", authorization)
                 .build()
 
         try {
@@ -25,7 +25,7 @@ object OkHttpHelper {
     }
 
     @JvmStatic
-    fun get(url: String, authorization: String): Single<String> {
-        return Single.create { it.onSuccess(OkHttpHelper.getResponse(url, authorization)) }
+    fun get(url: String, key: String, value: String): Single<String> {
+        return Single.create { it.onSuccess(OkHttpHelper.getResponse(url, key, value)) }
     }
 }

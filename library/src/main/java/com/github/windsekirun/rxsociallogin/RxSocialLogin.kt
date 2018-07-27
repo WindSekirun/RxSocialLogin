@@ -4,6 +4,8 @@ import android.support.annotation.CheckResult
 
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.facebook.RxFacebookLogin
+import com.github.windsekirun.rxsociallogin.github.GithubLogin
+import com.github.windsekirun.rxsociallogin.github.RxGithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.google.RxGoogleLogin
 import com.github.windsekirun.rxsociallogin.intenal.Preconditions
@@ -60,5 +62,12 @@ object RxSocialLogin {
     fun google(login: GoogleLogin): Observable<LoginResultItem> {
         Preconditions.checkNotNull(login, "GoogleLogin")
         return RxGoogleLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun github(login: GithubLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "GithubLogin")
+        return RxGithubLogin(login)
     }
 }
