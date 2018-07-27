@@ -1,10 +1,9 @@
 package com.github.windsekirun.rxsociallogin.google
 
-import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.signInWithCredential
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,12 +12,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import io.reactivex.disposables.Disposable
 
 class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     private val mGoogleApiClient: GoogleApiClient
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private lateinit var disposable: Disposable
 
     init {
         val googleConfig = getConfig(SocialType.GOOGLE) as GoogleConfig
@@ -41,11 +41,9 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
         if (requestCode == REQUEST_CODE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 authWithFirebase(account)
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
                 responseFail(SocialType.GOOGLE)
             }
         }
@@ -58,43 +56,19 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     }
 
     override fun onDestroy() {
-
+        if (::disposable.isInitialized && !disposable.isDisposed) {
+            disposable.dispose()
+        }
     }
 
     override fun logout(clearToken: Boolean) {
         if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
     }
 
-    private fun handleSignInResult(user: FirebaseUser?) {
-        if (user == null) {
-            responseFail(SocialType.GOOGLE)
-            return
-        }
-
-        val item = LoginResultItem().apply {
-            this.name = user.displayName ?: ""
-            this.email = user.email ?: ""
-            this.profilePicture = user.photoUrl?.toString() ?: ""
-            this.id = user.uid
-            this.emailVerified = user.isEmailVerified
-            this.result = true
-            this.type = SocialType.GOOGLE
-        }
-
-        responseSuccess(item)
-    }
-
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity as Activity) {
-                    if (it.isSuccessful) {
-                        val user = firebaseAuth.currentUser
-                        handleSignInResult(user)
-                    } else {
-                        responseFail(SocialType.GOOGLE)
-                    }
-                }
+        disposable = auth.signInWithCredential(credential, activity, SocialType.GOOGLE)
+                .subscribe({ responseSuccess(it) }, {})
     }
 
     companion object {
