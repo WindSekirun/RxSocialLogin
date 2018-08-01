@@ -1,7 +1,7 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
 
-Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
+Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github, LinkedIn] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
 이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
 
@@ -11,6 +11,8 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 - Firebase Authentication integrated when use GoogleLogin.
 - Rewrite all methods in Kotlin
 - Hold Context in WeakReference to solve memory leak
+- Available to login with Github using Firebase Authentication
+- Available to login with LinkedIn using OAuth2
 
 ## Available Feature
 |Service|logout|Return Data|Config|
@@ -22,7 +24,7 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 |Twitter|X|id, name|setConsumerKey, setConsumerSecret|
 |Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
 |Github|O|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setScopeList, setClearCookies, setActivityTitle|
-|LinkedIn|X|id, name, email, profilePicture, firstName||
+|LinkedIn|X|id, name, email, profilePicture, firstName|setRequireEmail, setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
 
 ## Usages
 
@@ -266,11 +268,19 @@ SocialLogin.addType(SocialType.GITHUB, githubConfig);
 
 ### LinkedIn (Since 1.0)
 
+#### Precondition
+1. Register new application in [LinkedIn apps](https://www.linkedin.com/developer/apps)
+2. Provide your Client ID and Client Secret into LinkedinConfig.setClientId() and LinkedinConfig.setClientSecret()
+3. Make sure redirectUri has same value between LinkedIn apps and LinkedinConfig.
+
 #### MainApplication
 ```Java
 LinkedinConfig linkedinConfig = new LinkedinConfig.Builder()
                 .setClientId(getString(R.string.linkedin_api_key))
                 .setClientSecret(getString(R.string.linkedin_api_secret))
+                .setRequireEmail()
+                .setClearCookies(true)
+                .setRedirectUri("http://example.com/oauth/callback")
                 .build();
 
 SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig);
