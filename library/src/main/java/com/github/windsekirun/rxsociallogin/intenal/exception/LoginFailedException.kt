@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.intenal
+package com.github.windsekirun.rxsociallogin.intenal.exception
 
 /**
  * RxSocialLogin

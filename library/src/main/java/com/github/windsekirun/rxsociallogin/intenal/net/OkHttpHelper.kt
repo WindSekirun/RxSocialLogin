@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.intenal
+package com.github.windsekirun.rxsociallogin.intenal.net
 
 import android.util.Log
 import io.reactivex.Single
@@ -51,12 +51,12 @@ object OkHttpHelper {
 
     @JvmStatic
     fun get(url: String, header: Pair<String, String>): Single<String> {
-        return Single.create { it.onSuccess(OkHttpHelper.requestGet(url, header)) }
+        return Single.create { it.onSuccess(requestGet(url, header)) }
     }
 
     @JvmStatic
     fun post(url: String, header: Pair<String, String>,
              formBody: Array<out Pair<String, String>>): Single<String> {
-        return Single.create { it.onSuccess(OkHttpHelper.requestPost(url, header, formBody)) }
+        return Single.create { it.onSuccess(requestPost(url, header, formBody)) }
     }
 }

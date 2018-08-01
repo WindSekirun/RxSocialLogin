@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
-import com.github.windsekirun.rxsociallogin.intenal.BaseSocialObservable
+import com.github.windsekirun.rxsociallogin.intenal.rx.BaseSocialObservable
 
 /**
  * RxSocialLogin

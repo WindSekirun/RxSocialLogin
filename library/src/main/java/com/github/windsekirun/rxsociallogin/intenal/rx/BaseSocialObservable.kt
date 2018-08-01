@@ -1,7 +1,9 @@
-package com.github.windsekirun.rxsociallogin.intenal
+package com.github.windsekirun.rxsociallogin.intenal.rx
 
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.impl.OnResponseListener
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
+import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import io.reactivex.Observable
 import io.reactivex.Observer

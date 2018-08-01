@@ -3,7 +3,8 @@ package com.github.windsekirun.rxsociallogin.github
 import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.signInWithCredential
+import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
+import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
@@ -17,7 +18,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == GithubOAuthConstants.GITHUB_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(GithubOAuthConstants.RESPONSE_JSON) ?: "{}"
+            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
             responseFail(SocialType.GITHUB)

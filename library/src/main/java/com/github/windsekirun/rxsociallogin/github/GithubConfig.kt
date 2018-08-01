@@ -20,6 +20,7 @@ class GithubConfig(val clientId: String, val clientSecret: String, val scopeList
         private var clearCookies: Boolean = false
         private var activityTitle: String = "Login to Github"
 
+
         fun setClientId(clientId: String): Builder {
             this.clientId = clientId
             return this
@@ -49,6 +50,7 @@ class GithubConfig(val clientId: String, val clientSecret: String, val scopeList
             this.activityTitle = activityTitle
             return this
         }
+
 
         fun build(): GithubConfig {
             return GithubConfig(clientId, clientSecret, scopeList, clearCookies, activityTitle)

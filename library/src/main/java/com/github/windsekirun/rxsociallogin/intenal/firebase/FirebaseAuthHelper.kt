@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.intenal
+package com.github.windsekirun.rxsociallogin.intenal.firebase
 
 import android.app.Activity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem

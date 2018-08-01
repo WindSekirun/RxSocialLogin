@@ -8,7 +8,7 @@ import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.github.RxGithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.google.RxGoogleLogin
-import com.github.windsekirun.rxsociallogin.intenal.Preconditions
+import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.RxKakaoLogin
 import com.github.windsekirun.rxsociallogin.line.LineLogin

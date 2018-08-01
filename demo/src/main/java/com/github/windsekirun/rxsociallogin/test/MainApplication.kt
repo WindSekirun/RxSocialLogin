@@ -83,6 +83,9 @@ class MainApplication : Application() {
         SocialLogin.addType(SocialType.GITHUB, githubConfig)
 
         val linkedinConfig = LinkedinConfig.Builder()
+                .setClearCookies(false)
+                .setRedirectUri("http://example.com/oauth/callback")
+                .setRequireEmail()
                 .setClientId(getString(R.string.linkedin_api_key))
                 .setClientSecret(getString(R.string.linkedin_api_secret))
                 .build()

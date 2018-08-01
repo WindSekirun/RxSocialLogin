@@ -10,5 +10,9 @@
             android:name=".github.GithubOAuthActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
+        <activity
+            android:name=".linkedin.LinkedInOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
     </application>
 </manifest>

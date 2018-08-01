@@ -3,7 +3,7 @@ package com.github.windsekirun.rxsociallogin.google
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.signInWithCredential
+import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn

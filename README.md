@@ -22,6 +22,7 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 |Twitter|X|id, name|setConsumerKey, setConsumerSecret|
 |Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
 |Github|O|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setScopeList, setClearCookies, setActivityTitle|
+|LinkedIn|X|id, name, email, profilePicture, firstName||
 
 ## Usages
 
@@ -265,7 +266,15 @@ SocialLogin.addType(SocialType.GITHUB, githubConfig);
 
 ### LinkedIn (Since 1.0)
 
+#### MainApplication
+```Java
+LinkedinConfig linkedinConfig = new LinkedinConfig.Builder()
+                .setClientId(getString(R.string.linkedin_api_key))
+                .setClientSecret(getString(R.string.linkedin_api_secret))
+                .build();
 
+SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig);
+```
 
 ## Sample
 - [MainActivity.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainActivity.kt)
