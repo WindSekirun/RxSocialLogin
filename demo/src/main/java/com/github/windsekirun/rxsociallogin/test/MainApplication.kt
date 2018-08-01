@@ -12,6 +12,7 @@ import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressConfig
+import com.github.windsekirun.rxsociallogin.yahoo.YahooConfig
 
 
 /**
@@ -101,5 +102,14 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(SocialType.WORDPRESS, wordpressConfig)
+
+        val yahooConfig = YahooConfig.Builder()
+                .setClientId(getString(R.string.yahoo_api_key))
+                .setClientSecret(getString(R.string.yahoo_api_secret))
+                .setClearCookies(true)
+                .setRedirectUri("http://example.com")
+                .build()
+
+        SocialLogin.addType(SocialType.YAHOO, yahooConfig)
     }
 }

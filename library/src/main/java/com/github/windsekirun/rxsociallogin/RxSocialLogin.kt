@@ -22,6 +22,8 @@ import com.github.windsekirun.rxsociallogin.twitter.RxTwitterLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import com.github.windsekirun.rxsociallogin.wordpress.RxWordpressLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
+import com.github.windsekirun.rxsociallogin.yahoo.RxYahooLogin
+import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.Observable
 
 object RxSocialLogin {
@@ -87,5 +89,12 @@ object RxSocialLogin {
     fun wordpress(login: WordpressLogin): Observable<LoginResultItem> {
         Preconditions.checkNotNull(login, "WordpressLogin")
         return RxWordpressLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun yahoo(login: YahooLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "YahooLogin")
+        return RxYahooLogin(login)
     }
 }

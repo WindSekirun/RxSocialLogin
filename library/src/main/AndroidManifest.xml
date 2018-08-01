@@ -14,7 +14,12 @@
             android:name=".linkedin.LinkedInOAuthActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
-        <activity android:name=".wordpress.WordpressOAuthActivity"
+        <activity
+            android:name=".wordpress.WordpressOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".yahoo.YahooOAuthActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
     </application>

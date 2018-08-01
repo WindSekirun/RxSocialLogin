@@ -1,7 +1,7 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
 
-Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github, LinkedIn, Wordpress] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
+Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github, LinkedIn, Wordpress, Yahoo] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
 이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
 
@@ -12,8 +12,7 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 - Rewrite all methods in Kotlin
 - Hold Context in WeakReference to solve memory leak
 - Available to login with Github using Firebase Authentication
-- Available to login with LinkedIn using OAuth2 Authentication
-- Available to login with LinkedIn using OAuth2 Authentication
+- Available to login with LinkedIn, Wordpress, Yahoo using OAuth2 Authentication
 
 ## Available Feature
 |Service|logout|Return Data|Config|
@@ -27,6 +26,7 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 |Github|O|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setScopeList, setClearCookies, setActivityTitle|
 |LinkedIn|X|id, name, email, profilePicture, firstName|setRequireEmail, setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
 |Wordpress|X|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
+|Yahoo|X|id, name|setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
 
 ## Usages
 
@@ -278,8 +278,8 @@ SocialLogin.addType(SocialType.GITHUB, githubConfig);
 #### MainApplication
 ```Java
 LinkedinConfig linkedinConfig = new LinkedinConfig.Builder()
-                .setClientId(getString(R.string.linkedin_api_key))
-                .setClientSecret(getString(R.string.linkedin_api_secret))
+                .setClientId("<YOUR CLIENT ID>")
+                .setClientSecret("<YOUR CLIENT SECRET>")
                 .setRequireEmail()
                 .setClearCookies(true)
                 .setRedirectUri("http://example.com/oauth/callback")
@@ -298,13 +298,27 @@ SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig);
 #### MainApplication
 ```Java
 WordpressConfig wordpressConfig = new WordpressConfig.Builder()
-                .setClientId(getString(R.string.wordpress_api_key))
-                .setClientSecret(getString(R.string.wordpress_api_secret))
+                .setClientId("<YOUR CLIENT ID>")
+                .setClientSecret("<YOUR CLIENT SECRET>")
                 .setClearCookies(true)
                 .setRedirectUri("http://example.com/oauth/callback")
                 .build();
 
 SocialLogin.addType(SocialType.WORDPRESS, wordpressConfig);
+```
+
+### Yahoo (Since 1.0)
+
+#### MainApplication
+```Java
+YahooConfig yahooConfig = new YahooConfig.Builder()
+                .setClientId("<YOUR CLIENT ID>")
+                .setClientSecret("<YOUR CLIENT SECRET>")
+                .setClearCookies(true)
+                .setRedirectUri("http://example.com/oauth/callback")
+                .build();
+
+SocialLogin.addType(SocialType.YAHOO, yahooConfig);
 ```
 
 ## Sample

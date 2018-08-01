@@ -10,5 +10,5 @@ package com.github.windsekirun.rxsociallogin.model
  */
 
 enum class SocialType {
-    KAKAO, GOOGLE, FACEBOOK, LINE, NAVER, TWITTER, GITHUB, LINKEDIN, WORDPRESS, NONE
+    KAKAO, GOOGLE, FACEBOOK, LINE, NAVER, TWITTER, GITHUB, LINKEDIN, WORDPRESS, YAHOO, NONE
 }

@@ -103,6 +103,13 @@
             android:layout_weight="1"
             android:text="Wordpress" />
 
+        <Button
+            android:id="@+id/btnYahoo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Yahoo" />
+
     </LinearLayout>
 
     <TextView
