@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
+import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.line.LineLogin
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lineLogin: LineLogin
     private lateinit var twitterLogin: TwitterLogin
     private lateinit var googleLogin: GoogleLogin
+    private lateinit var githubLogin: GithubLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         lineLogin = LineLogin(this)
         twitterLogin = TwitterLogin(this)
 //        googleLogin = GoogleLogin(this)
+        githubLogin = GithubLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -75,12 +78,16 @@ class MainActivity : AppCompatActivity() {
 //        val googleDisposable = RxSocialLogin.google(googleLogin)
 //                .subscribe(consumer, error)
 
+        val githubDisposable = RxSocialLogin.github(githubLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
         compositeDisposable.add(lineDisposable)
         compositeDisposable.add(twitterDisposable)
 //        compositeDisposable.add(googleDisposable)
+        compositeDisposable.add(githubDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -105,6 +112,14 @@ class MainActivity : AppCompatActivity() {
         btnGoogle.setOnClickListener {
 //            googleLogin.onLogin()
         }
+
+        btnGithub.setOnClickListener {
+            githubLogin.onLogin()
+        }
+
+        btnLinkedIn.setOnClickListener {
+
+        }
     }
 
     override fun onDestroy() {
@@ -120,5 +135,6 @@ class MainActivity : AppCompatActivity() {
         lineLogin.onActivityResult(requestCode, resultCode, data)
         twitterLogin.onActivityResult(requestCode, resultCode, data)
 //        googleLogin.onActivityResult(requestCode, resultCode, data)
+        githubLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

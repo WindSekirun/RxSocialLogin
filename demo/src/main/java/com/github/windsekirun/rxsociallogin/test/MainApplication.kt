@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.test
 import android.app.Application
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
+import com.github.windsekirun.rxsociallogin.github.GithubConfig
 import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 import com.github.windsekirun.rxsociallogin.line.LineConfig
@@ -71,5 +72,13 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(SocialType.GOOGLE, googleConfig)
+
+        val githubConfig = GithubConfig.Builder()
+                .setClientId(getString(R.string.github_api_key))
+                .setClientSecret(getString(R.string.github_api_secret))
+                .setClearCookies(true)
+                .build()
+
+        SocialLogin.addType(SocialType.GITHUB, githubConfig)
     }
 }

@@ -95,6 +95,6 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     private fun String.toRequest(authorization: String): Single<String> {
-        return OkHttpHelper.get(this, "Authorization", authorization)
+        return OkHttpHelper.get(this, "Authorization" to authorization)
     }
 }

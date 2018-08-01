@@ -22,17 +22,19 @@ android {
         resValue "string", "twitter_api_id", properties.getProperty("default.twitter.api", "")
         resValue "string", "twitter_api_secret", properties.getProperty("default.twitter.secret", "")
         resValue "string", "server_client_id", properties.getProperty("default.google.token", "")
+        resValue "string", "github_api_key", properties.getProperty("default.github.api", "")
+        resValue "string", "github_api_secret", properties.getProperty("default.github.secret", "")
         multiDexEnabled true
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
 
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
     }
@@ -59,4 +61,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:15.0.0'
 }
 
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'

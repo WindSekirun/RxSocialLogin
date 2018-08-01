@@ -1,7 +1,7 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
 
-Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
+Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
 이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
 
@@ -21,6 +21,7 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google] w
 |Line|X|id, name, accessToken|setChannelId|
 |Twitter|X|id, name|setConsumerKey, setConsumerSecret|
 |Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
+|Github|O|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setScopeList, setClearCookies, setActivityTitle|
 
 ## Usages
 
@@ -210,7 +211,7 @@ SocialLogin.addType(SocialType.TWITTER, twitterConfig);
 Tutorial to implement Google Login with RxSocialLogin, [English](https://blog.uzuki.live/implement-google-login-with-rxsociallogin-english/), [Korean](https://blog.uzuki.live/implement-google-login-with-rxsociallogin-korean/)
 
 1. In AS 3.1, enter 'Firebase' and click 'Authentication' and click 'Connect to Firebase' and 'Add Firebase Authentication to your app'. in this step, you will save your 'google-services.json' in your app module directory.
-2.  Enable Google as authentication provider in Firebase Console
+2. Enable Google as authentication provider in Firebase Console
 3. Find 'Web Client ID' in Firebase console. you can find this information in sub-section of authentication provider.
 4. Provide your 'Web Client ID' into GoogleConfig.setClientTokenId()
 
@@ -231,6 +232,41 @@ GoogleConfig googleConfig = new GoogleConfig.Builder()
 SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 ```
 
+### Github (Since 1.0)
+
+#### Precondition
+First and second steps are same as Google's Precondition.
+
+1. In AS 3.1, enter 'Firebase' and click 'Authentication' and click 'Connect to Firebase' and 'Add Firebase Authentication to your app'. in this step, you will save your 'google-services.json' in your app module directory.
+2. Enable Github as authentication provider in Firebase Console
+3. Copy authorization callback url in Github section.
+4. Enter into [new OAuth application](https://github.com/settings/applications/new) on Github, and paste your callback url which find in step 3.
+5. Press 'register application', and copy Client ID and Client Secret.
+6. Provide your Client ID and Client Secret to Github section of Firebase Console
+7. Provide your Client ID and Client Secret into GithubConfig.setClientId() and GithubConfig.setClientSecret()
+
+#### build.gradle
+```
+implementation 'com.google.android.gms:play-services-auth:15.0.0'
+implementation 'com.google.firebase:firebase-auth:15.0.0'
+```
+
+#### MainApplication
+```Java
+SocialLogin.init(this);
+GithubConfig githubConfig = new GithubConfig.Builder()
+                .setClientId("<YOUR CLIENT ID>")
+                .setClientSecret("<YOUR CLIENT SECRET>")
+                .setClearCookies(true)
+                .build();
+
+SocialLogin.addType(SocialType.GITHUB, githubConfig);
+```
+
+### LinkedIn (Since 1.0)
+
+
+
 ## Sample
 - [MainActivity.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainActivity.kt)
 - [MainApplication.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt)
@@ -238,7 +274,6 @@ SocialLogin.addType(SocialType.GOOGLE, googleConfig);
 ## Proguard
 
 For usages with Proguard, please apply [these rules](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) according [issue #2](https://github.com/WindSekirun/RxSocialLogin/issues/2). 
-
 
 ## License
 ```

@@ -16,9 +16,11 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == GithubOAuthConstants.GITHUB_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == GithubOAuthConstants.GITHUB_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(GithubOAuthConstants.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
+        } else if (resultCode != Activity.RESULT_OK) {
+            responseFail(SocialType.GITHUB)
         }
     }
 
@@ -40,7 +42,10 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) return
+        if (accessToken.isEmpty()) {
+            responseFail(SocialType.GITHUB)
+            return
+        }
 
         val credential = GithubAuthProvider.getCredential(accessToken)
         disposable = auth.signInWithCredential(credential, activity, SocialType.GITHUB)

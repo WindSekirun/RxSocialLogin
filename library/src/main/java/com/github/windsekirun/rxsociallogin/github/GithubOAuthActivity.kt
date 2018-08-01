@@ -1,5 +1,6 @@
 package com.github.windsekirun.rxsociallogin.github
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
@@ -13,17 +14,12 @@ import com.github.windsekirun.rxsociallogin.R
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.model.SocialType
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_github.*
 import okhttp3.HttpUrl
 
-/**
- * RxSocialLogin
- * Class: GithubOAuthActivity
- * Created by pyxis on 18. 7. 27.
- *
- * Description:
- */
 class GithubOAuthActivity : AppCompatActivity() {
     lateinit var githubConfig: GithubConfig
     lateinit var disposable: Disposable
@@ -54,8 +50,9 @@ class GithubOAuthActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun init() {
-        var githubUrl = "${GithubOAuthConstants.GITHUB_URL} + ?client_id=${githubConfig.clientId}"
+        var githubUrl = "${GithubOAuthConstants.GITHUB_URL}?client_id=${githubConfig.clientId}"
 
         if (githubConfig.scopeList.isNotEmpty()) {
             val scope = githubConfig.scopeList.joinToString(",")
@@ -94,20 +91,21 @@ class GithubOAuthActivity : AppCompatActivity() {
             }
         }
 
-        setSupportActionBar(toolBar)
         supportActionBar?.let {
             it.title = githubConfig.activityTitle
             it.setDisplayHomeAsUpEnabled(true)
         }
+
+        webView.loadUrl(githubUrl)
     }
 
     private fun requestOAuthToken(code: String) {
-        val urlBuilder = HttpUrl.parse(GithubOAuthConstants.GITHUB_OAUTH)!!.newBuilder()
-        urlBuilder.addQueryParameter("client_id", githubConfig.clientId)
-        urlBuilder.addQueryParameter("client_secret", githubConfig.clientSecret)
-        urlBuilder.addQueryParameter("code", code)
+        val formArray = arrayOf("client_id" to githubConfig.clientId,
+                "client_secret" to githubConfig.clientSecret, "code" to code)
 
-        disposable = OkHttpHelper.get(urlBuilder.build().toString(), "Accept", "application/json")
+        disposable = OkHttpHelper.post(GithubOAuthConstants.GITHUB_OAUTH, "Accept" to "application/json", formArray)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     finishActivity(it)
                 }, {
