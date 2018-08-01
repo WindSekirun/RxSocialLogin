@@ -12,7 +12,6 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class YahooLogin(activity: Activity) : SocialLogin(activity) {
-    private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == YahooOAuthConstants.YAHOO_REQUEST_CODE) {
@@ -29,9 +28,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     override fun onDestroy() {
-        if (::disposable.isInitialized && !disposable.isDisposed) {
-            disposable.dispose()
-        }
+
     }
 
     private fun analyzeResult(jsonStr: String) {
