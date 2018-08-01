@@ -1,7 +1,7 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
 
-Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github, LinkedIn] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
+Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, Github, LinkedIn, Wordpress] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
 이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
 
@@ -12,7 +12,8 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 - Rewrite all methods in Kotlin
 - Hold Context in WeakReference to solve memory leak
 - Available to login with Github using Firebase Authentication
-- Available to login with LinkedIn using OAuth2
+- Available to login with LinkedIn using OAuth2 Authentication
+- Available to login with LinkedIn using OAuth2 Authentication
 
 ## Available Feature
 |Service|logout|Return Data|Config|
@@ -25,6 +26,7 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 |Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
 |Github|O|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setScopeList, setClearCookies, setActivityTitle|
 |LinkedIn|X|id, name, email, profilePicture, firstName|setRequireEmail, setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
+|Wordpress|X|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
 
 ## Usages
 
@@ -284,6 +286,25 @@ LinkedinConfig linkedinConfig = new LinkedinConfig.Builder()
                 .build();
 
 SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig);
+```
+
+### Wordpress (Since 1.0)
+
+#### Precondition
+1. Register new application in [Wordpress apps](https://developer.wordpress.com/apps/)
+2. Provide your Client ID and Client Secret into WordpressConfig.setClientId() and WordpressConfig.setClientSecret()
+3. Make sure redirectUri has same value between Wordpress apps and WordpressConfig.
+
+#### MainApplication
+```Java
+WordpressConfig wordpressConfig = new WordpressConfig.Builder()
+                .setClientId(getString(R.string.wordpress_api_key))
+                .setClientSecret(getString(R.string.wordpress_api_secret))
+                .setClearCookies(true)
+                .setRedirectUri("http://example.com/oauth/callback")
+                .build();
+
+SocialLogin.addType(SocialType.WORDPRESS, wordpressConfig);
 ```
 
 ## Sample

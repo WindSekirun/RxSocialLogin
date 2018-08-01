@@ -20,6 +20,8 @@ import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.naver.RxNaverLogin
 import com.github.windsekirun.rxsociallogin.twitter.RxTwitterLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
+import com.github.windsekirun.rxsociallogin.wordpress.RxWordpressLogin
+import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import io.reactivex.Observable
 
 object RxSocialLogin {
@@ -78,5 +80,12 @@ object RxSocialLogin {
     fun linkedin(login: LinkedinLogin): Observable<LoginResultItem> {
         Preconditions.checkNotNull(login, "LinkedinLogin")
         return RxLinkedinLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun wordpress(login: WordpressLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "WordpressLogin")
+        return RxWordpressLogin(login)
     }
 }

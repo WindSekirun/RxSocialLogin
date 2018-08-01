@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.linkedin
+package com.github.windsekirun.rxsociallogin.wordpress
 
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 
@@ -10,21 +10,15 @@ import com.github.windsekirun.rxsociallogin.model.SocialConfig
  *
  * Description:
  */
-class LinkedinConfig(val clientId: String, val clientSecret: String, val clearCookies: Boolean,
-                     val activityTitle: String, val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {
+class WordpressConfig(val clientId: String, val clientSecret: String, val clearCookies: Boolean,
+                      val activityTitle: String, val redirectUri: String) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
         private var clientSecret: String = ""
         private var clearCookies: Boolean = false
-        private var activityTitle: String = "Login to Linkedin"
-        private var redirectUri: String = "http://www.example.com/auth/linkedin"
-        private var isRequireEmail = false
-
-        fun setRequireEmail(): Builder {
-            isRequireEmail = true
-            return this
-        }
+        private var activityTitle: String = "Login to Wordpress"
+        private var redirectUri: String = "http://www.example.com/auth/wordpress"
 
         fun setClientId(clientId: String): Builder {
             this.clientId = clientId
@@ -51,8 +45,8 @@ class LinkedinConfig(val clientId: String, val clientSecret: String, val clearCo
             return this
         }
 
-        fun build(): LinkedinConfig {
-            return LinkedinConfig(clientId, clientSecret, clearCookies, activityTitle, redirectUri, isRequireEmail)
+        fun build(): WordpressConfig {
+            return WordpressConfig(clientId, clientSecret, clearCookies, activityTitle, redirectUri)
         }
     }
 }

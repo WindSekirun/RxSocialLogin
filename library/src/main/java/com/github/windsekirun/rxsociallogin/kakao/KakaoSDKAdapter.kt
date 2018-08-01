@@ -1,12 +1,7 @@
 package com.github.windsekirun.rxsociallogin.kakao
 
 import android.content.Context
-
-import com.kakao.auth.ApprovalType
-import com.kakao.auth.AuthType
-import com.kakao.auth.IApplicationConfig
-import com.kakao.auth.ISessionConfig
-import com.kakao.auth.KakaoAdapter
+import com.kakao.auth.*
 
 class KakaoSDKAdapter(private val context: Context) : KakaoAdapter() {
 

@@ -11,6 +11,7 @@ import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
+import com.github.windsekirun.rxsociallogin.wordpress.WordpressConfig
 
 
 /**
@@ -81,15 +82,24 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(SocialType.GITHUB, githubConfig)
+
         val linkedinConfig = LinkedinConfig.Builder()
+                .setClearCookies(false)
+                .setRedirectUri("http://example.com/oauth/callback")
+                .setRequireEmail()
                 .setClientId(getString(R.string.linkedin_api_key))
                 .setClientSecret(getString(R.string.linkedin_api_secret))
-                .setRequireEmail()
+                .build()
+
+        SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig)
+
+        val wordpressConfig = WordpressConfig.Builder()
+                .setClientId(getString(R.string.wordpress_api_key))
+                .setClientSecret(getString(R.string.wordpress_api_secret))
                 .setClearCookies(true)
                 .setRedirectUri("http://example.com/oauth/callback")
                 .build()
 
-
-        SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig)
+        SocialLogin.addType(SocialType.WORDPRESS, wordpressConfig)
     }
 }

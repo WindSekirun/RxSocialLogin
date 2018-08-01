@@ -14,6 +14,7 @@ import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
+import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var googleLogin: GoogleLogin
     private lateinit var githubLogin: GithubLogin
     private lateinit var linkedinLogin: LinkedinLogin
+    private lateinit var wordpressLogin: WordpressLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         googleLogin = GoogleLogin(this)
         githubLogin = GithubLogin(this)
         linkedinLogin = LinkedinLogin(this)
+        wordpressLogin = WordpressLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -87,6 +90,9 @@ class MainActivity : AppCompatActivity() {
         val linkedinDisposable = RxSocialLogin.linkedin(linkedinLogin)
                 .subscribe(consumer, error)
 
+        val wordpressDisposable = RxSocialLogin.wordpress(wordpressLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
@@ -95,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(googleDisposable)
         compositeDisposable.add(githubDisposable)
         compositeDisposable.add(linkedinDisposable)
+        compositeDisposable.add(wordpressDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -127,6 +134,10 @@ class MainActivity : AppCompatActivity() {
         btnLinkedIn.setOnClickListener {
             linkedinLogin.onLogin()
         }
+
+        btnWordpress.setOnClickListener {
+            wordpressLogin.onLogin()
+        }
     }
 
     override fun onDestroy() {
@@ -144,5 +155,6 @@ class MainActivity : AppCompatActivity() {
         googleLogin.onActivityResult(requestCode, resultCode, data)
         githubLogin.onActivityResult(requestCode, resultCode, data)
         linkedinLogin.onActivityResult(requestCode, resultCode, data)
+        wordpressLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

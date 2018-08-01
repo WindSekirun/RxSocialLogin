@@ -26,6 +26,8 @@ android {
         resValue "string", "github_api_secret", properties.getProperty("default.github.secret", "")
         resValue "string", "linkedin_api_key", properties.getProperty("default.linkedin.api", "")
         resValue "string", "linkedin_api_secret", properties.getProperty("default.linkedin.secret", "")
+        resValue "string", "wordpress_api_key", properties.getProperty("default.wordpress.api", "")
+        resValue "string", "wordpress_api_secret", properties.getProperty("default.wordpress.secret", "")
         multiDexEnabled true
     }
 

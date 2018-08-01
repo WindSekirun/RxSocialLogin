@@ -2,7 +2,6 @@ package com.github.windsekirun.rxsociallogin.intenal.oauth
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import pyxis.uzuki.live.richutilskt.impl.F1
 
 /**
  * RxSocialLogin

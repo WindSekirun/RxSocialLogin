@@ -2,8 +2,7 @@ package com.github.windsekirun.rxsociallogin.facebook
 
 import android.text.TextUtils
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
-
-import java.util.ArrayList
+import java.util.*
 
 class FacebookConfig(var requestOptions: ArrayList<String>?, var isRequireWritePermissions: Boolean,
                      val isBehaviorOnCancel: Boolean, var applicationId: String?) : SocialConfig() {
