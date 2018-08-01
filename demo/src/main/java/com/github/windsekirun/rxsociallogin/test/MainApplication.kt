@@ -7,6 +7,7 @@ import com.github.windsekirun.rxsociallogin.github.GithubConfig
 import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 import com.github.windsekirun.rxsociallogin.line.LineConfig
+import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
 import com.github.windsekirun.rxsociallogin.model.SocialType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
@@ -80,5 +81,12 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(SocialType.GITHUB, githubConfig)
+
+        val linkedinConfig = LinkedinConfig.Builder()
+                .setClientId(getString(R.string.linkedin_api_key))
+                .setClientSecret(getString(R.string.linkedin_api_secret))
+                .build()
+
+        SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig)
     }
 }

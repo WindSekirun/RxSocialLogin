@@ -10,14 +10,15 @@ import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.line.LineLogin
+import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
+import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
 import pyxis.uzuki.live.richutilskt.utils.getKeyHash
-import io.reactivex.plugins.RxJavaPlugins
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var twitterLogin: TwitterLogin
     private lateinit var googleLogin: GoogleLogin
     private lateinit var githubLogin: GithubLogin
+    private lateinit var linkedinLogin: LinkedinLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +48,9 @@ class MainActivity : AppCompatActivity() {
         naverLogin = NaverLogin(this)
         lineLogin = LineLogin(this)
         twitterLogin = TwitterLogin(this)
-//        googleLogin = GoogleLogin(this)
+        googleLogin = GoogleLogin(this)
         githubLogin = GithubLogin(this)
+        linkedinLogin = LinkedinLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             val typeStr = it.toString()
@@ -75,10 +78,13 @@ class MainActivity : AppCompatActivity() {
         val twitterDisposable = RxSocialLogin.twitter(twitterLogin)
                 .subscribe(consumer, error)
 
-//        val googleDisposable = RxSocialLogin.google(googleLogin)
-//                .subscribe(consumer, error)
+        val googleDisposable = RxSocialLogin.google(googleLogin)
+                .subscribe(consumer, error)
 
         val githubDisposable = RxSocialLogin.github(githubLogin)
+                .subscribe(consumer, error)
+
+        val linkedinDisposable = RxSocialLogin.linkedin(linkedinLogin)
                 .subscribe(consumer, error)
 
         compositeDisposable.add(kakaoDisposable)
@@ -86,8 +92,9 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(naverDisposable)
         compositeDisposable.add(lineDisposable)
         compositeDisposable.add(twitterDisposable)
-//        compositeDisposable.add(googleDisposable)
+        compositeDisposable.add(googleDisposable)
         compositeDisposable.add(githubDisposable)
+        compositeDisposable.add(linkedinDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -110,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnGoogle.setOnClickListener {
-//            googleLogin.onLogin()
+            googleLogin.onLogin()
         }
 
         btnGithub.setOnClickListener {
@@ -118,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnLinkedIn.setOnClickListener {
-
+            linkedinLogin.onLogin()
         }
     }
 
@@ -134,7 +141,8 @@ class MainActivity : AppCompatActivity() {
         naverLogin.onActivityResult(requestCode, resultCode, data)
         lineLogin.onActivityResult(requestCode, resultCode, data)
         twitterLogin.onActivityResult(requestCode, resultCode, data)
-//        googleLogin.onActivityResult(requestCode, resultCode, data)
+        googleLogin.onActivityResult(requestCode, resultCode, data)
         githubLogin.onActivityResult(requestCode, resultCode, data)
+        linkedinLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

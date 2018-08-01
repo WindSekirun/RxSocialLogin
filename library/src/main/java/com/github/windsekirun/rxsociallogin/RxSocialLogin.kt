@@ -13,6 +13,8 @@ import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.RxKakaoLogin
 import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.line.RxLineLogin
+import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
+import com.github.windsekirun.rxsociallogin.linkedin.RxLinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.naver.RxNaverLogin
@@ -69,5 +71,12 @@ object RxSocialLogin {
     fun github(login: GithubLogin): Observable<LoginResultItem> {
         Preconditions.checkNotNull(login, "GithubLogin")
         return RxGithubLogin(login)
+    }
+
+    @CheckResult
+    @JvmStatic
+    fun linkedin(login: LinkedinLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "LinkedinLogin")
+        return RxLinkedinLogin(login)
     }
 }

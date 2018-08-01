@@ -24,6 +24,8 @@ android {
         resValue "string", "server_client_id", properties.getProperty("default.google.token", "")
         resValue "string", "github_api_key", properties.getProperty("default.github.api", "")
         resValue "string", "github_api_secret", properties.getProperty("default.github.secret", "")
+        resValue "string", "linkedin_api_key", properties.getProperty("default.linkedin.api", "")
+        resValue "string", "linkedin_api_secret", properties.getProperty("default.linkedin.secret", "")
         multiDexEnabled true
     }
 

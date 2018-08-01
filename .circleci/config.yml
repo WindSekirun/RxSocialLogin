@@ -17,6 +17,9 @@ jobs:
       - run :
           name: touch local.properties
           command: touch local.properties
+      - run :
+          name: decrypt google-service.json for CI process
+          command: echo $GOOGLE_SERVICES_JSON | base64 --decode --ignore-garbage > ${HOME}/${CIRCLE_PROJECT_REPONAME}/demo/google-services.json
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
       - run:
