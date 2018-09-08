@@ -6,11 +6,11 @@ import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
 import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import kotlinx.android.synthetic.main.activity_oauth.*
 
 class WordpressOAuthActivity : BaseOAuthActivity() {
-    private val config: WordpressConfig by lazy { SocialLogin.getConfig(SocialType.WORDPRESS) as WordpressConfig }
+    private val config: WordpressConfig by lazy { SocialLogin.getConfig(PlatformType.WORDPRESS) as WordpressConfig }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun init() {

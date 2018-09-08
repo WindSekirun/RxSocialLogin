@@ -6,8 +6,7 @@ import android.util.Base64
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
-import io.reactivex.disposables.Disposable
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
@@ -18,7 +17,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
-            responseFail(SocialType.YAHOO)
+            responseFail(PlatformType.YAHOO)
         }
     }
 
@@ -36,7 +35,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
         val idToken = jsonObject?.getJSONString("id_token") ?: ""
         val guid = jsonObject?.getJSONString("xoauth_yahoo_guid") ?: ""
         if (guid.isEmpty() || idToken.isEmpty()) {
-            responseFail(SocialType.YAHOO)
+            responseFail(PlatformType.YAHOO)
             return
         }
 
@@ -46,7 +45,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
         val response = decodedStr.createJSONObject()
 
         if (response == null) {
-            responseFail(SocialType.YAHOO)
+            responseFail(PlatformType.YAHOO)
             return
         }
 
@@ -56,7 +55,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
             this.id = guid
             this.name = name
             this.result = true
-            this.platform = SocialType.YAHOO
+            this.mPlatform = PlatformType.YAHOO
         }
 
         responseSuccess(item)

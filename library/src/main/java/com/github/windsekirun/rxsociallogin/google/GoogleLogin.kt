@@ -4,7 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -21,7 +21,7 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     private lateinit var disposable: Disposable
 
     init {
-        val googleConfig = getConfig(SocialType.GOOGLE) as GoogleConfig
+        val googleConfig = getConfig(PlatformType.GOOGLE) as GoogleConfig
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(googleConfig.clientTokenId)
 
@@ -44,7 +44,7 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
                 val account = task.getResult(ApiException::class.java)
                 authWithFirebase(account)
             } catch (e: ApiException) {
-                responseFail(SocialType.GOOGLE)
+                responseFail(PlatformType.GOOGLE)
             }
         }
     }
@@ -67,7 +67,7 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        disposable = auth.signInWithCredential(credential, activity, SocialType.GOOGLE)
+        disposable = auth.signInWithCredential(credential, activity, PlatformType.GOOGLE)
                 .subscribe({ responseSuccess(it) }, {})
     }
 

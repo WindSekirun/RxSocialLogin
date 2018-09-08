@@ -8,7 +8,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
@@ -22,7 +22,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     override fun onLogin() {
-        val config = getConfig(SocialType.FACEBOOK) as FacebookConfig
+        val config = getConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         if (config.isRequireWritePermissions) {
             LoginManager.getInstance().logInWithPublishPermissions(activity!!, config.requestOptions)
@@ -39,12 +39,12 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 if (config.isBehaviorOnCancel) {
                     getUserInfo()
                 } else {
-                    responseFail(SocialType.FACEBOOK)
+                    responseFail(PlatformType.FACEBOOK)
                 }
             }
 
             override fun onError(error: FacebookException) {
-                responseFail(SocialType.FACEBOOK)
+                responseFail(PlatformType.FACEBOOK)
             }
         })
     }
@@ -58,11 +58,11 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     private fun getUserInfo() {
-        val config = getConfig(SocialType.FACEBOOK) as FacebookConfig
+        val config = getConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
             if (obj == null) {
-                responseFail(SocialType.FACEBOOK)
+                responseFail(PlatformType.FACEBOOK)
                 return@GraphJSONObjectCallback
             }
 
@@ -76,7 +76,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 this.gender = obj.getJSONString("gender")
                 this.firstName = obj.getJSONString("first_name")
                 this.profilePicture = profilePicture
-                this.platform = SocialType.FACEBOOK
+                this.mPlatform = PlatformType.FACEBOOK
                 this.result = true
             }
 

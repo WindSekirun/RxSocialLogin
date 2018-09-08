@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException
@@ -28,7 +28,7 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
                 val item = LoginResultItem().apply {
                     this.id = result.data.userId.toString()
                     this.name = result.data.userName
-                    this.platform = SocialType.TWITTER
+                    this.mPlatform = PlatformType.TWITTER
                     this.result = true
                 }
 
@@ -36,7 +36,7 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
             }
 
             override fun failure(exception: TwitterException) {
-                responseFail(SocialType.TWITTER)
+                responseFail(PlatformType.TWITTER)
             }
         })
     }

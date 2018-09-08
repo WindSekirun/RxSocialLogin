@@ -2,15 +2,15 @@ package com.github.windsekirun.rxsociallogin.intenal.firebase
 
 import android.app.Activity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
 
-internal fun handleSignInResult(user: FirebaseUser?, socialType: SocialType): LoginResultItem {
+internal fun handleSignInResult(user: FirebaseUser?, platformType: PlatformType): LoginResultItem {
     if (user == null) {
-        return LoginResultItem.createFail(socialType)
+        return LoginResultItem.createFail(platformType)
     }
 
     return LoginResultItem().apply {
@@ -20,20 +20,20 @@ internal fun handleSignInResult(user: FirebaseUser?, socialType: SocialType): Lo
         id = user.uid
         emailVerified = user.isEmailVerified
         result = true
-        platform = socialType
+        mPlatform = platformType
     }
 }
 
 internal fun FirebaseAuth.signInWithCredential(credential: AuthCredential, activity: Activity?,
-                                               socialType: SocialType): Observable<LoginResultItem> {
+                                               platformType: PlatformType): Observable<LoginResultItem> {
     return Observable.create { emitter ->
         this.signInWithCredential(credential)
                 .addOnCompleteListener(activity as Activity) {
                     if (it.isSuccessful) {
                         val user = this.currentUser
-                        emitter.onNext(handleSignInResult(user, socialType))
+                        emitter.onNext(handleSignInResult(user, platformType))
                     } else {
-                        emitter.onNext(LoginResultItem.createFail(socialType))
+                        emitter.onNext(LoginResultItem.createFail(platformType))
                     }
                 }
     }

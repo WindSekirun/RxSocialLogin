@@ -8,7 +8,7 @@ import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 import com.github.windsekirun.rxsociallogin.line.LineConfig
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressConfig
@@ -35,7 +35,7 @@ class MainApplication : Application() {
                 .setConsumerSecret(getString(R.string.twitter_api_secret))
                 .build()
 
-        SocialLogin.addType(SocialType.TWITTER, twitterConfig)
+        SocialLogin.addType(PlatformType.TWITTER, twitterConfig)
 
         val facebookConfig = FacebookConfig.Builder()
                 .setApplicationId(getString(R.string.facebook_api_key))
@@ -43,7 +43,7 @@ class MainApplication : Application() {
                 .setBehaviorOnCancel()
                 .build()
 
-        SocialLogin.addType(SocialType.FACEBOOK, facebookConfig)
+        SocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
 
         val kakaoConfig = KakaoConfig.Builder()
                 .setRequireEmail()
@@ -53,7 +53,7 @@ class MainApplication : Application() {
                 .setRequireGender()
                 .build()
 
-        SocialLogin.addType(SocialType.KAKAO, kakaoConfig)
+        SocialLogin.addType(PlatformType.KAKAO, kakaoConfig)
 
         val naverConfig = NaverConfig.Builder()
                 .setAuthClientId(getString(R.string.naver_api_id))
@@ -61,20 +61,20 @@ class MainApplication : Application() {
                 .setClientName(getString(R.string.app_name))
                 .build()
 
-        SocialLogin.addType(SocialType.NAVER, naverConfig)
+        SocialLogin.addType(PlatformType.NAVER, naverConfig)
 
         val lineConfig = LineConfig.Builder()
                 .setChannelId(getString(R.string.line_api_channel))
                 .build()
 
-        SocialLogin.addType(SocialType.LINE, lineConfig)
+        SocialLogin.addType(PlatformType.LINE, lineConfig)
 
         val googleConfig = GoogleConfig.Builder()
                 .setRequireEmail()
                 .setClientTokenId(getString(R.string.server_client_id))
                 .build()
 
-        SocialLogin.addType(SocialType.GOOGLE, googleConfig)
+        SocialLogin.addType(PlatformType.GOOGLE, googleConfig)
 
         val githubConfig = GithubConfig.Builder()
                 .setClientId(getString(R.string.github_api_key))
@@ -82,7 +82,7 @@ class MainApplication : Application() {
                 .setClearCookies(true)
                 .build()
 
-        SocialLogin.addType(SocialType.GITHUB, githubConfig)
+        SocialLogin.addType(PlatformType.GITHUB, githubConfig)
 
         val linkedinConfig = LinkedinConfig.Builder()
                 .setClearCookies(false)
@@ -92,7 +92,7 @@ class MainApplication : Application() {
                 .setClientSecret(getString(R.string.linkedin_api_secret))
                 .build()
 
-        SocialLogin.addType(SocialType.LINKEDIN, linkedinConfig)
+        SocialLogin.addType(PlatformType.LINKEDIN, linkedinConfig)
 
         val wordpressConfig = WordpressConfig.Builder()
                 .setClientId(getString(R.string.wordpress_api_key))
@@ -101,7 +101,7 @@ class MainApplication : Application() {
                 .setRedirectUri("http://example.com/oauth/callback")
                 .build()
 
-        SocialLogin.addType(SocialType.WORDPRESS, wordpressConfig)
+        SocialLogin.addType(PlatformType.WORDPRESS, wordpressConfig)
 
         val yahooConfig = YahooConfig.Builder()
                 .setClientId(getString(R.string.yahoo_api_key))
@@ -110,6 +110,6 @@ class MainApplication : Application() {
                 .setRedirectUri("http://example.com")
                 .build()
 
-        SocialLogin.addType(SocialType.YAHOO, yahooConfig)
+        SocialLogin.addType(PlatformType.YAHOO, yahooConfig)
     }
 }

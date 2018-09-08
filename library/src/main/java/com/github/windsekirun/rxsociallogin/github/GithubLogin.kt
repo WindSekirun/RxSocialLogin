@@ -5,7 +5,7 @@ import android.content.Intent
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
 import io.reactivex.disposables.Disposable
@@ -21,7 +21,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
-            responseFail(SocialType.GITHUB)
+            responseFail(PlatformType.GITHUB)
         }
     }
 
@@ -44,12 +44,12 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            responseFail(SocialType.GITHUB)
+            responseFail(PlatformType.GITHUB)
             return
         }
 
         val credential = GithubAuthProvider.getCredential(accessToken)
-        disposable = auth.signInWithCredential(credential, activity, SocialType.GITHUB)
+        disposable = auth.signInWithCredential(credential, activity, PlatformType.GITHUB)
                 .subscribe({ responseSuccess(it) }, {})
     }
 }

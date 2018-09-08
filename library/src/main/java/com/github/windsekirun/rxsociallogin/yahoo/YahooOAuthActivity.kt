@@ -7,11 +7,11 @@ import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
 import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import kotlinx.android.synthetic.main.activity_oauth.*
 
 class YahooOAuthActivity : BaseOAuthActivity() {
-    private val config: YahooConfig by lazy { SocialLogin.getConfig(SocialType.YAHOO) as YahooConfig }
+    private val config: YahooConfig by lazy { SocialLogin.getConfig(PlatformType.YAHOO) as YahooConfig }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun init() {

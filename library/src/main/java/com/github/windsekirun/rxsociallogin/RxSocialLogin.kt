@@ -1,28 +1,18 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.support.annotation.CheckResult
-
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
-import com.github.windsekirun.rxsociallogin.facebook.RxFacebookLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
-import com.github.windsekirun.rxsociallogin.github.RxGithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
-import com.github.windsekirun.rxsociallogin.google.RxGoogleLogin
+import com.github.windsekirun.rxsociallogin.intenal.rx.BaseSocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
-import com.github.windsekirun.rxsociallogin.kakao.RxKakaoLogin
 import com.github.windsekirun.rxsociallogin.line.LineLogin
-import com.github.windsekirun.rxsociallogin.line.RxLineLogin
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
-import com.github.windsekirun.rxsociallogin.linkedin.RxLinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
-import com.github.windsekirun.rxsociallogin.naver.RxNaverLogin
-import com.github.windsekirun.rxsociallogin.twitter.RxTwitterLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
-import com.github.windsekirun.rxsociallogin.wordpress.RxWordpressLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
-import com.github.windsekirun.rxsociallogin.yahoo.RxYahooLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.Observable
 
@@ -97,4 +87,15 @@ object RxSocialLogin {
         Preconditions.checkNotNull(login, "YahooLogin")
         return RxYahooLogin(login)
     }
+
+    internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
+    internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
+    internal class RxGoogleLogin(login: GoogleLogin) : BaseSocialObservable<GoogleLogin>(login)
+    internal class RxKakaoLogin(login: KakaoLogin) : BaseSocialObservable<KakaoLogin>(login)
+    internal class RxLineLogin(login: LineLogin) : BaseSocialObservable<LineLogin>(login)
+    internal class RxLinkedinLogin(login: LinkedinLogin) : BaseSocialObservable<LinkedinLogin>(login)
+    internal class RxNaverLogin(login: NaverLogin) : BaseSocialObservable<NaverLogin>(login)
+    internal class RxTwitterLogin(login: TwitterLogin) : BaseSocialObservable<TwitterLogin>(login)
+    internal class RxWordpressLogin(login: WordpressLogin) : BaseSocialObservable<WordpressLogin>(login)
+    internal class RxYahooLogin(login: YahooLogin) : BaseSocialObservable<YahooLogin>(login)
 }

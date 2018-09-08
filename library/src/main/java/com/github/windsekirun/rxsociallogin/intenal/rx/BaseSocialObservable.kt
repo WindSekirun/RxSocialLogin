@@ -42,7 +42,7 @@ open class BaseSocialObservable<T : SocialLogin>(private val login: T) : Observa
                 if (result) { //
                     observer?.onNext(item)
                 } else if (!isDisposed) {
-                    observer?.onError(LoginFailedException("login failed: ${item.platform}"))
+                    observer?.onError(LoginFailedException("login failed: ${item.mPlatform}"))
                 }
             }
         }

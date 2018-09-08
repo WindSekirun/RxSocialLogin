@@ -6,7 +6,7 @@ import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +14,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: LinkedinConfig by lazy { getConfig(SocialType.LINKEDIN) as LinkedinConfig }
+    private val config: LinkedinConfig by lazy { getConfig(PlatformType.LINKEDIN) as LinkedinConfig }
     private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -22,7 +22,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
-            responseFail(SocialType.LINKEDIN)
+            responseFail(PlatformType.LINKEDIN)
         }
     }
 
@@ -41,7 +41,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            responseFail(SocialType.LINKEDIN)
+            responseFail(PlatformType.LINKEDIN)
             return
         }
 
@@ -60,7 +60,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
                     val response = it.createJSONObject()
 
                     if (response == null) {
-                        responseFail(SocialType.LINKEDIN)
+                        responseFail(PlatformType.LINKEDIN)
                         return@subscribe
                     }
 
@@ -82,12 +82,12 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
                         this.profilePicture = pictureUrl ?: ""
 
                         this.result = true
-                        this.platform = SocialType.LINKEDIN
+                        this.mPlatform = PlatformType.LINKEDIN
                     }
 
                     responseSuccess(item)
                 }, {
-                    responseFail(SocialType.LINKEDIN)
+                    responseFail(PlatformType.LINKEDIN)
                 })
     }
 }

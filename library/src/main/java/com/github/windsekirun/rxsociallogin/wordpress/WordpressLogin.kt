@@ -6,7 +6,7 @@ import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
-            responseFail(SocialType.WORDPRESS)
+            responseFail(PlatformType.WORDPRESS)
         }
     }
 
@@ -41,7 +41,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            responseFail(SocialType.WORDPRESS)
+            responseFail(PlatformType.WORDPRESS)
             return
         }
 
@@ -53,7 +53,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
                     val response = it.createJSONObject()
 
                     if (response == null) {
-                        responseFail(SocialType.WORDPRESS)
+                        responseFail(PlatformType.WORDPRESS)
                         return@subscribe
                     }
 
@@ -71,12 +71,12 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
                         this.emailVerified = emailVerified
 
                         this.result = true
-                        this.platform = SocialType.WORDPRESS
+                        this.mPlatform = PlatformType.WORDPRESS
                     }
 
                     responseSuccess(item)
                 }, {
-                    responseFail(SocialType.WORDPRESS)
+                    responseFail(PlatformType.WORDPRESS)
                 })
     }
 }

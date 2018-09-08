@@ -6,7 +6,7 @@ import android.content.Intent
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginDefine
 import com.nhn.android.naverlogin.OAuthLoginHandler
@@ -31,7 +31,7 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
     override fun onLogin() {
         OAuthLoginDefine.MARKET_LINK_WORKING = false
 
-        val config = getConfig(SocialType.NAVER) as NaverConfig
+        val config = getConfig(PlatformType.NAVER) as NaverConfig
         authLogin.init(activity, config.authClientId, config.authClientSecret, config.clientName)
         authLogin.startOauthLoginActivity(activity, NaverLoginHandler())
     }
@@ -69,7 +69,7 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
                     val responseObject = getJSONObject(jsonObject, "response")
 
                     if (responseObject == null) {
-                        responseFail(SocialType.NAVER)
+                        responseFail(PlatformType.NAVER)
                         return@subscribe
                     }
 
@@ -82,13 +82,13 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
                         this.age = responseObject.getJSONString("age")
                         this.birthday = responseObject.getJSONString("birthday")
                         this.profilePicture = responseObject.getJSONString("profile_image")
-                        this.platform = SocialType.NAVER
+                        this.mPlatform = PlatformType.NAVER
                         this.result = true
                     }
 
                     responseSuccess(item)
                 }) {
-                    responseFail(SocialType.NAVER)
+                    responseFail(PlatformType.NAVER)
                 }
 
         compositeDisposable.add(disposable)

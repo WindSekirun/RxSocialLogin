@@ -19,7 +19,6 @@ import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
-import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
 import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         val consumer = Consumer<LoginResultItem> {
             txtResult.text = it.toString()
             txtResult.setTextColor(Color.BLACK)
-            txtPlatform.text = it.platform.name
+            txtPlatform.text = it.mPlatform.name
         }
 
         val error = Consumer<Throwable> {

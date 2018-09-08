@@ -9,7 +9,7 @@ import com.github.windsekirun.rxsociallogin.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.kakao.auth.KakaoSDK
 import com.twitter.sdk.android.core.Twitter
@@ -45,8 +45,8 @@ abstract class SocialLogin(activity: Activity) {
 
     }
 
-    protected fun responseFail(socialType: SocialType) {
-        responseSuccess(LoginResultItem.createFail(socialType))
+    protected fun responseFail(platformType: PlatformType) {
+        responseSuccess(LoginResultItem.createFail(platformType))
     }
 
     protected fun responseSuccess(loginResultItem: LoginResultItem) {
@@ -54,9 +54,9 @@ abstract class SocialLogin(activity: Activity) {
     }
 
     companion object {
-        private var availableTypeMap: MutableMap<SocialType, SocialConfig> = HashMap()
+        private var sAvailableTypeMap: MutableMap<PlatformType, SocialConfig> = HashMap()
         private var application: Application? = null
-        private val alreadyInitializedList = ArrayList<SocialType>()
+        private val alreadyInitializedList = ArrayList<PlatformType>()
 
         /**
          * Initialize SocialLogin
@@ -74,11 +74,11 @@ abstract class SocialLogin(activity: Activity) {
          * @param availableTypeMap
          */
         @JvmStatic
-        fun init(application: Application, availableTypeMap: MutableMap<SocialType, SocialConfig>) {
+        fun init(application: Application, availableTypeMap: MutableMap<PlatformType, SocialConfig>) {
             this.application = application
 
             if (!availableTypeMap.isEmpty()) {
-                this.availableTypeMap = availableTypeMap
+                this.sAvailableTypeMap = availableTypeMap
                 initializeSDK()
             }
         }
@@ -86,52 +86,52 @@ abstract class SocialLogin(activity: Activity) {
         /**
          * add SocialConfig to use
          *
-         * @param socialType   [SocialType] object
+         * @param platformType   [PlatformType] object
          * @param socialConfig [SocialConfig] object
          */
         @JvmStatic
-        fun addType(socialType: SocialType, socialConfig: SocialConfig) {
+        fun addType(platformType: PlatformType, socialConfig: SocialConfig) {
             if (application == null) {
                 throw RuntimeException("No context is available, please declare SocialLogin.init(this)")
             }
 
-            availableTypeMap[socialType] = socialConfig
+            sAvailableTypeMap[platformType] = socialConfig
             initializeSDK()
         }
 
         /**
          * remove SocialConfig in AvailableTypeMap
          *
-         * @param socialType [SocialType] object
+         * @param platformType [PlatformType] object
          */
         @JvmStatic
-        fun removeType(socialType: SocialType) {
-            availableTypeMap.remove(socialType)
+        fun removeType(platformType: PlatformType) {
+            sAvailableTypeMap.remove(platformType)
         }
 
         private fun initializeSDK() {
-            for ((key, value) in availableTypeMap) {
+            for ((key, value) in sAvailableTypeMap) {
                 if (alreadyInitializedList.contains(key)) {
                     return
                 }
 
                 alreadyInitializedList.add(key)
                 when (key) {
-                    SocialType.KAKAO -> initializeKakaoSDK()
-                    SocialType.TWITTER -> initializeTwitterSDK(value as TwitterConfig)
-                    SocialType.FACEBOOK -> initializeFacebookSDK(value as FacebookConfig)
+                    PlatformType.KAKAO -> initializeKakaoSDK()
+                    PlatformType.TWITTER -> initializeTwitterSDK(value as TwitterConfig)
+                    PlatformType.FACEBOOK -> initializeFacebookSDK(value as FacebookConfig)
                     else -> {
                     }
                 }
             }
         }
 
-        fun getConfig(type: SocialType): SocialConfig {
-            if (!availableTypeMap.containsKey(type)) {
-                throw RuntimeException(String.format("No config is available :: SocialType -> ${type.name}"))
+        fun getConfig(type: PlatformType): SocialConfig {
+            if (!sAvailableTypeMap.containsKey(type)) {
+                throw RuntimeException(String.format("No config is available :: Platform -> ${type.name}"))
             }
 
-            return availableTypeMap[type]!!
+            return sAvailableTypeMap[type]!!
         }
 
         private fun initializeKakaoSDK() {
@@ -152,7 +152,7 @@ abstract class SocialLogin(activity: Activity) {
         }
 
         private fun clear() {
-            availableTypeMap.clear()
+            sAvailableTypeMap.clear()
             alreadyInitializedList.clear()
         }
 

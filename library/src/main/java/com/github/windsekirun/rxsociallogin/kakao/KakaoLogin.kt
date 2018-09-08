@@ -5,7 +5,7 @@ import android.content.Intent
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.KakaoSDK
@@ -71,16 +71,16 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
             val message = exception?.message ?: ""
             Log.d("SessionCallback", "OpenFailed:: $message")
 
-            responseFail(SocialType.KAKAO)
+            responseFail(PlatformType.KAKAO)
         }
     }
 
     private fun requestMe() {
-        val config = getConfig(SocialType.KAKAO) as KakaoConfig
+        val config = getConfig(PlatformType.KAKAO) as KakaoConfig
 
         UserManagement.getInstance().me(config.requestOptions, object : MeV2ResponseCallback() {
             override fun onSessionClosed(errorResult: ErrorResult) {
-                responseFail(SocialType.KAKAO)
+                responseFail(PlatformType.KAKAO)
             }
 
             override fun onSuccess(result: MeV2Response) {
@@ -126,7 +126,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
                     this.birthday = birthday
                     this.emailVerified = isEmailVerified
                     this.result = true
-                    this.platform = SocialType.KAKAO
+                    this.mPlatform = PlatformType.KAKAO
                 }
 
                 responseSuccess(item)
