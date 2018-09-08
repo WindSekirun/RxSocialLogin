@@ -8,4 +8,4 @@ package com.github.windsekirun.rxsociallogin.intenal.exception
  *
  * Description:
  */
-class LoginFailedException(message: String) : Exception(message)
+class LoginFailedException(message: String) : IllegalStateException(message)
