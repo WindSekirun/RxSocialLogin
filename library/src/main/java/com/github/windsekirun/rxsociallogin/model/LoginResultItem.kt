@@ -25,7 +25,6 @@ class LoginResultItem {
     var firstName = ""
     var ageRange = ""
 
-
     companion object {
         fun createFail(type: SocialType) = LoginResultItem().apply {
             this.result = false
@@ -34,10 +33,24 @@ class LoginResultItem {
     }
 
     override fun toString(): String {
-        return "LoginResultItem(type=$type, result=$result, id='$id', name='$name', " +
-                "accessToken='$accessToken', email='$email', nickname='$nickname'," +
-                " profilePicture='$profilePicture', gender='$gender'," +
-                " thumbnailPicture='$thumbnailPicture', emailVerified='$emailVerified', age='$age'," +
-                " birthday='$birthday', firstName='$firstName', ageRange='$ageRange')"
+        return "LoginResultItem(\n" +
+                "type=$type,\n" +
+                "result=$result,\n" +
+                "id='$id',\n" +
+                "name='$name',\n" +
+                "accessToken='$accessToken',\n" +
+                "email='$email',\n" +
+                "nickname='$nickname',\n" +
+                "profilePicture='$profilePicture',\n" +
+                "gender='$gender',\n" +
+                "thumbnailPicture='$thumbnailPicture',\n" +
+                "emailVerified=$emailVerified,\n" +
+                "age='$age'\n" +
+                "birthday='$birthday',\n" +
+                "firstName='$firstName',\n" +
+                "ageRange='$ageRange'\n" +
+                ")"
     }
+
+
 }

@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             val typeStr = it.toString()
             Log.d(MainActivity::class.java.simpleName, "onNext: typeStr: $typeStr")
             txtResult.text = typeStr
+            txtType.text = it.type.name
         }
 
         val error = Consumer<Throwable> {
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             lineLogin.onLogin()
         }
 
-        btnTwiitter.setOnClickListener {
+        btnTwitter.setOnClickListener {
             twitterLogin.onLogin()
         }
 
@@ -138,7 +139,7 @@ class MainActivity : AppCompatActivity() {
             githubLogin.onLogin()
         }
 
-        btnLinkedIn.setOnClickListener {
+        btnLinkedin.setOnClickListener {
             linkedinLogin.onLogin()
         }
 
