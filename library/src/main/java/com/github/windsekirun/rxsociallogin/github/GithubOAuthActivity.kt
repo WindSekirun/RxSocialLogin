@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin.github
 
 import android.annotation.SuppressLint
+import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -14,7 +15,7 @@ class GithubOAuthActivity : BaseOAuthActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun init() {
-        var url = "${GithubOAuthConstants.GITHUB_URL}?client_id=${githubConfig.clientId}"
+        var url = "${OAuthConstants.GITHUB_URL}?client_id=${githubConfig.clientId}"
 
         if (githubConfig.scopeList.isNotEmpty()) {
             val scope = githubConfig.scopeList.joinToString(",")
@@ -41,6 +42,6 @@ class GithubOAuthActivity : BaseOAuthActivity() {
 
         val header = "Accept" to "application/json"
 
-        disposable = OkHttpHelper.post(GithubOAuthConstants.GITHUB_OAUTH, header, formArray).requestAccessToken()
+        disposable = OkHttpHelper.post(OAuthConstants.GITHUB_OAUTH, header, formArray).requestAccessToken()
     }
 }

@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
 import android.annotation.SuppressLint
+import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -16,7 +17,7 @@ class LinkedInOAuthActivity : BaseOAuthActivity() {
     override fun init() {
         val state = randomString(22)
 
-        var url = "${LinkedInOAuthConstants.LINKEDIN_URL}?response_type=code&" +
+        var url = "${OAuthConstants.LINKEDIN_URL}?response_type=code&" +
                 "client_id=${linkedinConfig.clientId}&redirect_uri=${linkedinConfig.redirectUri}&" +
                 "state=$state&scope=r_basicprofile"
 
@@ -46,6 +47,6 @@ class LinkedInOAuthActivity : BaseOAuthActivity() {
 
         val header = "Content-Type" to "application/json"
 
-        disposable = OkHttpHelper.post(LinkedInOAuthConstants.LINKEDIN_OAUTH, header, formArray).requestAccessToken()
+        disposable = OkHttpHelper.post(OAuthConstants.LINKEDIN_OAUTH, header, formArray).requestAccessToken()
     }
 }

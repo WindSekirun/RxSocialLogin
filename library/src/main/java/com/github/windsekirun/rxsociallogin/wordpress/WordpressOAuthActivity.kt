@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin.wordpress
 
 import android.annotation.SuppressLint
+import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -14,7 +15,7 @@ class WordpressOAuthActivity : BaseOAuthActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun init() {
-        val url = "${WordpressOAuthConstants.WORDPRESS_URL}?client_id=${config.clientId}&" +
+        val url = "${OAuthConstants.WORDPRESS_URL}?client_id=${config.clientId}&" +
                 "redirect_uri=${config.redirectUri}&response_type=code"
 
         if (config.clearCookies) {
@@ -43,6 +44,6 @@ class WordpressOAuthActivity : BaseOAuthActivity() {
 
         val header = "Content-Type" to "application/json"
 
-        disposable = OkHttpHelper.post(WordpressOAuthConstants.WORDPRESS_OAUTH, header, formArray).requestAccessToken()
+        disposable = OkHttpHelper.post(OAuthConstants.WORDPRESS_OAUTH, header, formArray).requestAccessToken()
     }
 }

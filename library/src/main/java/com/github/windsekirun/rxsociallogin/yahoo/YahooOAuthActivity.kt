@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.yahoo
 
 import android.annotation.SuppressLint
 import android.util.Base64
+import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -17,7 +18,7 @@ class YahooOAuthActivity : BaseOAuthActivity() {
     override fun init() {
         val nonce = randomString(21)
 
-        val url = "${YahooOAuthConstants.YAHOO_URL}?client_id=${config.clientId}&" +
+        val url = "${OAuthConstants.YAHOO_URL}?client_id=${config.clientId}&" +
                 "redirect_uri=${config.redirectUri}&response_type=code&scope=openid%20sdps-r&nonce=$nonce"
 
         if (config.clearCookies) {
@@ -49,6 +50,6 @@ class YahooOAuthActivity : BaseOAuthActivity() {
 
         val header = "Authorization" to "Basic $basicToken"
 
-        disposable = OkHttpHelper.post(YahooOAuthConstants.YAHOO_OAUTH, header, formArray).requestAccessToken()
+        disposable = OkHttpHelper.post(OAuthConstants.YAHOO_OAUTH, header, formArray).requestAccessToken()
     }
 }

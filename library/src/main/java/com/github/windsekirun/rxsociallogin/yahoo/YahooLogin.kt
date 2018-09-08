@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.yahoo
 import android.app.Activity
 import android.content.Intent
 import android.util.Base64
+import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -13,7 +14,7 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 class YahooLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == YahooOAuthConstants.YAHOO_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
@@ -23,7 +24,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun onLogin() {
         val intent = Intent(activity, YahooOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, YahooOAuthConstants.YAHOO_REQUEST_CODE)
+        activity?.startActivityForResult(intent, OAuthConstants.YAHOO_REQUEST_CODE)
     }
 
     override fun onDestroy() {

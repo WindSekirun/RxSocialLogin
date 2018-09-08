@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.wordpress
 
 import android.app.Activity
 import android.content.Intent
+import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -18,7 +19,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
     private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == WordpressOAuthConstants.WORDPRESS_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (resultCode != Activity.RESULT_OK) {
@@ -28,7 +29,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun onLogin() {
         val intent = Intent(activity, WordpressOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, WordpressOAuthConstants.WORDPRESS_REQUEST_CODE)
+        activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
     }
 
     override fun onDestroy() {
