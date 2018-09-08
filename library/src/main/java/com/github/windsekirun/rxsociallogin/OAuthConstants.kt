@@ -25,4 +25,7 @@ object OAuthConstants {
     const val YAHOO_OAUTH = "https://api.login.yahoo.com/oauth2/get_token"
     const val YAHOO_REQUEST_CODE = 103
 
+    const val VK_URL = "https://oauth.vk.com/authorize"
+    const val VK_OAUTH = "https://oauth.vk.com/access_token"
+    const val VK_REQUEST_CODE = 104
 }
