@@ -43,11 +43,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
-//        // optional, if you happen 'UndeliverableException', use this methods.
-//        // warning, this value is global handler.
-//        // you can see wiki at https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
-//        RxJavaPlugins.setErrorHandler { e -> }
-
         kakaoLogin = KakaoLogin(this)
         facebookLogin = FacebookLogin(this)
         naverLogin = NaverLogin(this)
