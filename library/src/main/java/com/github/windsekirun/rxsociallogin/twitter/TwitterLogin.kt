@@ -28,7 +28,7 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
                 val item = LoginResultItem().apply {
                     this.id = result.data.userId.toString()
                     this.name = result.data.userName
-                    this.mPlatform = PlatformType.TWITTER
+                    this.platform = PlatformType.TWITTER
                     this.result = true
                 }
 

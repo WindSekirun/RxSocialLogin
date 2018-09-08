@@ -126,7 +126,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
                     this.birthday = birthday
                     this.emailVerified = isEmailVerified
                     this.result = true
-                    this.mPlatform = PlatformType.KAKAO
+                    this.platform = PlatformType.KAKAO
                 }
 
                 responseSuccess(item)

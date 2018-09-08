@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.github.windsekirun.rxsociallogin.test.MainActivity">
+    tools:context="com.github.windsekirun.rxsociallogin.test.MainActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <ImageView
         android:id="@+id/imageView"
@@ -105,21 +106,30 @@
         app:srcCompat="@drawable/ic_twitter" />
 
     <ImageView
-        android:id="@+id/btnWordpress"
+        android:id="@+id/btnVK"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="@+id/btnKakao"
         app:layout_constraintTop_toBottomOf="@+id/btnKakao"
+        app:srcCompat="@drawable/ic_vk" />
+
+    <ImageView
+        android:id="@+id/btnWordpress"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toBottomOf="@+id/btnLine"
         app:srcCompat="@drawable/ic_wordpress" />
 
     <ImageView
         android:id="@+id/btnYahoo"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="@+id/btnLine"
-        app:layout_constraintTop_toBottomOf="@+id/btnLine"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/btnLinkedin"
         app:srcCompat="@drawable/ic_yahoo" />
 
     <android.support.constraint.Guideline
@@ -142,7 +152,7 @@
         android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/btnLinkedin" />
+        app:layout_constraintTop_toBottomOf="@+id/btnYahoo" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -169,11 +179,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/hanken"
-        tools:text="Platform"
         android:textColor="@android:color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/textView2" />
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        tools:text="Platform" />
 
 
 </android.support.constraint.ConstraintLayout>

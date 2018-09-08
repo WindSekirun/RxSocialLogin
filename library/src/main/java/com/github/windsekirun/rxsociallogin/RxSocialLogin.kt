@@ -12,6 +12,7 @@ import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
+import com.github.windsekirun.rxsociallogin.vk.VKLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.Observable
@@ -88,6 +89,13 @@ object RxSocialLogin {
         return RxYahooLogin(login)
     }
 
+    @CheckResult
+    @JvmStatic
+    fun vk(login: VKLogin): Observable<LoginResultItem> {
+        Preconditions.checkNotNull(login, "VKLogin")
+        return RxVKLogin(login)
+    }
+
     internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
     internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
     internal class RxGoogleLogin(login: GoogleLogin) : BaseSocialObservable<GoogleLogin>(login)
@@ -98,4 +106,5 @@ object RxSocialLogin {
     internal class RxTwitterLogin(login: TwitterLogin) : BaseSocialObservable<TwitterLogin>(login)
     internal class RxWordpressLogin(login: WordpressLogin) : BaseSocialObservable<WordpressLogin>(login)
     internal class RxYahooLogin(login: YahooLogin) : BaseSocialObservable<YahooLogin>(login)
+    internal class RxVKLogin(login: VKLogin) : BaseSocialObservable<VKLogin>(login)
 }

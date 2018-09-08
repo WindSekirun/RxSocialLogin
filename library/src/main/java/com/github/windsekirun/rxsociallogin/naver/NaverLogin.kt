@@ -82,7 +82,7 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
                         this.age = responseObject.getJSONString("age")
                         this.birthday = responseObject.getJSONString("birthday")
                         this.profilePicture = responseObject.getJSONString("profile_image")
-                        this.mPlatform = PlatformType.NAVER
+                        this.platform = PlatformType.NAVER
                         this.result = true
                     }
 

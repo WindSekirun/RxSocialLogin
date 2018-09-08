@@ -72,7 +72,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
                         this.emailVerified = emailVerified
 
                         this.result = true
-                        this.mPlatform = PlatformType.WORDPRESS
+                        this.platform = PlatformType.WORDPRESS
                     }
 
                     responseSuccess(item)

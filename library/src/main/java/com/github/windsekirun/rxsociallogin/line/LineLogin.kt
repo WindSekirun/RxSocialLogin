@@ -38,7 +38,7 @@ class LineLogin(activity: Activity) : SocialLogin(activity) {
                 }
 
                 val item = LoginResultItem().apply {
-                    this.mPlatform = PlatformType.LINE
+                    this.platform = PlatformType.LINE
                     this.result = true
                     this.accessToken = accessToken ?: ""
                     this.id = lineProfile.userId

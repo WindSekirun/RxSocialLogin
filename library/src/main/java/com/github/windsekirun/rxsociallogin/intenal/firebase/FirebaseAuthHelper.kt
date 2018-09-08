@@ -20,7 +20,7 @@ internal fun handleSignInResult(user: FirebaseUser?, platformType: PlatformType)
         id = user.uid
         emailVerified = user.isEmailVerified
         result = true
-        mPlatform = platformType
+        platform = platformType
     }
 }
 

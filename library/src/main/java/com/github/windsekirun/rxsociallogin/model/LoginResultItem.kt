@@ -9,7 +9,7 @@ package com.github.windsekirun.rxsociallogin.model
  * Description:
  */
 class LoginResultItem {
-    var mPlatform: PlatformType = PlatformType.NONE
+    var platform: PlatformType = PlatformType.NONE
     var result = false
     var id = ""
     var name = ""
@@ -28,13 +28,13 @@ class LoginResultItem {
     companion object {
         fun createFail(platform: PlatformType) = LoginResultItem().apply {
             this.result = false
-            this.mPlatform = platform
+            this.platform = platform
         }
     }
 
     override fun toString(): String {
         return "LoginResultItem(\n" +
-                "type=$mPlatform,\n" +
+                "platform=$platform,\n" +
                 "result=$result,\n" +
                 "id='$id',\n" +
                 "name='$name',\n" +

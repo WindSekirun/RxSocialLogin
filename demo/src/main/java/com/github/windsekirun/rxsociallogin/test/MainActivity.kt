@@ -15,6 +15,7 @@ import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
+import com.github.windsekirun.rxsociallogin.vk.VKLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.disposables.CompositeDisposable
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var linkedinLogin: LinkedinLogin
     private lateinit var wordpressLogin: WordpressLogin
     private lateinit var yahooLogin: YahooLogin
+    private lateinit var vkLogin: VKLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,11 +54,12 @@ class MainActivity : AppCompatActivity() {
         linkedinLogin = LinkedinLogin(this)
         wordpressLogin = WordpressLogin(this)
         yahooLogin = YahooLogin(this)
+        vkLogin = VKLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             txtResult.text = it.toString()
             txtResult.setTextColor(Color.BLACK)
-            txtPlatform.text = it.mPlatform.name
+            txtPlatform.text = it.platform.name
         }
 
         val error = Consumer<Throwable> {
@@ -96,6 +99,9 @@ class MainActivity : AppCompatActivity() {
         val yahooDisposable = RxSocialLogin.yahoo(yahooLogin)
                 .subscribe(consumer, error)
 
+        val vkDisposable = RxSocialLogin.vk(vkLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
@@ -106,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(linkedinDisposable)
         compositeDisposable.add(wordpressDisposable)
         compositeDisposable.add(yahooDisposable)
+        compositeDisposable.add(vkDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -146,6 +153,10 @@ class MainActivity : AppCompatActivity() {
         btnYahoo.setOnClickListener {
             yahooLogin.onLogin()
         }
+
+        btnVK.setOnClickListener {
+            vkLogin.onLogin()
+        }
     }
 
     override fun onDestroy() {
@@ -165,5 +176,6 @@ class MainActivity : AppCompatActivity() {
         linkedinLogin.onActivityResult(requestCode, resultCode, data)
         wordpressLogin.onActivityResult(requestCode, resultCode, data)
         yahooLogin.onActivityResult(requestCode, resultCode, data)
+        vkLogin.onActivityResult(requestCode, resultCode, data)
     }
 }
