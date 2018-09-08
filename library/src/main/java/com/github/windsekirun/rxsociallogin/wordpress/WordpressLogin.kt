@@ -71,7 +71,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
                         this.emailVerified = emailVerified
 
                         this.result = true
-                        this.type = SocialType.WORDPRESS
+                        this.platform = SocialType.WORDPRESS
                     }
 
                     responseSuccess(item)

@@ -164,7 +164,7 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/txtType"
+        android:id="@+id/txtPlatform"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

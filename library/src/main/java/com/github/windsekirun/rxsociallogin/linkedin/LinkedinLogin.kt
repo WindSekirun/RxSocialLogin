@@ -82,7 +82,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
                         this.profilePicture = pictureUrl ?: ""
 
                         this.result = true
-                        this.type = SocialType.LINKEDIN
+                        this.platform = SocialType.LINKEDIN
                     }
 
                     responseSuccess(item)

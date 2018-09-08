@@ -11,11 +11,11 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 - Firebase Authentication integrated when use GoogleLogin.
 - Rewrite all methods in Kotlin
 - Hold Context in WeakReference to solve memory leak
-- Available to login with Github using Firebase Authentication
+- Available to login with Github using Firebase and OAuth2 Authentication
 - Available to login with LinkedIn, Wordpress, Yahoo using OAuth2 Authentication
 
 ## Available Feature
-|Service|logout|Return Data|Config|
+|Platform|logout|Return Data|Config|
 |---|---|---|---|
 |Facebook|O|id, name, email, profilePicture, gender, firstName|setRequireEmail, setRequireWritePermission, setApplicationId, setRequireFriends, setBehaviorOnCancel, setPictureSize|
 |Kakao|O|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|setRequireEmail, setRequireAgeRange, setRequireBirthday, setRequireGender|
@@ -87,7 +87,6 @@ RxSocialLogin.kakao(mKakaoLogin)
 #### Limitations
 1. Subscribe and observe should occur on Main Thread. if you try to change thread such as ```Schedulers.io``` using ```subscribeOn```, it will be call ```onError()```. instead, ```AndroidSchedulers.mainThread()``` will be fine.
 2. You should use ```subscribe(Consumer onNext, Consumer onError)```, not ```subscribe(Consumer onNext)``` whether you don't need onError callback.
-3. Sometimes it happen 'UndeliverableException'. if you prevent this exception, use ```RxJavaPlugins.setErrorHandler { e -> }``` statement. this methods occur change global error handler of RxJava, please use it only when you know exactly what you are doing. You can see [RxJava2 Wiki](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling)
 
 ### Call login() methods on anywhere
 ```java

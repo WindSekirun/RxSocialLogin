@@ -76,7 +76,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 this.gender = obj.getJSONString("gender")
                 this.firstName = obj.getJSONString("first_name")
                 this.profilePicture = profilePicture
-                this.type = SocialType.FACEBOOK
+                this.platform = SocialType.FACEBOOK
                 this.result = true
             }
 

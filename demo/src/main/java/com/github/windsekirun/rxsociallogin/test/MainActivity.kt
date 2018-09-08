@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin.test
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -42,10 +43,10 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
-        // optional, if you happen 'UndeliverableException', use this methods.
-        // warning, this value is global handler.
-        // you can see wiki at https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
-        RxJavaPlugins.setErrorHandler { e -> }
+//        // optional, if you happen 'UndeliverableException', use this methods.
+//        // warning, this value is global handler.
+//        // you can see wiki at https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
+//        RxJavaPlugins.setErrorHandler { e -> }
 
         kakaoLogin = KakaoLogin(this)
         facebookLogin = FacebookLogin(this)
@@ -59,14 +60,15 @@ class MainActivity : AppCompatActivity() {
         yahooLogin = YahooLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
-            val typeStr = it.toString()
-            Log.d(MainActivity::class.java.simpleName, "onNext: typeStr: $typeStr")
-            txtResult.text = typeStr
-            txtType.text = it.type.name
+            txtResult.text = it.toString()
+            txtResult.setTextColor(Color.BLACK)
+            txtPlatform.text = it.platform.name
         }
 
         val error = Consumer<Throwable> {
             Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
+            txtResult.text = "Login Failed"
+            txtResult.setTextColor(Color.RED)
         }
 
         // warning, do this in MainThread.

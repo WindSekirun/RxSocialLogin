@@ -56,7 +56,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
             this.id = guid
             this.name = name
             this.result = true
-            this.type = SocialType.YAHOO
+            this.platform = SocialType.YAHOO
         }
 
         responseSuccess(item)

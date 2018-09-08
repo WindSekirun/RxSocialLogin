@@ -55,7 +55,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
 
     private fun checkSession() {
         try {
-            val open = Session.getCurrentSession().checkAndImplicitOpen()
+           Session.getCurrentSession().checkAndImplicitOpen()
         } catch (e: Exception) {
             KakaoSDK.init(kakaoSDKAdapter)
         }
@@ -126,7 +126,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
                     this.birthday = birthday
                     this.emailVerified = isEmailVerified
                     this.result = true
-                    this.type = SocialType.KAKAO
+                    this.platform = SocialType.KAKAO
                 }
 
                 responseSuccess(item)

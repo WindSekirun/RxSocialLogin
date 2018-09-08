@@ -20,7 +20,7 @@ internal fun handleSignInResult(user: FirebaseUser?, socialType: SocialType): Lo
         id = user.uid
         emailVerified = user.isEmailVerified
         result = true
-        type = socialType
+        platform = socialType
     }
 }
 
