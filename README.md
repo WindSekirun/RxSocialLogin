@@ -15,18 +15,18 @@ Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google, G
 - Available to login with LinkedIn, Wordpress, Yahoo using OAuth2 Authentication
 
 ## Available Feature
-|Platform|logout|Return Data|Config|
+|Platform|Available Data|
 |---|---|---|---|
-|Facebook|O|id, name, email, profilePicture, gender, firstName|setRequireEmail, setRequireWritePermission, setApplicationId, setRequireFriends, setBehaviorOnCancel, setPictureSize|
-|Kakao|O|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|setRequireEmail, setRequireAgeRange, setRequireBirthday, setRequireGender|
-|Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
-|Line|X|id, name, accessToken|setChannelId|
-|Twitter|X|id, name|setConsumerKey, setConsumerSecret|
-|Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
-|Github|O|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setScopeList, setClearCookies, setActivityTitle|
-|LinkedIn|X|id, name, email, profilePicture, firstName|setRequireEmail, setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
-|Wordpress|X|id, name, email, profilePicture, emailVerified|setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
-|Yahoo|X|id, name|setClientId, setClientSecret, setClearCookies, setActivityTitle, setRedirectUri|
+|Facebook|id, name, email, profilePicture, gender, firstName|
+|Github|id, name, email, profilePicture, emailVerified|
+|Google|id, name, email, profilePicture, emailVerified|
+|Kakao|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|
+|LinkedIn|id, name, email, profilePicture, firstName|
+|Line|id, name, accessToken|
+|Naver|id, name, email, nickname, gender, profilePicture, age, birthDay|
+|Twitter|id, name|
+|Wordpress|id, name, email, profilePicture, emailVerified|
+|Yahoo|id, name|
 
 ## Usages
 
