@@ -3,12 +3,14 @@ package com.github.windsekirun.rxsociallogin.vk
 import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.*
 import io.reactivex.disposables.Disposable
+import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class VKLogin(activity: Activity) : SocialLogin(activity) {
     private val config: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
@@ -21,13 +23,18 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
             }
 
             override fun onResult(res: VKAccessToken?) {
-                getUserInfo()
+                getUserInfo(res)
             }
         })
     }
 
     override fun onLogin() {
-        VKSdk.login(activity as Activity, "status", "email", "photos")
+        val scopeList = mutableListOf("status", "photos")
+        if (config.requireEmail) {
+            scopeList.add("email")
+        }
+
+        VKSdk.login(activity as Activity, *scopeList.toTypedArray())
     }
 
     override fun onDestroy() {
@@ -36,7 +43,7 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    private fun getUserInfo() {
+    private fun getUserInfo(token: VKAccessToken?) {
         val request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "nickname,screen_name,bdate,city,photo_max"))
         request.executeWithListener(object : VKRequest.VKRequestListener() {
             override fun attemptFailed(request: VKRequest?, attemptNumber: Int, totalAttempts: Int) {
@@ -47,6 +54,11 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
             override fun onComplete(response: VKResponse?) {
                 super.onComplete(response)
 
+                if (response == null) {
+                    responseFail(PlatformType.VK)
+                } else {
+                    parseResponse(response, token)
+                }
             }
 
             override fun onProgress(progressType: VKRequest.VKProgressType?, bytesLoaded: Long, bytesTotal: Long) {
@@ -58,5 +70,37 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
                 responseFail(PlatformType.VK)
             }
         })
+    }
+
+    private fun parseResponse(response: VKResponse, token: VKAccessToken?) {
+        val jsonObject = response.json
+        if (jsonObject == null) {
+            responseFail(PlatformType.VK)
+            return
+        }
+
+        val myObject = jsonObject.getJSONArray("response").getJSONObject(0)
+        val id = myObject.getJSONString("id")
+        val firstName = myObject.getJSONString("first_name")
+        val name = "$firstName ${myObject.getJSONString("last_name")}"
+        val birthday = myObject.getJSONString("bdate")
+        val profilePicture = myObject.getJSONString("photo_max")
+        val nickname = myObject.getJSONString("nickname")
+
+        val email = if (token != null) token.email ?: "" else ""
+
+        val result = LoginResultItem().apply {
+            this.platform = PlatformType.VK
+            this.result = true
+            this.id = id
+            this.name = name
+            this.birthday = birthday
+            this.profilePicture = profilePicture
+            this.firstName = firstName
+            this.nickname = nickname
+            this.email = email
+        }
+
+        responseSuccess(result)
     }
 }

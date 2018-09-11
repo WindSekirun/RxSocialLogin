@@ -116,7 +116,7 @@ abstract class SocialLogin(activity: Activity) {
         private fun initializeSDK() {
             for ((key, value) in sAvailableTypeMap) {
                 if (alreadyInitializedList.contains(key)) {
-                    return
+                    continue
                 }
 
                 alreadyInitializedList.add(key)

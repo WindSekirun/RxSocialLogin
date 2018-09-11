@@ -25,7 +25,7 @@ Integrated SocialLogin with 11 Platform with RxJava and [Firebase Authentication
 |Line|id, name, accessToken|
 |Naver|id, name, email, nickname, gender, profilePicture, age, birthDay|
 |Twitter|id, name|
-|VK||
+|VK|id, name, email, profilePicture, nickname, firstName, birthDay|
 |Wordpress|id, name, email, profilePicture, emailVerified|
 |Yahoo|id, name|
 
