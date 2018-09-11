@@ -20,13 +20,13 @@ import io.reactivex.android.MainThreadDisposable
 open class BaseSocialObservable<T : SocialLogin>(private val login: T) : Observable<LoginResultItem>() {
 
     override fun subscribeActual(observer: Observer<in LoginResultItem>?) {
-        if (!Preconditions.checkMainThread(observer)) {
+        if (observer == null || !Preconditions.checkMainThread(observer)) {
             return
         }
 
         val listener = Listener(login, observer)
         login.responseListener = listener
-        observer?.onSubscribe(listener)
+        observer.onSubscribe(listener)
     }
 
     private class Listener<out T : SocialLogin>(val login: T, val observer: Observer<in LoginResultItem>?) :

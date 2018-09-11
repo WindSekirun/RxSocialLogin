@@ -21,80 +21,48 @@ object RxSocialLogin {
 
     @CheckResult
     @JvmStatic
-    fun facebook(login: FacebookLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "FacebookLogin")
-        return RxFacebookLogin(login)
-    }
+    fun facebook(login: FacebookLogin): Observable<LoginResultItem> = RxFacebookLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun kakao(login: KakaoLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "KakaoLogin")
-        return RxKakaoLogin(login)
-    }
+    fun kakao(login: KakaoLogin): Observable<LoginResultItem> = RxKakaoLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun naver(login: NaverLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "NaverLogin")
-        return RxNaverLogin(login)
-    }
+    fun naver(login: NaverLogin): Observable<LoginResultItem> = RxNaverLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun line(login: LineLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "LineLogin")
-        return RxLineLogin(login)
-    }
+    fun line(login: LineLogin): Observable<LoginResultItem> = RxLineLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun twitter(login: TwitterLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "TwitterLogin")
-        return RxTwitterLogin(login)
-    }
+    fun twitter(login: TwitterLogin): Observable<LoginResultItem> = RxTwitterLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun google(login: GoogleLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "GoogleLogin")
-        return RxGoogleLogin(login)
-    }
+    fun google(login: GoogleLogin): Observable<LoginResultItem> = RxGoogleLogin(login)
+
 
     @CheckResult
     @JvmStatic
-    fun github(login: GithubLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "GithubLogin")
-        return RxGithubLogin(login)
-    }
+    fun github(login: GithubLogin): Observable<LoginResultItem> = RxGithubLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun linkedin(login: LinkedinLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "LinkedinLogin")
-        return RxLinkedinLogin(login)
-    }
+    fun linkedin(login: LinkedinLogin): Observable<LoginResultItem> = RxLinkedinLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun wordpress(login: WordpressLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "WordpressLogin")
-        return RxWordpressLogin(login)
-    }
+    fun wordpress(login: WordpressLogin): Observable<LoginResultItem> = RxWordpressLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun yahoo(login: YahooLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "YahooLogin")
-        return RxYahooLogin(login)
-    }
+    fun yahoo(login: YahooLogin): Observable<LoginResultItem> = RxYahooLogin(login)
 
     @CheckResult
     @JvmStatic
-    fun vk(login: VKLogin): Observable<LoginResultItem> {
-        Preconditions.checkNotNull(login, "VKLogin")
-        return RxVKLogin(login)
-    }
+    fun vk(login: VKLogin): Observable<LoginResultItem> = RxVKLogin(login)
 
     internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
     internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
