@@ -18,7 +18,7 @@ Integrated SocialLogin with 15 Platform with RxJava and [Firebase Authentication
 |---|---|
 |Disqus|id, name, email, nickname, profilePicture|
 |Facebook|id, name, email, profilePicture, gender, firstName|
-|Foursquare||
+|Foursquare|id, name, email, firstName, gender, birthDay, profilePicture|
 |Github|id, name, email, profilePicture, emailVerified|
 |Google|id, name, email, profilePicture, emailVerified|
 |Kakao|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|

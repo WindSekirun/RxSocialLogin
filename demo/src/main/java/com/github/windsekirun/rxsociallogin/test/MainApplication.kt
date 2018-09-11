@@ -4,6 +4,7 @@ import android.app.Application
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
+import com.github.windsekirun.rxsociallogin.foursquare.FoursquareConfig
 import com.github.windsekirun.rxsociallogin.github.GithubConfig
 import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
@@ -135,5 +136,12 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(PlatformType.DISQUS, disqusConfig)
+
+        val foursquareConfig = FoursquareConfig.Builder()
+                .setClientId(getString(R.string.foursquare_api_key))
+                .setClientSecret(getString(R.string.foursquare_api_secret))
+                .build()
+
+        SocialLogin.addType(PlatformType.FOURSQUARE, foursquareConfig)
     }
 }

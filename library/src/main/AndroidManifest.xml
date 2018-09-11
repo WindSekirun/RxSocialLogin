@@ -31,5 +31,9 @@
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
 
+        <activity
+            android:name="com.foursquare.android.nativeoauth.TokenExchangeActivity"
+            android:theme="@android:style/Theme.Dialog" />
+
     </application>
 </manifest>

@@ -8,6 +8,7 @@ import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
+import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var vkLogin: VKLogin
     private lateinit var windowsLogin: WindowsLogin
     private lateinit var disqusLogin: DisqusLogin
+    private lateinit var foursquareLogin: FoursquareLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         vkLogin = VKLogin(this)
         windowsLogin = WindowsLogin(this)
         disqusLogin = DisqusLogin(this)
+        foursquareLogin = FoursquareLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             txtResult.text = it.toString()
@@ -114,6 +117,9 @@ class MainActivity : AppCompatActivity() {
         val disqusDisposable = RxSocialLogin.disqus(disqusLogin)
                 .subscribe(consumer, error)
 
+        val foursquareDisposable = RxSocialLogin.foursquare(foursquareLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
@@ -127,6 +133,7 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(vkDisposable)
         compositeDisposable.add(windowsDisposable)
         compositeDisposable.add(disqusDisposable)
+        compositeDisposable.add(foursquareDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -177,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnFoursquare.setOnClickListener {
-
+            foursquareLogin.onLogin()
         }
 
         btnDisqus.setOnClickListener {
@@ -209,5 +216,6 @@ class MainActivity : AppCompatActivity() {
         vkLogin.onActivityResult(requestCode, resultCode, data)
         windowsLogin.onActivityResult(requestCode, resultCode, data)
         disqusLogin.onActivityResult(requestCode, resultCode, data)
+        foursquareLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

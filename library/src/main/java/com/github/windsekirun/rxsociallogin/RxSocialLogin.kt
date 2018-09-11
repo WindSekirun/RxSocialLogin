@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin
 import android.support.annotation.CheckResult
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
+import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.intenal.rx.BaseSocialObservable
@@ -72,6 +73,10 @@ object RxSocialLogin {
     @JvmStatic
     fun disqus(login: DisqusLogin): Observable<LoginResultItem> = RxDisqusLogin(login)
 
+    @CheckResult
+    @JvmStatic
+    fun foursquare(login: FoursquareLogin): Observable<LoginResultItem> = RxFoursquareLogin(login)
+
     internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
     internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
     internal class RxGoogleLogin(login: GoogleLogin) : BaseSocialObservable<GoogleLogin>(login)
@@ -85,4 +90,5 @@ object RxSocialLogin {
     internal class RxVKLogin(login: VKLogin) : BaseSocialObservable<VKLogin>(login)
     internal class RxWindowsLogin(login: WindowsLogin) : BaseSocialObservable<WindowsLogin>(login)
     internal class RxDisqusLogin(login: DisqusLogin) : BaseSocialObservable<DisqusLogin>(login)
+    internal class RxFoursquareLogin(login: FoursquareLogin) : BaseSocialObservable<FoursquareLogin>(login)
 }
