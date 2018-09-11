@@ -12,6 +12,7 @@ import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.github.windsekirun.rxsociallogin.vk.VKConfig
+import com.github.windsekirun.rxsociallogin.windows.WindowsConfig
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressConfig
 import com.github.windsekirun.rxsociallogin.yahoo.YahooConfig
 
@@ -118,5 +119,11 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(PlatformType.VK, vkConfig)
+
+        val windowsConfig = WindowsConfig.Builder()
+                .setClientId(getString(R.string.windows_api_key))
+                .build()
+
+        SocialLogin.addType(PlatformType.WINDOWS, windowsConfig)
     }
 }

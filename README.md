@@ -1,7 +1,7 @@
 ## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
 
-Integrated SocialLogin with 11 Platform with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
+Integrated SocialLogin with 15 Platform with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
 
 이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
 
@@ -11,21 +11,24 @@ Integrated SocialLogin with 11 Platform with RxJava and [Firebase Authentication
 - Firebase Authentication integrated when use Google, Github.
 - **Re-write all methods** in Kotlin
 - Hold Context in WeakReference to solve memory leak
-- Available to login with Github using Firebase and OAuth2 Authentication
-- Available to login with LinkedIn, Wordpress, Yahoo, VK using OAuth2 Authentication
+- Support 15 Platform
 
 ## Available Platform
-|Platform|Data|
+|Platform|Data|Guide|
 |---|---|
+|Disqus||
 |Facebook|id, name, email, profilePicture, gender, firstName|
+|Foursquare||
 |Github|id, name, email, profilePicture, emailVerified|
 |Google|id, name, email, profilePicture, emailVerified|
 |Kakao|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|
-|LinkedIn|id, name, email, profilePicture, firstName|
 |Line|id, name, accessToken|
+|LinkedIn|id, name, email, profilePicture, firstName|
 |Naver|id, name, email, nickname, gender, profilePicture, age, birthDay|
+|Twitch||
 |Twitter|id, name|
 |VK|id, name, email, profilePicture, nickname, firstName, birthDay|
+|Windows|id, name, email|
 |Wordpress|id, name, email, profilePicture, emailVerified|
 |Yahoo|id, name|
 

@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class VKLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
+    private val mConfig: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
     private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -30,7 +30,7 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun onLogin() {
         val scopeList = mutableListOf("status", "photos")
-        if (config.requireEmail) {
+        if (mConfig.requireEmail) {
             scopeList.add("email")
         }
 

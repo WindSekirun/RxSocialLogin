@@ -16,6 +16,7 @@ import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import com.github.windsekirun.rxsociallogin.vk.VKLogin
+import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.disposables.CompositeDisposable
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var wordpressLogin: WordpressLogin
     private lateinit var yahooLogin: YahooLogin
     private lateinit var vkLogin: VKLogin
+    private lateinit var windowsLogin: WindowsLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         wordpressLogin = WordpressLogin(this)
         yahooLogin = YahooLogin(this)
         vkLogin = VKLogin(this)
+        windowsLogin = WindowsLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             txtResult.text = it.toString()
@@ -102,6 +105,9 @@ class MainActivity : AppCompatActivity() {
         val vkDisposable = RxSocialLogin.vk(vkLogin)
                 .subscribe(consumer, error)
 
+        val windowsDisposable = RxSocialLogin.windows(windowsLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
@@ -113,6 +119,7 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(wordpressDisposable)
         compositeDisposable.add(yahooDisposable)
         compositeDisposable.add(vkDisposable)
+        compositeDisposable.add(windowsDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -157,6 +164,22 @@ class MainActivity : AppCompatActivity() {
         btnVK.setOnClickListener {
             vkLogin.onLogin()
         }
+
+        btnWindows.setOnClickListener {
+            windowsLogin.onLogin()
+        }
+
+        btnFoursquare.setOnClickListener {
+
+        }
+
+        btnDisqus.setOnClickListener {
+
+        }
+
+        btnTwitch.setOnClickListener {
+
+        }
     }
 
     override fun onDestroy() {
@@ -177,5 +200,6 @@ class MainActivity : AppCompatActivity() {
         wordpressLogin.onActivityResult(requestCode, resultCode, data)
         yahooLogin.onActivityResult(requestCode, resultCode, data)
         vkLogin.onActivityResult(requestCode, resultCode, data)
+        windowsLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

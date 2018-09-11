@@ -22,7 +22,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
-        } else if (resultCode != Activity.RESULT_OK) {
+        }else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
             responseFail(PlatformType.LINKEDIN)
         }
     }
