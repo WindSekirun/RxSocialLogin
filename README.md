@@ -8,14 +8,14 @@ Integrated SocialLogin with 11 Platform with RxJava and [Firebase Authentication
 ### Difference from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
 - RxJava2 integrated.
 - CircleCI integrated.
-- Firebase Authentication integrated when use GoogleLogin.
-- Rewrite all methods in Kotlin
+- Firebase Authentication integrated when use Google, Github.
+- **Re-write all methods** in Kotlin
 - Hold Context in WeakReference to solve memory leak
 - Available to login with Github using Firebase and OAuth2 Authentication
 - Available to login with LinkedIn, Wordpress, Yahoo, VK using OAuth2 Authentication
 
-## Available Feature
-|Platform|Available Data|
+## Available Platform
+|Platform|Data|
 |---|---|
 |Facebook|id, name, email, profilePicture, gender, firstName|
 |Github|id, name, email, profilePicture, emailVerified|
@@ -35,7 +35,7 @@ Integrated SocialLogin with 11 Platform with RxJava and [Firebase Authentication
 ```
 allprojects {
     repositories {
-    	    maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+    	maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
 	    maven { url 'https://jitpack.io' }
     }
 }
@@ -44,7 +44,7 @@ allprojects {
 *app/build.gradle*
 ```
 dependencies {
-    implementation 'com.github.WindSekirun:RxSocialLogin:0.5.0'
+    implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
     
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
@@ -53,7 +53,6 @@ dependencies {
 ```
 * RxAndroid: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxandroid%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxandroid.svg'></a>
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
-
 
 ## Guide
 

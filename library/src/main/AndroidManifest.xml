@@ -22,5 +22,10 @@
             android:name=".yahoo.YahooOAuthActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent" />
+
     </application>
 </manifest>

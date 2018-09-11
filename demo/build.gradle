@@ -30,6 +30,7 @@ android {
         resValue "string", "wordpress_api_secret", properties.getProperty("default.wordpress.secret", "")
         resValue "string", "yahoo_api_key", properties.getProperty("default.yahoo.api", "")
         resValue "string", "yahoo_api_secret", properties.getProperty("default.yahoo.secret", "")
+        resValue "integer", "com_vk_sdk_AppId", properties.getProperty("default.vk.appid", "")
         multiDexEnabled true
     }
 

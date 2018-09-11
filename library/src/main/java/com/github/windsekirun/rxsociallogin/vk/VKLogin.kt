@@ -2,34 +2,32 @@ package com.github.windsekirun.rxsociallogin.vk
 
 import android.app.Activity
 import android.content.Intent
-import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
-import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.vk.sdk.VKAccessToken
+import com.vk.sdk.VKCallback
+import com.vk.sdk.VKSdk
+import com.vk.sdk.api.*
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import pyxis.uzuki.live.richutilskt.utils.createJSONObject
-import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class VKLogin(activity: Activity) : SocialLogin(activity) {
     private val config: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
     private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.VK_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.VK)
-        }
+        !VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
+            override fun onError(error: VKError?) {
+                responseFail(PlatformType.VK)
+            }
+
+            override fun onResult(res: VKAccessToken?) {
+                getUserInfo()
+            }
+        })
     }
 
     override fun onLogin() {
-        val intent = Intent(activity, VKOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, OAuthConstants.VK_REQUEST_CODE)
+        VKSdk.login(activity as Activity, "status", "email", "photos")
     }
 
     override fun onDestroy() {
@@ -38,15 +36,27 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    private fun analyzeResult(jsonStr: String) {
-        val jsonObject = jsonStr.createJSONObject()
-        val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) {
-            responseFail(PlatformType.VK)
-            return
-        }
+    private fun getUserInfo() {
+        val request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "nickname,screen_name,bdate,city,photo_max"))
+        request.executeWithListener(object : VKRequest.VKRequestListener() {
+            override fun attemptFailed(request: VKRequest?, attemptNumber: Int, totalAttempts: Int) {
+                super.attemptFailed(request, attemptNumber, totalAttempts)
+                responseFail(PlatformType.VK)
+            }
 
-        // TODO: implement api
-        val url = "https://api.vk.com/method/users.get?v=${config.version}&access_token=$accessToken"
+            override fun onComplete(response: VKResponse?) {
+                super.onComplete(response)
+
+            }
+
+            override fun onProgress(progressType: VKRequest.VKProgressType?, bytesLoaded: Long, bytesTotal: Long) {
+                super.onProgress(progressType, bytesLoaded, bytesTotal)
+            }
+
+            override fun onError(error: VKError?) {
+                super.onError(error)
+                responseFail(PlatformType.VK)
+            }
+        })
     }
 }

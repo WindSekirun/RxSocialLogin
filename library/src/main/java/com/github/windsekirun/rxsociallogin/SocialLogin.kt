@@ -8,14 +8,18 @@ import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.kakao.auth.KakaoSDK
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
+import com.vk.sdk.VKAccessToken
+import com.vk.sdk.VKAccessTokenTracker
+import com.vk.sdk.VKSdk
 import java.lang.ref.WeakReference
 import java.util.*
+
 
 /**
  * SocialLogin
@@ -120,6 +124,7 @@ abstract class SocialLogin(activity: Activity) {
                     PlatformType.KAKAO -> initializeKakaoSDK()
                     PlatformType.TWITTER -> initializeTwitterSDK(value as TwitterConfig)
                     PlatformType.FACEBOOK -> initializeFacebookSDK(value as FacebookConfig)
+                    PlatformType.VK -> initializeVKSDK()
                     else -> {
                     }
                 }
@@ -149,6 +154,19 @@ abstract class SocialLogin(activity: Activity) {
                     .build()
 
             Twitter.initialize(twitterConfig)
+        }
+
+        private fun initializeVKSDK() {
+            val vkAccessTokenTracker = object : VKAccessTokenTracker() {
+                override fun onVKAccessTokenChanged(oldToken: VKAccessToken?, newToken: VKAccessToken?) {
+                    if (newToken == null) {
+                        // VKAccessToken is invalid
+                    }
+                }
+            }
+
+            vkAccessTokenTracker.startTracking()
+            VKSdk.initialize(application)
         }
 
         private fun clear() {
