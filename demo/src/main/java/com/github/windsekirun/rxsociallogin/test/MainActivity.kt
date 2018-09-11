@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var yahooLogin: YahooLogin
     private lateinit var vkLogin: VKLogin
     private lateinit var windowsLogin: WindowsLogin
+    private lateinit var disqusLogin: DisqusLogin
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         yahooLogin = YahooLogin(this)
         vkLogin = VKLogin(this)
         windowsLogin = WindowsLogin(this)
+        disqusLogin = DisqusLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             txtResult.text = it.toString()
@@ -108,6 +111,9 @@ class MainActivity : AppCompatActivity() {
         val windowsDisposable = RxSocialLogin.windows(windowsLogin)
                 .subscribe(consumer, error)
 
+        val disqusDisposable = RxSocialLogin.disqus(disqusLogin)
+                .subscribe(consumer, error)
+
         compositeDisposable.add(kakaoDisposable)
         compositeDisposable.add(facebookDisposable)
         compositeDisposable.add(naverDisposable)
@@ -120,6 +126,7 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(yahooDisposable)
         compositeDisposable.add(vkDisposable)
         compositeDisposable.add(windowsDisposable)
+        compositeDisposable.add(disqusDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
@@ -174,7 +181,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnDisqus.setOnClickListener {
-
+            disqusLogin.onLogin()
         }
 
         btnTwitch.setOnClickListener {
@@ -201,5 +208,6 @@ class MainActivity : AppCompatActivity() {
         yahooLogin.onActivityResult(requestCode, resultCode, data)
         vkLogin.onActivityResult(requestCode, resultCode, data)
         windowsLogin.onActivityResult(requestCode, resultCode, data)
+        disqusLogin.onActivityResult(requestCode, resultCode, data)
     }
 }

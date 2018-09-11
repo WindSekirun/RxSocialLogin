@@ -33,6 +33,8 @@ android {
         resValue "integer", "com_vk_sdk_AppId", properties.getProperty("default.vk.appid", "")
         resValue "string", "windows_api_key", properties.getProperty("default.windows.appid", "")
         resValue "string", "windows_api_scheme", properties.getProperty("default.windows.scheme", "")
+        resValue "string", "disqus_api_key", properties.getProperty("default.disqus.api", "")
+        resValue "string", "disqus_api_secret", properties.getProperty("default.disqus.secret", "")
         multiDexEnabled true
     }
 

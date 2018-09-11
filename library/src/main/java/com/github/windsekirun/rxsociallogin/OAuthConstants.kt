@@ -24,4 +24,8 @@ object OAuthConstants {
     const val YAHOO_URL = "https://api.login.yahoo.com/oauth2/request_auth"
     const val YAHOO_OAUTH = "https://api.login.yahoo.com/oauth2/get_token"
     const val YAHOO_REQUEST_CODE = 103
+
+    const val DISQUS_URL = "https://disqus.com/api/oauth/2.0/authorize/"
+    const val DISQUS_OAUTH = "https://disqus.com/api/oauth/2.0/access_token/"
+    const val DISQUS_REQUEST_CODE = 104
 }

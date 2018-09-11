@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.test
 
 import android.app.Application
 import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.github.GithubConfig
 import com.github.windsekirun.rxsociallogin.google.GoogleConfig
@@ -125,5 +126,14 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(PlatformType.WINDOWS, windowsConfig)
+
+        val disqusConfig = DisqusConfig.Builder()
+                .setClientId(getString(R.string.disqus_api_key))
+                .setClientSecret(getString(R.string.disqus_api_secret))
+                .setClearCookies(true)
+                .setRedirectUri("http://www.example.com/oauth_redirect")
+                .build()
+
+        SocialLogin.addType(PlatformType.DISQUS, disqusConfig)
     }
 }

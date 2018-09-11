@@ -23,6 +23,10 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
+            android:name=".disqus.DisqusOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
