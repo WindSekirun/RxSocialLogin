@@ -16,7 +16,7 @@ Integrated SocialLogin with 11 Platform with RxJava and [Firebase Authentication
 
 ## Available Feature
 |Platform|Available Data|
-|---|---|---|---|
+|---|---|
 |Facebook|id, name, email, profilePicture, gender, firstName|
 |Github|id, name, email, profilePicture, emailVerified|
 |Google|id, name, email, profilePicture, emailVerified|
