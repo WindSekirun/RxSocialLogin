@@ -6,7 +6,6 @@ import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import kotlinx.android.synthetic.main.activity_oauth.*
 
@@ -22,10 +21,6 @@ class LinkedInOAuthActivity : BaseOAuthActivity() {
                 "state=$state&scope=r_basicprofile"
 
         if (linkedinConfig.requireEmail) url += "%20r_emailaddress"
-
-        if (linkedinConfig.clearCookies) {
-            clearCookies()
-        }
 
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = OAuthWebViewClient {

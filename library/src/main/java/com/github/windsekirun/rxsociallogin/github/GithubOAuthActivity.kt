@@ -6,7 +6,6 @@ import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import kotlinx.android.synthetic.main.activity_oauth.*
 
@@ -20,10 +19,6 @@ class GithubOAuthActivity : BaseOAuthActivity() {
         if (githubConfig.scopeList.isNotEmpty()) {
             val scope = githubConfig.scopeList.joinToString(",")
             url += scope
-        }
-
-        if (githubConfig.clearCookies) {
-            clearCookies()
         }
 
         webView.settings.javaScriptEnabled = true

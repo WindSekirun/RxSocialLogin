@@ -1,13 +1,11 @@
 package com.github.windsekirun.rxsociallogin.disqus
 
 import android.annotation.SuppressLint
-import android.util.Base64
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import kotlinx.android.synthetic.main.activity_oauth.*
 
@@ -18,10 +16,6 @@ class DisqusOAuthActivity : BaseOAuthActivity() {
     override fun init() {
         val url = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
                 "scope=read&response_type=code&redirect_uri=${config.redirectUri}"
-
-        if (config.clearCookies) {
-            clearCookies()
-        }
 
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
