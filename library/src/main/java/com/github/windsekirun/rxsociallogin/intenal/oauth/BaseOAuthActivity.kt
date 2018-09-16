@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.github.windsekirun.rxsociallogin.R
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -77,12 +78,12 @@ abstract class BaseOAuthActivity : AppCompatActivity() {
         return sb.toString()
     }
 
-    private fun finishActivity() {
+    fun finishActivity() {
         setResult(2)
         finish()
     }
 
-    private fun finishActivity(jsonStr: String) {
+    fun finishActivity(jsonStr: String) {
         val intent = Intent()
         intent.putExtra(RESPONSE_JSON, jsonStr)
         setResult(Activity.RESULT_OK, intent)

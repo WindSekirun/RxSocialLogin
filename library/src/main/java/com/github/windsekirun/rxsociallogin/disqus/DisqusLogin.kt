@@ -2,9 +2,11 @@ package com.github.windsekirun.rxsociallogin.disqus
 
 import android.app.Activity
 import android.content.Intent
+import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -56,36 +58,46 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
         val requestUrl = "https://disqus.com/api/3.0/users/details.json" +
                 "?access_token=$accessToken&api_key=${config.clientId}&api_secret=${config.clientSecret}"
 
-        val disposable = OkHttpHelper.get(requestUrl, "Content-Type" to "application/json")
-                .subscribeOn(Schedulers.newThread())
+        val disposable = requestUrl.httpGet()
+                .header("Content-Type" to "application/json")
+                .toResultObservable()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    val jsonObject = it.createJSONObject()
-                    val responseObject = jsonObject?.getJSONObject("response")
-
-                    if (responseObject == null) {
+                    it.fold({ response ->
+                        parseUserJson(response)
+                    }, { _ ->
                         responseFail(PlatformType.DISQUS)
-                        return@subscribe
-                    }
-
-                    val avatarObject = responseObject.getJSONObject("avatar")
-                    val profilePicture = avatarObject?.getJSONString("permalink") ?: ""
-
-                    val item = LoginResultItem().apply {
-                        this.id = responseObject.getJSONString("id")
-                        this.name = responseObject.getJSONString("name")
-                        this.email = responseObject.getJSONString("email")
-                        this.nickname = responseObject.getJSONString("username")
-                        this.profilePicture = profilePicture
-                        this.platform = PlatformType.DISQUS
-                        this.result = true
-                    }
-
-                    responseSuccess(item)
-                }) {
+                    })
+                }, {
                     responseFail(PlatformType.DISQUS)
-                }
+                })
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun parseUserJson(jsonStr: String?) {
+        val jsonObject = jsonStr?.createJSONObject()
+        val responseObject = jsonObject?.getJSONObject("response")
+
+        if (responseObject == null) {
+            responseFail(PlatformType.DISQUS)
+            return
+        }
+
+        val avatarObject = responseObject.getJSONObject("avatar")
+        val profilePicture = avatarObject?.getJSONString("permalink") ?: ""
+
+        val item = LoginResultItem().apply {
+            this.id = responseObject.getJSONString("id")
+            this.name = responseObject.getJSONString("name")
+            this.email = responseObject.getJSONString("email")
+            this.nickname = responseObject.getJSONString("username")
+            this.profilePicture = profilePicture
+            this.platform = PlatformType.DISQUS
+            this.result = true
+        }
+
+        responseSuccess(item)
     }
 }
