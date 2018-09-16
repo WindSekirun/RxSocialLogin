@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.twitch
 import android.app.Activity
 import android.content.Intent
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
@@ -12,7 +13,6 @@ import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
@@ -37,6 +37,21 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun logout(clearToken: Boolean) {
         super.logout(clearToken)
+
+        val accessToken = AccessTokenProvider.twitchAccessToken
+        if (accessToken.isNotEmpty()) {
+            val requestUrl = "https://id.twitch.tv/oauth2/revoke?client_id=${config.clientId}" +
+                    "&token=$accessToken"
+            val disposable = requestUrl.httpPost()
+                    .toResultObservable()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { result, error ->
+                        AccessTokenProvider.twitchAccessToken = ""
+                    }
+
+            compositeDisposable.add(disposable)
+        }
     }
 
     fun toObservable() = RxSocialLogin.twitch(this)
