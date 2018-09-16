@@ -7,7 +7,6 @@ import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -43,13 +42,13 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
     fun toObservable() = RxSocialLogin.disqus(this)
 
     private fun analyzeResult(jsonStr: String) {
-        val result = jsonStr.createJSONObject()
-        if (result == null) {
+        val accessTokenResult = jsonStr.createJSONObject()
+        if (accessTokenResult == null) {
             responseFail(PlatformType.DISQUS)
             return
         }
 
-        val accessToken = result.getJSONString("access_token", "")
+        val accessToken = accessTokenResult.getJSONString("access_token", "")
         if (accessToken.isEmpty()) {
             responseFail(PlatformType.DISQUS)
             return
@@ -63,15 +62,13 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
                 .toResultObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    it.fold({ response ->
-                        parseUserJson(response)
-                    }, { _ ->
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        parseUserJson(result.component1())
+                    } else {
                         responseFail(PlatformType.DISQUS)
-                    })
-                }, {
-                    responseFail(PlatformType.DISQUS)
-                })
+                    }
+                }
 
         compositeDisposable.add(disposable)
     }
