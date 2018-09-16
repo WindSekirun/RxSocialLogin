@@ -2,9 +2,11 @@ package com.github.windsekirun.rxsociallogin.wordpress
 
 import android.app.Activity
 import android.content.Intent
+import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -42,39 +44,47 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
         }
 
         val url = "https://public-api.wordpress.com/rest/v1.1/me"
-        val disposable = OkHttpHelper.get(url, "Authorization" to "Bearer $accessToken")
+        val disposable = url.httpGet()
+                .header("Authorization" to "Bearer $accessToken")
+                .toResultObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val response = it.createJSONObject()
-
-                    if (response == null) {
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        parseUserInfo(result.component1())
+                    } else {
                         responseFail(PlatformType.WORDPRESS)
-                        return@subscribe
                     }
-
-                    val id = response.getJSONString("ID")
-                    val username = response.getJSONString("username")
-                    val email = response.getJSONString("email")
-                    val profilePicture = response.getJSONString("profile_URL")
-                    val emailVerified = response.getJSONBoolean("email_verified")
-
-                    val item = LoginResultItem().apply {
-                        this.id = id
-                        this.name = username
-                        this.email = email
-                        this.profilePicture = profilePicture
-                        this.emailVerified = emailVerified
-
-                        this.result = true
-                        this.platform = PlatformType.WORDPRESS
-                    }
-
-                    responseSuccess(item)
-                }, {
-                    responseFail(PlatformType.WORDPRESS)
-                })
+                }
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun parseUserInfo(jsonStr: String?) {
+        val response = jsonStr?.createJSONObject()
+
+        if (response == null) {
+            responseFail(PlatformType.WORDPRESS)
+            return
+        }
+
+        val id = response.getJSONString("ID")
+        val username = response.getJSONString("username")
+        val email = response.getJSONString("email")
+        val profilePicture = response.getJSONString("profile_URL")
+        val emailVerified = response.getJSONBoolean("email_verified")
+
+        val item = LoginResultItem().apply {
+            this.id = id
+            this.name = username
+            this.email = email
+            this.profilePicture = profilePicture
+            this.emailVerified = emailVerified
+
+            this.result = true
+            this.platform = PlatformType.WORDPRESS
+        }
+
+        responseSuccess(item)
     }
 }

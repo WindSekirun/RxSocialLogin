@@ -2,12 +2,15 @@ package com.github.windsekirun.rxsociallogin.yahoo
 
 import android.annotation.SuppressLint
 import android.util.Base64
+import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
 import com.github.windsekirun.rxsociallogin.model.PlatformType
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_oauth.*
 
 class YahooOAuthActivity : BaseOAuthActivity() {
@@ -33,7 +36,7 @@ class YahooOAuthActivity : BaseOAuthActivity() {
     }
 
     private fun requestOAuthToken(code: String) {
-        val formArray = arrayOf(
+        val parameters = listOf(
                 "grant_type" to "authorization_code",
                 "redirect_uri" to config.redirectUri,
                 "client_id" to config.clientId,
@@ -45,6 +48,18 @@ class YahooOAuthActivity : BaseOAuthActivity() {
 
         val header = "Authorization" to "Basic $basicToken"
 
-        disposable = OkHttpHelper.post(OAuthConstants.YAHOO_OAUTH, header, formArray).requestAccessToken()
+        disposable = OAuthConstants.YAHOO_OAUTH.httpPost(parameters)
+                .header(header)
+                .toResultObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        finishActivity(result.component1() as String)
+                    } else {
+                        finishActivity()
+                    }
+                }
+
     }
 }
