@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.github
 import android.app.Activity
 import android.content.Intent
 import android.util.Base64
+import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
@@ -52,7 +53,21 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     override fun logout(clearToken: Boolean) {
         FirebaseAuth.getInstance().signOut()
         clearCookies()
-        AccessTokenProvider.githubAccessToken = ""
+
+        val accessToken = AccessTokenProvider.githubAccessToken
+        if (accessToken.isNotEmpty()) {
+            val requestUrl = "https://api.github.com/applications/${config.clientSecret}/tokens/$accessToken"
+            val disposable = requestUrl.httpDelete()
+                    .authenticate(config.clientId, config.clientSecret)
+                    .toResultObservable()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { result, error ->
+                        AccessTokenProvider.githubAccessToken = ""
+                    }
+
+            compositeDisposable.add(disposable)
+        }
     }
 
     fun toObservable() = RxSocialLogin.github(this)
