@@ -14,7 +14,7 @@ Integrated SocialLogin with 15 Platform with RxJava and [Firebase Authentication
 - Support 15 Platform
 
 ## Available Platform
-|Platform|Data|Guide|
+|Platform|Data|
 |---|---|
 |Disqus|id, name, email, nickname, profilePicture|
 |Facebook|id, name, email, profilePicture, gender, firstName|
