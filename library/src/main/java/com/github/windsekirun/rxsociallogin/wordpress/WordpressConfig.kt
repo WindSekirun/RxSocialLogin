@@ -10,13 +10,12 @@ import com.github.windsekirun.rxsociallogin.model.SocialConfig
  *
  * Description:
  */
-class WordpressConfig(val clientId: String, val clientSecret: String, val clearCookies: Boolean,
+class WordpressConfig(val clientId: String, val clientSecret: String,
                       val activityTitle: String, val redirectUri: String) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
         private var clientSecret: String = ""
-        private var clearCookies: Boolean = false
         private var activityTitle: String = "Login to Wordpress"
         private var redirectUri: String = "http://www.example.com/auth/wordpress"
 
@@ -27,11 +26,6 @@ class WordpressConfig(val clientId: String, val clientSecret: String, val clearC
 
         fun setClientSecret(clientSecret: String): Builder {
             this.clientSecret = clientSecret
-            return this
-        }
-
-        fun setClearCookies(clearCookies: Boolean): Builder {
-            this.clearCookies = clearCookies
             return this
         }
 
@@ -46,7 +40,7 @@ class WordpressConfig(val clientId: String, val clientSecret: String, val clearC
         }
 
         fun build(): WordpressConfig {
-            return WordpressConfig(clientId, clientSecret, clearCookies, activityTitle, redirectUri)
+            return WordpressConfig(clientId, clientSecret, activityTitle, redirectUri)
         }
     }
 }

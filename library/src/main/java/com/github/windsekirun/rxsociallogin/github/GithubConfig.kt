@@ -11,13 +11,12 @@ import com.github.windsekirun.rxsociallogin.model.SocialConfig
  * Description:
  */
 class GithubConfig(val clientId: String, val clientSecret: String, val scopeList: ArrayList<String>,
-                   val clearCookies: Boolean, val activityTitle: String) : SocialConfig() {
+                  val activityTitle: String) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
         private var clientSecret: String = ""
         private var scopeList: ArrayList<String> = arrayListOf()
-        private var clearCookies: Boolean = false
         private var activityTitle: String = "Login to Github"
 
         fun setClientId(clientId: String): Builder {
@@ -40,19 +39,13 @@ class GithubConfig(val clientId: String, val clientSecret: String, val scopeList
             return this
         }
 
-        fun setClearCookies(clearCookies: Boolean): Builder {
-            this.clearCookies = clearCookies
-            return this
-        }
-
         fun setActivityTitle(activityTitle: String): Builder {
             this.activityTitle = activityTitle
             return this
         }
 
-
         fun build(): GithubConfig {
-            return GithubConfig(clientId, clientSecret, scopeList, clearCookies, activityTitle)
+            return GithubConfig(clientId, clientSecret, scopeList, activityTitle)
         }
     }
 }

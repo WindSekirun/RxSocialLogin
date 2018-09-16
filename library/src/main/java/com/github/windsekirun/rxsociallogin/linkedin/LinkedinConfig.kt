@@ -10,13 +10,12 @@ import com.github.windsekirun.rxsociallogin.model.SocialConfig
  *
  * Description:
  */
-class LinkedinConfig(val clientId: String, val clientSecret: String, val clearCookies: Boolean,
-                     val activityTitle: String, val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {
+class LinkedinConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
+                     val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
         private var clientSecret: String = ""
-        private var clearCookies: Boolean = false
         private var activityTitle: String = "Login to Linkedin"
         private var redirectUri: String = "http://www.example.com/auth/linkedin"
         private var isRequireEmail = false
@@ -36,11 +35,6 @@ class LinkedinConfig(val clientId: String, val clientSecret: String, val clearCo
             return this
         }
 
-        fun setClearCookies(clearCookies: Boolean): Builder {
-            this.clearCookies = clearCookies
-            return this
-        }
-
         fun setActivityTitle(activityTitle: String): Builder {
             this.activityTitle = activityTitle
             return this
@@ -52,7 +46,7 @@ class LinkedinConfig(val clientId: String, val clientSecret: String, val clearCo
         }
 
         fun build(): LinkedinConfig {
-            return LinkedinConfig(clientId, clientSecret, clearCookies, activityTitle, redirectUri, isRequireEmail)
+            return LinkedinConfig(clientId, clientSecret, activityTitle, redirectUri, isRequireEmail)
         }
     }
 }

@@ -7,7 +7,6 @@ import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType

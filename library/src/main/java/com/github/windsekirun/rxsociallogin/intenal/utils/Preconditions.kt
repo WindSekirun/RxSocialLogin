@@ -2,11 +2,9 @@ package com.github.windsekirun.rxsociallogin.intenal.utils
 
 import android.os.Looper
 import android.support.annotation.RestrictTo
-
+import android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposables
-
-import android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP
 
 @RestrictTo(LIBRARY_GROUP)
 class Preconditions private constructor() {

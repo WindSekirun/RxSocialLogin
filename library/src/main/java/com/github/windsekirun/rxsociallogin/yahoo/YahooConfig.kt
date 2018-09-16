@@ -10,8 +10,8 @@ import com.github.windsekirun.rxsociallogin.model.SocialConfig
  *
  * Description:
  */
-class YahooConfig(val clientId: String, val clientSecret: String, val clearCookies: Boolean,
-                  val activityTitle: String, val redirectUri: String) : SocialConfig() {
+class YahooConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
+                  val redirectUri: String) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
@@ -30,11 +30,6 @@ class YahooConfig(val clientId: String, val clientSecret: String, val clearCooki
             return this
         }
 
-        fun setClearCookies(clearCookies: Boolean): Builder {
-            this.clearCookies = clearCookies
-            return this
-        }
-
         fun setActivityTitle(activityTitle: String): Builder {
             this.activityTitle = activityTitle
             return this
@@ -46,7 +41,7 @@ class YahooConfig(val clientId: String, val clientSecret: String, val clearCooki
         }
 
         fun build(): YahooConfig {
-            return YahooConfig(clientId, clientSecret, clearCookies, activityTitle, redirectUri)
+            return YahooConfig(clientId, clientSecret, activityTitle, redirectUri)
         }
     }
 }

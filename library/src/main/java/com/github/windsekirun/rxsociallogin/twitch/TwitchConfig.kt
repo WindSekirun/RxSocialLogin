@@ -10,13 +10,12 @@ import com.github.windsekirun.rxsociallogin.model.SocialConfig
  *
  * Description:
  */
-class TwitchConfig(val clientId: String, val clientSecret: String, val clearCookies: Boolean,
-                   val activityTitle: String, val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {
+class TwitchConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
+                   val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
         private var clientSecret: String = ""
-        private var clearCookies: Boolean = false
         private var activityTitle: String = "Login to Twitch"
         private var redirectUri: String = "http://example.com/auth/disqus"
         private var isRequireEmail: Boolean = false
@@ -28,11 +27,6 @@ class TwitchConfig(val clientId: String, val clientSecret: String, val clearCook
 
         fun setClientSecret(clientSecret: String): Builder {
             this.clientSecret = clientSecret
-            return this
-        }
-
-        fun setClearCookies(clearCookies: Boolean): Builder {
-            this.clearCookies = clearCookies
             return this
         }
 
@@ -52,7 +46,7 @@ class TwitchConfig(val clientId: String, val clientSecret: String, val clearCook
         }
 
         fun build(): TwitchConfig {
-            return TwitchConfig(clientId, clientSecret, clearCookies, activityTitle, redirectUri, isRequireEmail)
+            return TwitchConfig(clientId, clientSecret, activityTitle, redirectUri, isRequireEmail)
         }
     }
 }

@@ -84,13 +84,11 @@ class MainApplication : Application() {
         val githubConfig = GithubConfig.Builder()
                 .setClientId(getString(R.string.github_api_key))
                 .setClientSecret(getString(R.string.github_api_secret))
-                .setClearCookies(true)
                 .build()
 
         SocialLogin.addType(PlatformType.GITHUB, githubConfig)
 
         val linkedinConfig = LinkedinConfig.Builder()
-                .setClearCookies(false)
                 .setRedirectUri("http://example.com/oauth/callback")
                 .setRequireEmail()
                 .setClientId(getString(R.string.linkedin_api_key))
@@ -102,7 +100,6 @@ class MainApplication : Application() {
         val wordpressConfig = WordpressConfig.Builder()
                 .setClientId(getString(R.string.wordpress_api_key))
                 .setClientSecret(getString(R.string.wordpress_api_secret))
-                .setClearCookies(true)
                 .setRedirectUri("http://example.com/oauth/callback")
                 .build()
 
@@ -111,7 +108,6 @@ class MainApplication : Application() {
         val yahooConfig = YahooConfig.Builder()
                 .setClientId(getString(R.string.yahoo_api_key))
                 .setClientSecret(getString(R.string.yahoo_api_secret))
-                .setClearCookies(true)
                 .setRedirectUri("http://example.com")
                 .build()
 
@@ -132,7 +128,6 @@ class MainApplication : Application() {
         val disqusConfig = DisqusConfig.Builder()
                 .setClientId(getString(R.string.disqus_api_key))
                 .setClientSecret(getString(R.string.disqus_api_secret))
-                .setClearCookies(true)
                 .setRedirectUri("http://www.example.com/oauth_redirect")
                 .build()
 

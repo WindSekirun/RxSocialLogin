@@ -10,7 +10,6 @@ import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 

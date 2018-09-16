@@ -1,7 +1,10 @@
 package com.github.windsekirun.rxsociallogin.intenal.fuel
 
-import com.github.kittinunf.fuel.core.*
+import com.github.kittinunf.fuel.core.Deserializable
+import com.github.kittinunf.fuel.core.FuelError
+import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.deserializers.StringDeserializer
+import com.github.kittinunf.fuel.core.response
 import com.github.kittinunf.result.Result
 import io.reactivex.Single
 import java.nio.charset.Charset
