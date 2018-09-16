@@ -25,7 +25,7 @@ Integrated SocialLogin with 15 Platform with RxJava and [Firebase Authentication
 |Line|id, name, accessToken|
 |LinkedIn|id, name, email, profilePicture, firstName|
 |Naver|id, name, email, nickname, gender, profilePicture, age, birthDay|
-|Twitch||
+|Twitch|id, name, email, profilePicture|
 |Twitter|id, name|
 |VK|id, name, email, profilePicture, nickname, firstName, birthDay|
 |Windows|id, name, email|

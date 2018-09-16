@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -56,6 +57,8 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
     override fun logout(clearToken: Boolean) {
         LoginManager.getInstance().logOut()
     }
+
+    fun toObservable() = RxSocialLogin.facebook(this)
 
     private fun getUserInfo() {
         val config = getConfig(PlatformType.FACEBOOK) as FacebookConfig

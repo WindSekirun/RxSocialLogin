@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.wordpress
 import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.OAuthConstants
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -37,6 +38,8 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
             disposable.dispose()
         }
     }
+
+    fun toObservable() = RxSocialLogin.wordpress(this)
 
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()

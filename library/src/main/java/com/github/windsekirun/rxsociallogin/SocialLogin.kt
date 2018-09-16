@@ -6,6 +6,7 @@ import android.content.Intent
 import com.facebook.FacebookSdk
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.impl.OnResponseListener
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -96,7 +97,7 @@ abstract class SocialLogin(activity: Activity) {
         @JvmStatic
         fun addType(platformType: PlatformType, socialConfig: SocialConfig) {
             if (application == null) {
-                throw RuntimeException("No context is available, please declare SocialLogin.init(this)")
+                throw LoginFailedException("No context is available, please declare SocialLogin.init(this)")
             }
 
             sAvailableTypeMap[platformType] = socialConfig
@@ -133,7 +134,7 @@ abstract class SocialLogin(activity: Activity) {
 
         fun getConfig(type: PlatformType): SocialConfig {
             if (!sAvailableTypeMap.containsKey(type)) {
-                throw RuntimeException(String.format("No config is available :: Platform -> ${type.name}"))
+                throw LoginFailedException(String.format("No config is available :: Platform -> ${type.name}"))
             }
 
             return sAvailableTypeMap[type]!!

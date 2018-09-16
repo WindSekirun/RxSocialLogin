@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.windows
 
 import android.app.Activity
 import android.content.Intent
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -69,6 +70,8 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
             }
         }
     }
+
+    fun toObservable() = RxSocialLogin.windows(this)
 
     private fun getUserInfo(authenticationResult: AuthenticationResult) {
         if (authenticationResult.accessToken == null) {

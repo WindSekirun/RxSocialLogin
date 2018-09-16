@@ -28,4 +28,8 @@ object OAuthConstants {
     const val DISQUS_URL = "https://disqus.com/api/oauth/2.0/authorize/"
     const val DISQUS_OAUTH = "https://disqus.com/api/oauth/2.0/access_token/"
     const val DISQUS_REQUEST_CODE = 104
+
+    const val TWITCH_URL = "https://id.twitch.tv/oauth2/authorize"
+    const val TWITCH_OAUTH = "https://id.twitch.tv/oauth2/token"
+    const val TWITCH_REQUEST_CODE = 105
 }

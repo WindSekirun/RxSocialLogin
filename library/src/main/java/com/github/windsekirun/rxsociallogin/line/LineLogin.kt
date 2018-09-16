@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.line
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -25,6 +26,8 @@ class LineLogin(activity: Activity) : SocialLogin(activity) {
     override fun onDestroy() {
 
     }
+
+    fun toObservable() = RxSocialLogin.line(this)
 
     private fun onResultLineLogin(data: Intent?) {
         val result = LineLoginApi.getLoginResultFromIntent(data)

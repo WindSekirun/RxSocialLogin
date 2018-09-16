@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.naver
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -47,6 +48,8 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
             OAuthLogin.getInstance().logout(activity)
         }
     }
+
+    fun toObservable() = RxSocialLogin.naver(this)
 
     @SuppressLint("HandlerLeak")
     private inner class NaverLoginHandler : OAuthLoginHandler() {

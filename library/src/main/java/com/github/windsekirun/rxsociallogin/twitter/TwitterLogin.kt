@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.twitter
 
 import android.app.Activity
 import android.content.Intent
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -21,6 +22,8 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
     override fun onDestroy() {
 
     }
+
+    fun toObservable() = RxSocialLogin.twitter(this)
 
     override fun onLogin() {
         twitterAuthClient.authorize(activity, object : Callback<TwitterSession>() {

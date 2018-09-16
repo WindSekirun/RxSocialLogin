@@ -12,6 +12,7 @@ import com.github.windsekirun.rxsociallogin.line.LineConfig
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
+import com.github.windsekirun.rxsociallogin.twitch.TwitchConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.github.windsekirun.rxsociallogin.vk.VKConfig
 import com.github.windsekirun.rxsociallogin.windows.WindowsConfig
@@ -143,5 +144,14 @@ class MainApplication : Application() {
                 .build()
 
         SocialLogin.addType(PlatformType.FOURSQUARE, foursquareConfig)
+
+        val twitchConfig = TwitchConfig.Builder()
+                .setClientId(getString(R.string.twitch_api_key))
+                .setClientSecret(getString(R.string.twitch_api_secret))
+                .setRedirectUri("http://example.com/oauth/callback")
+                .setRequireEmail()
+                .build()
+
+        SocialLogin.addType(PlatformType.TWITCH, twitchConfig)
     }
 }

@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.foursquare
 import android.app.Activity
 import android.content.Intent
 import com.foursquare.android.nativeoauth.FoursquareOAuth
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -48,6 +49,8 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
     override fun onDestroy() {
         compositeDisposable.clear()
     }
+
+    fun toObservable() = RxSocialLogin.foursquare(this)
 
     private fun getUserInfo(token: String) {
         val requestUrl = "https://api.foursquare.com/v2/users/self?oauth_token=$token" +

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Base64
 import com.github.windsekirun.rxsociallogin.OAuthConstants
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
@@ -30,6 +31,8 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
     override fun onDestroy() {
 
     }
+
+    fun toObservable() = RxSocialLogin.yahoo(this)
 
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()

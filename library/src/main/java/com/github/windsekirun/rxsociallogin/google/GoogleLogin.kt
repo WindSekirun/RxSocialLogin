@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.google
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -64,6 +65,8 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     override fun logout(clearToken: Boolean) {
         if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
     }
+
+    fun toObservable() = RxSocialLogin.google(this)
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)

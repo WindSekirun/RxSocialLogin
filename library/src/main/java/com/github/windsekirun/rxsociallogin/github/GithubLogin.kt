@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.github
 import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.OAuthConstants
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -40,6 +41,8 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     override fun logout(clearToken: Boolean) {
         FirebaseAuth.getInstance().signOut()
     }
+
+    fun toObservable() = RxSocialLogin.github(this)
 
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()

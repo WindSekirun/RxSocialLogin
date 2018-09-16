@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.disqus
+package com.github.windsekirun.rxsociallogin.twitch
 
 import android.app.Activity
 import android.content.Intent
@@ -16,74 +16,77 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class DisqusLogin(activity: Activity) : SocialLogin(activity) {
+class TwitchLogin(activity: Activity) : SocialLogin(activity) {
     private val compositeDisposable = CompositeDisposable()
-    private val config: DisqusConfig by lazy { getConfig(PlatformType.DISQUS) as DisqusConfig }
+    private val config: TwitchConfig by lazy { getConfig(PlatformType.TWITCH) as TwitchConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.DISQUS_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.TWITCH_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.DISQUS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.DISQUS)
+        } else if (requestCode == OAuthConstants.TWITCH_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
+            responseFail(PlatformType.TWITCH)
         }
     }
 
     override fun onLogin() {
-        val intent = Intent(activity, DisqusOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, OAuthConstants.DISQUS_REQUEST_CODE)
+        val intent = Intent(activity, TwitchOAuthActivity::class.java)
+        activity?.startActivityForResult(intent, OAuthConstants.TWITCH_REQUEST_CODE)
     }
 
     override fun onDestroy() {
         compositeDisposable.clear()
     }
 
-    fun toObservable() = RxSocialLogin.disqus(this)
+    fun toObservable() = RxSocialLogin.twitch(this)
 
     private fun analyzeResult(jsonStr: String) {
         val result = jsonStr.createJSONObject()
         if (result == null) {
-            responseFail(PlatformType.DISQUS)
+            responseFail(PlatformType.TWITCH)
             return
         }
 
         val accessToken = result.getJSONString("access_token", "")
         if (accessToken.isEmpty()) {
-            responseFail(PlatformType.DISQUS)
+            responseFail(PlatformType.TWITCH)
             return
         }
 
-        val requestUrl = "https://disqus.com/api/3.0/users/details.json" +
-                "?access_token=$accessToken&api_key=${config.clientId}&api_secret=${config.clientSecret}"
+        val requestUrl = "https://api.twitch.tv/helix/users"
+        val authorization = "Bearer $accessToken"
 
-        val disposable = OkHttpHelper.get(requestUrl, "Content-Type" to "application/json")
+        val disposable = OkHttpHelper.get(requestUrl, "Authorization" to authorization)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     val jsonObject = it.createJSONObject()
-                    val responseObject = jsonObject?.getJSONObject("response")
+                    val responseArray = jsonObject?.getJSONArray("data")
 
-                    if (responseObject == null) {
-                        responseFail(PlatformType.DISQUS)
+                    if (responseArray == null) {
+                        responseFail(PlatformType.TWITCH)
                         return@subscribe
                     }
 
-                    val avatarObject = responseObject.getJSONObject("avatar")
-                    val profilePicture = avatarObject?.getJSONString("permalink") ?: ""
+                    val responseObject = responseArray.getJSONObject(0)
+
+                    if (responseObject == null) {
+                        responseFail(PlatformType.TWITCH)
+                        return@subscribe
+                    }
 
                     val item = LoginResultItem().apply {
-                        this.id = responseObject.getJSONString("id")
-                        this.name = responseObject.getJSONString("name")
-                        this.email = responseObject.getJSONString("email")
-                        this.nickname = responseObject.getJSONString("username")
-                        this.profilePicture = profilePicture
-                        this.platform = PlatformType.DISQUS
                         this.result = true
+                        this.platform = PlatformType.TWITCH
+                        this.id = responseObject.getJSONString("id")
+                        this.name = responseObject.getJSONString("display_name")
+                        this.email = responseObject.getJSONString("email", "")
+                        this.profilePicture = responseObject.getJSONString("profile_image_url", "")
                     }
 
                     responseSuccess(item)
                 }) {
-                    responseFail(PlatformType.DISQUS)
+                    responseFail(PlatformType.TWITCH)
                 }
 
         compositeDisposable.add(disposable)

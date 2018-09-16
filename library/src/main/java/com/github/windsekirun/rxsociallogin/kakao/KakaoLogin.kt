@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.kakao
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -52,6 +53,8 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
             Session.getCurrentSession().close()
         }
     }
+
+    fun toObservable() = RxSocialLogin.kakao(this)
 
     private fun checkSession() {
         try {

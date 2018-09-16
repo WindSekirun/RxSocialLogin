@@ -12,6 +12,7 @@ import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
+import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import com.github.windsekirun.rxsociallogin.vk.VKLogin
 import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
@@ -77,6 +78,10 @@ object RxSocialLogin {
     @JvmStatic
     fun foursquare(login: FoursquareLogin): Observable<LoginResultItem> = RxFoursquareLogin(login)
 
+    @CheckResult
+    @JvmStatic
+    fun twitch(login: TwitchLogin): Observable<LoginResultItem> = RxTwitchLogin(login)
+
     internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
     internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
     internal class RxGoogleLogin(login: GoogleLogin) : BaseSocialObservable<GoogleLogin>(login)
@@ -91,4 +96,5 @@ object RxSocialLogin {
     internal class RxWindowsLogin(login: WindowsLogin) : BaseSocialObservable<WindowsLogin>(login)
     internal class RxDisqusLogin(login: DisqusLogin) : BaseSocialObservable<DisqusLogin>(login)
     internal class RxFoursquareLogin(login: FoursquareLogin) : BaseSocialObservable<FoursquareLogin>(login)
+    internal class RxTwitchLogin(login: TwitchLogin) : BaseSocialObservable<TwitchLogin>(login)
 }

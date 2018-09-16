@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.vk
 
 import android.app.Activity
 import android.content.Intent
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -42,6 +43,8 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
             disposable.dispose()
         }
     }
+
+    fun toObservable() = RxSocialLogin.vk(this)
 
     private fun getUserInfo(token: VKAccessToken?) {
         val request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "nickname,screen_name,bdate,city,photo_max"))

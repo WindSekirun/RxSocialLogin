@@ -37,6 +37,8 @@ android {
         resValue "string", "disqus_api_secret", properties.getProperty("default.disqus.secret", "")
         resValue "string", "foursquare_api_key", properties.getProperty("default.foursquare.api", "")
         resValue "string", "foursquare_api_secret", properties.getProperty("default.foursquare.secret", "")
+        resValue "string", "twitch_api_key", properties.getProperty("default.twitch.api", "")
+        resValue "string", "twitch_api_secret", properties.getProperty("default.twitch.secret", "")
         multiDexEnabled true
     }
 
@@ -69,7 +71,9 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0' // optional
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1' // optional
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1' // optional
     // library
     implementation project(path: ':library')
     // google

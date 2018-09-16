@@ -16,11 +16,14 @@ import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
+import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
 import com.github.windsekirun.rxsociallogin.vk.VKLogin
 import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
+import com.jakewharton.rxbinding2.view.clicks
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private val windowsLogin: WindowsLogin by lazy { WindowsLogin(this) }
     private val disqusLogin: DisqusLogin by lazy { DisqusLogin(this) }
     private val foursquareLogin: FoursquareLogin by lazy { FoursquareLogin(this) }
+    private val twitchLogin: TwitchLogin by lazy { TwitchLogin(this) }
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,122 +67,95 @@ class MainActivity : AppCompatActivity() {
             txtResult.setTextColor(Color.RED)
         }
 
-        // warning, do this in MainThread.
-        RxSocialLogin.kakao(kakaoLogin)
+        btnDisqus.clicks()
+                .doOnNext { disqusLogin.onLogin() }
+                .flatMap { disqusLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.facebook(facebookLogin)
+        btnFacebook.clicks()
+                .doOnNext { facebookLogin.onLogin() }
+                .flatMap { facebookLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.naver(naverLogin)
+        btnFoursquare.clicks()
+                .doOnNext { foursquareLogin.onLogin() }
+                .flatMap { foursquareLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.line(lineLogin)
+        btnGithub.clicks()
+                .doOnNext { githubLogin.onLogin() }
+                .flatMap { githubLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.twitter(twitterLogin)
+        btnGoogle.clicks()
+                .doOnNext { googleLogin.onLogin() }
+                .flatMap { googleLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.google(googleLogin)
+        btnKakao.clicks()
+                .doOnNext { kakaoLogin.onLogin() }
+                .flatMap { kakaoLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.github(githubLogin)
+        btnLine.clicks()
+                .doOnNext { lineLogin.onLogin() }
+                .flatMap { lineLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.linkedin(linkedinLogin)
+        btnLinkedin.clicks()
+                .doOnNext { linkedinLogin.onLogin() }
+                .flatMap { linkedinLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.wordpress(wordpressLogin)
+        btnNaver.clicks()
+                .doOnNext { naverLogin.onLogin() }
+                .flatMap { naverLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.yahoo(yahooLogin)
+        btnTwitch.clicks()
+                .doOnNext { twitchLogin.onLogin() }
+                .flatMap { twitchLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.vk(vkLogin)
+        btnTwitter.clicks()
+                .doOnNext { twitterLogin.onLogin() }
+                .flatMap { twitterLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.windows(windowsLogin)
+        btnVK.clicks()
+                .doOnNext { vkLogin.onLogin() }
+                .flatMap { vkLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.disqus(disqusLogin)
+        btnWindows.clicks()
+                .doOnNext { windowsLogin.onLogin() }
+                .flatMap { windowsLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        RxSocialLogin.foursquare(foursquareLogin)
+        btnWordpress.clicks()
+                .doOnNext { wordpressLogin.onLogin() }
+                .flatMap { wordpressLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
-        btnKakao.setOnClickListener {
-            kakaoLogin.onLogin()
-        }
-
-        btnFacebook.setOnClickListener {
-            facebookLogin.onLogin()
-        }
-
-        btnNaver.setOnClickListener {
-            naverLogin.onLogin()
-        }
-
-        btnLine.setOnClickListener {
-            lineLogin.onLogin()
-        }
-
-        btnTwitter.setOnClickListener {
-            twitterLogin.onLogin()
-        }
-
-        btnGoogle.setOnClickListener {
-            googleLogin.onLogin()
-        }
-
-        btnGithub.setOnClickListener {
-            githubLogin.onLogin()
-        }
-
-        btnLinkedin.setOnClickListener {
-            linkedinLogin.onLogin()
-        }
-
-        btnWordpress.setOnClickListener {
-            wordpressLogin.onLogin()
-        }
-
-        btnYahoo.setOnClickListener {
-            yahooLogin.onLogin()
-        }
-
-        btnVK.setOnClickListener {
-            vkLogin.onLogin()
-        }
-
-        btnWindows.setOnClickListener {
-            windowsLogin.onLogin()
-        }
-
-        btnFoursquare.setOnClickListener {
-            foursquareLogin.onLogin()
-        }
-
-        btnDisqus.setOnClickListener {
-            disqusLogin.onLogin()
-        }
-
-        btnTwitch.setOnClickListener {
-
-        }
+        btnYahoo.clicks()
+                .doOnNext { yahooLogin.onLogin() }
+                .flatMap { yahooLogin.toObservable() }
+                .subscribe(consumer, error)
+                .addTo(compositeDisposable)
     }
 
     override fun onDestroy() {
@@ -202,5 +179,6 @@ class MainActivity : AppCompatActivity() {
         windowsLogin.onActivityResult(requestCode, resultCode, data)
         disqusLogin.onActivityResult(requestCode, resultCode, data)
         foursquareLogin.onActivityResult(requestCode, resultCode, data)
+        twitchLogin.onActivityResult(requestCode, resultCode, data)
     }
 }
