@@ -2,35 +2,31 @@ package com.github.windsekirun.rxsociallogin.windows
 
 import android.app.Activity
 import android.content.Intent
+import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.AuthenticationResult
 import com.microsoft.identity.client.MsalException
 import com.microsoft.identity.client.PublicClientApplication
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
 class WindowsLogin(activity: Activity) : SocialLogin(activity) {
-    private val mConfig: WindowsConfig by lazy { getConfig(PlatformType.WINDOWS) as WindowsConfig }
-    private lateinit var clientApplication: PublicClientApplication
+    private val config: WindowsConfig by lazy { getConfig(PlatformType.WINDOWS) as WindowsConfig }
+    private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity.applicationContext, config.clientId) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (::clientApplication.isInitialized) {
-            clientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data)
-        }
+        clientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data)
     }
 
     override fun login() {
-        clientApplication = PublicClientApplication(activity!!.applicationContext, mConfig.clientId)
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {
@@ -47,20 +43,17 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
             override fun onError(exception: MsalException?) {
                 responseFail(PlatformType.WINDOWS)
             }
-
         })
     }
 
     override fun logout(clearToken: Boolean) {
         super.logout(clearToken)
 
-        if (::clientApplication.isInitialized) {
-            try {
-                clientApplication.users.forEach {
-                    clientApplication.remove(it)
-                }
-            } catch (ignore: Exception) {
+        try {
+            clientApplication.users.forEach {
+                clientApplication.remove(it)
             }
+        } catch (ignore: Exception) {
         }
     }
 
@@ -74,34 +67,38 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
 
         val requestUrl = "https://graph.microsoft.com/v1.0/me"
 
-        val disposable = requestUrl.toRequest("Bearer ${authenticationResult.accessToken}")
+        val disposable = requestUrl.httpGet()
+                .header("Authorization" to "Bearer ${authenticationResult.accessToken}")
+                .toResultObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val jsonObject = it.createJSONObject()
-
-                    if (jsonObject == null) {
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        parseUserInfo(result.component1())
+                    } else {
                         responseFail(PlatformType.WINDOWS)
-                        return@subscribe
                     }
-
-                    val item = LoginResultItem().apply {
-                        this.id = jsonObject.getJSONString("id")
-                        this.name = jsonObject.getJSONString("displayName")
-                        this.email = jsonObject.getJSONString("userPrincipalName")
-                        this.platform = PlatformType.WINDOWS
-                        this.result = true
-                    }
-
-                    responseSuccess(item)
-                }) {
-                    responseFail(PlatformType.WINDOWS)
                 }
 
         compositeDisposable.add(disposable)
     }
 
-    private fun String.toRequest(authorization: String): Single<String> {
-        return OkHttpHelper.get(this, "Authorization" to authorization)
+    private fun parseUserInfo(jsonStr: String?) {
+        val jsonObject = jsonStr?.createJSONObject()
+
+        if (jsonObject == null) {
+            responseFail(PlatformType.WINDOWS)
+            return
+        }
+
+        val item = LoginResultItem().apply {
+            this.id = jsonObject.getJSONString("id")
+            this.name = jsonObject.getJSONString("displayName")
+            this.email = jsonObject.getJSONString("userPrincipalName")
+            this.platform = PlatformType.WINDOWS
+            this.result = true
+        }
+
+        responseSuccess(item)
     }
 }

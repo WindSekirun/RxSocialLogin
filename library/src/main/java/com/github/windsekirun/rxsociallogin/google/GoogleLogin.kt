@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
 class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
-    private val mGoogleApiClient: GoogleApiClient
+    private val googleApiClient: GoogleApiClient
     private val auth = FirebaseAuth.getInstance()
 
     init {
@@ -30,7 +30,7 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
 
         val googleSignInOptions = builder.build()
 
-        mGoogleApiClient = GoogleApiClient.Builder(activity)
+        googleApiClient = GoogleApiClient.Builder(activity)
                 .enableAutoManage(activity) { _ -> }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
@@ -49,13 +49,13 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     }
 
     override fun login() {
-        if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
-        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+        if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
+        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
     }
 
     override fun logout(clearToken: Boolean) {
-        if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
+        if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
     }
 
     fun toObservable() = RxSocialLogin.google(this)

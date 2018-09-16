@@ -13,7 +13,7 @@ import com.vk.sdk.api.*
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class VKLogin(activity: Activity) : SocialLogin(activity) {
-    private val mConfig: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
+    private val config: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         !VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
@@ -29,7 +29,7 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
 
     override fun login() {
         val scopeList = mutableListOf("status", "photos")
-        if (mConfig.requireEmail) {
+        if (config.requireEmail) {
             scopeList.add("email")
         }
 
