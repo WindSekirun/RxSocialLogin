@@ -23,7 +23,9 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
     private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity.applicationContext, config.clientId) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        clientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data)
+       if (requestCode == 1001) { // found on InteractiveRequest.java
+           clientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data)
+       }
     }
 
     override fun login() {

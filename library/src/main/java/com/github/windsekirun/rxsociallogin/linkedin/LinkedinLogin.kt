@@ -8,6 +8,7 @@ import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
+import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,6 +31,11 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
     override fun login() {
         val intent = Intent(activity, LinkedInOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.LINKEDIN_REQUEST_CODE)
+    }
+
+    override fun logout(clearToken: Boolean) {
+        super.logout(clearToken)
+        clearCookies()
     }
 
     fun toObservable() = RxSocialLogin.linkedin(this)

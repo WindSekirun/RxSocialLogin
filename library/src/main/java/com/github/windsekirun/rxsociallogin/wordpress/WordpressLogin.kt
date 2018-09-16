@@ -6,8 +6,11 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.github.GithubOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
+import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,6 +20,7 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class WordpressLogin(activity: Activity) : SocialLogin(activity) {
+    private val config: WordpressConfig by lazy { getConfig(PlatformType.WORDPRESS) as WordpressConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE) {
@@ -28,8 +32,19 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     override fun login() {
-        val intent = Intent(activity, WordpressOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
+        val accessToken = AccessTokenProvider.wordpressAccessToken
+        if (accessToken.isNotEmpty()) {
+            checkAccessTokenAvailable(accessToken)
+        } else {
+            val intent = Intent(activity, WordpressOAuthActivity::class.java)
+            activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
+        }
+    }
+
+    override fun logout(clearToken: Boolean) {
+        super.logout(clearToken)
+        clearCookies()
+        AccessTokenProvider.wordpressAccessToken = ""
     }
 
     fun toObservable() = RxSocialLogin.wordpress(this)
@@ -42,6 +57,31 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
             return
         }
 
+        AccessTokenProvider.wordpressAccessToken = accessToken
+        getUserInfo(accessToken)
+    }
+
+    private fun checkAccessTokenAvailable(accessToken: String) {
+        val requestUrl = "https://public-api.wordpress.com/oauth2/token-info" +
+                "?client_id=${config.clientId}&token=$accessToken"
+
+        val disposable = requestUrl.httpGet()
+                .toResultObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        getUserInfo(accessToken)
+                    } else {
+                        val intent = Intent(activity, WordpressOAuthActivity::class.java)
+                        activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
+                    }
+                }
+
+        compositeDisposable.add(disposable)
+    }
+
+    private fun getUserInfo(accessToken: String) {
         val url = "https://public-api.wordpress.com/rest/v1.1/me"
         val disposable = url.httpGet()
                 .header("Authorization" to "Bearer $accessToken")
