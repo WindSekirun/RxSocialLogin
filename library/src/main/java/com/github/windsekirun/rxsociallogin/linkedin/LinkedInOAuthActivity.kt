@@ -1,12 +1,16 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
 import android.annotation.SuppressLint
+import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
 import com.github.windsekirun.rxsociallogin.model.PlatformType
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_oauth.*
 
 class LinkedInOAuthActivity : BaseOAuthActivity() {
@@ -33,7 +37,7 @@ class LinkedInOAuthActivity : BaseOAuthActivity() {
     }
 
     private fun requestOAuthToken(code: String) {
-        val formArray = arrayOf(
+        val parameters = listOf(
                 "grant_type" to "authorization_code",
                 "redirect_uri" to linkedinConfig.redirectUri,
                 "client_id" to linkedinConfig.clientId,
@@ -42,6 +46,18 @@ class LinkedInOAuthActivity : BaseOAuthActivity() {
 
         val header = "Content-Type" to "application/json"
 
-        disposable = OkHttpHelper.post(OAuthConstants.LINKEDIN_OAUTH, header, formArray).requestAccessToken()
+        disposable = OAuthConstants.LINKEDIN_OAUTH.httpPost(parameters)
+                .header(header)
+                .toResultObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        finishActivity(result.component1() as String)
+                    } else {
+                        finishActivity()
+                    }
+                }
+
     }
 }

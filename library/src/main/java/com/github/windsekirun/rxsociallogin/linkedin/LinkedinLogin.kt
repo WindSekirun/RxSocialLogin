@@ -2,10 +2,11 @@ package com.github.windsekirun.rxsociallogin.linkedin
 
 import android.app.Activity
 import android.content.Intent
+import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -23,7 +24,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
-        }else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
+        } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
             responseFail(PlatformType.LINKEDIN)
         }
     }
@@ -57,41 +58,49 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
 
         val url = "https://api.linkedin.com/v1/people/~:(${parameters.joinToString(",")})?format=json"
 
-        disposable = OkHttpHelper.get(url, "Authorization" to "Bearer $accessToken")
+        disposable = url.httpGet()
+                .header("Authorization" to "Bearer $accessToken")
+                .toResultObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val response = it.createJSONObject()
-
-                    if (response == null) {
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        parseUserInfo(result.component1())
+                    } else {
                         responseFail(PlatformType.LINKEDIN)
-                        return@subscribe
                     }
+                }
+    }
 
-                    val firstName = response.getJSONString("firstName")
-                    val id = response.getJSONString("id")
-                    val formattedName = response.getJSONString("formattedName")
-                    val emailAddress = response.getJSONString("emailAddress")
+    private fun parseUserInfo(jsonStr: String?) {
+        val response = jsonStr?.createJSONObject()
 
-                    var pictureUrl: String? = ""
-                    if (response.has("pictureUrl") == true) {
-                        pictureUrl = response.getJSONString("pictureUrl")
-                    }
+        if (response == null) {
+            responseFail(PlatformType.LINKEDIN)
+            return
+        }
 
-                    val item = LoginResultItem().apply {
-                        this.id = id
-                        this.firstName = firstName
-                        this.name = formattedName
-                        this.email = emailAddress
-                        this.profilePicture = pictureUrl ?: ""
+        val firstName = response.getJSONString("firstName")
+        val id = response.getJSONString("id")
+        val formattedName = response.getJSONString("formattedName")
+        val emailAddress = response.getJSONString("emailAddress")
 
-                        this.result = true
-                        this.platform = PlatformType.LINKEDIN
-                    }
+        var pictureUrl: String? = ""
+        if (response.has("pictureUrl") == true) {
+            pictureUrl = response.getJSONString("pictureUrl")
+        }
 
-                    responseSuccess(item)
-                }, {
-                    responseFail(PlatformType.LINKEDIN)
-                })
+        val item = LoginResultItem().apply {
+            this.id = id
+            this.firstName = firstName
+            this.name = formattedName
+            this.email = emailAddress
+            this.profilePicture = pictureUrl ?: ""
+
+            this.result = true
+            this.platform = PlatformType.LINKEDIN
+        }
+
+        responseSuccess(item)
     }
 }
