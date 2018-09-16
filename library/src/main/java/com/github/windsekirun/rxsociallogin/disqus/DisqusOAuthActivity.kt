@@ -47,14 +47,12 @@ class DisqusOAuthActivity : BaseOAuthActivity() {
                 .toResultObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    it.fold({ response ->
-                        finishActivity(response)
-                    }, { _ ->
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        finishActivity(result.component1() as String)
+                    } else {
                         finishActivity()
-                    })
-                }, {
-                    finishActivity()
-                })
+                    }
+                }
     }
 }

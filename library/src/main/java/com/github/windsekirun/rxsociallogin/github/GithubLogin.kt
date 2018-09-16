@@ -2,11 +2,13 @@ package com.github.windsekirun.rxsociallogin.github
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Base64
+import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
-import com.github.windsekirun.rxsociallogin.intenal.net.OkHttpHelper
+import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
@@ -15,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
@@ -37,7 +38,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     override fun onLogin() {
         val accessToken = AccessTokenProvider.githubAccessToken
         if (accessToken.isNotEmpty()) {
-//            checkAccessTokenAvailable(accessToken)
+            checkAccessTokenAvailable(accessToken)
         } else {
             val intent = Intent(activity, GithubOAuthActivity::class.java)
             activity?.startActivityForResult(intent, OAuthConstants.GITHUB_REQUEST_CODE)
@@ -69,17 +70,22 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     private fun checkAccessTokenAvailable(accessToken: String) {
-//        val disposable = OkHttpHelper.get("https://api.github.com/${config.clientId}/tokens/$accessToken", )
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({
-//                    getUserInfo(accessToken)
-//                }, {
-//                    val intent = Intent(activity, GithubOAuthActivity::class.java)
-//                    activity?.startActivityForResult(intent, OAuthConstants.GITHUB_REQUEST_CODE)
-//                })
-//
-//        compositeDisposable.add(disposable)
+        val requestUrl = "https://api.github.com/applications/${config.clientId}/tokens/$accessToken"
+        val disposable = requestUrl.httpGet()
+                .authenticate(config.clientId, config.clientSecret)
+                .toResultObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { result, error ->
+                    if (error == null && result.component1() != null) {
+                        getUserInfo(accessToken)
+                    } else {
+                        val intent = Intent(activity, GithubOAuthActivity::class.java)
+                        activity?.startActivityForResult(intent, OAuthConstants.GITHUB_REQUEST_CODE)
+                    }
+                }
+
+        compositeDisposable.add(disposable)
     }
 
     private fun getUserInfo(accessToken: String) {
