@@ -23,25 +23,26 @@ import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var kakaoLogin: KakaoLogin
-    private lateinit var facebookLogin: FacebookLogin
-    private lateinit var naverLogin: NaverLogin
-    private lateinit var lineLogin: LineLogin
-    private lateinit var twitterLogin: TwitterLogin
-    private lateinit var googleLogin: GoogleLogin
-    private lateinit var githubLogin: GithubLogin
-    private lateinit var linkedinLogin: LinkedinLogin
-    private lateinit var wordpressLogin: WordpressLogin
-    private lateinit var yahooLogin: YahooLogin
-    private lateinit var vkLogin: VKLogin
-    private lateinit var windowsLogin: WindowsLogin
-    private lateinit var disqusLogin: DisqusLogin
-    private lateinit var foursquareLogin: FoursquareLogin
+    private val kakaoLogin: KakaoLogin by lazy { KakaoLogin(this) }
+    private val facebookLogin: FacebookLogin by lazy { FacebookLogin(this) }
+    private val naverLogin: NaverLogin by lazy { NaverLogin(this) }
+    private val lineLogin: LineLogin by lazy { LineLogin(this) }
+    private val twitterLogin: TwitterLogin by lazy { TwitterLogin(this) }
+    private val googleLogin: GoogleLogin by lazy { GoogleLogin(this) }
+    private val githubLogin: GithubLogin by lazy { GithubLogin(this) }
+    private val linkedinLogin: LinkedinLogin by lazy { LinkedinLogin(this) }
+    private val wordpressLogin: WordpressLogin by lazy { WordpressLogin(this) }
+    private val yahooLogin: YahooLogin by lazy { YahooLogin(this) }
+    private val vkLogin: VKLogin by lazy { VKLogin(this) }
+    private val windowsLogin: WindowsLogin by lazy { WindowsLogin(this) }
+    private val disqusLogin: DisqusLogin by lazy { DisqusLogin(this) }
+    private val foursquareLogin: FoursquareLogin by lazy { FoursquareLogin(this) }
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,21 +50,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
-
-        kakaoLogin = KakaoLogin(this)
-        facebookLogin = FacebookLogin(this)
-        naverLogin = NaverLogin(this)
-        lineLogin = LineLogin(this)
-        twitterLogin = TwitterLogin(this)
-        googleLogin = GoogleLogin(this)
-        githubLogin = GithubLogin(this)
-        linkedinLogin = LinkedinLogin(this)
-        wordpressLogin = WordpressLogin(this)
-        yahooLogin = YahooLogin(this)
-        vkLogin = VKLogin(this)
-        windowsLogin = WindowsLogin(this)
-        disqusLogin = DisqusLogin(this)
-        foursquareLogin = FoursquareLogin(this)
 
         val consumer = Consumer<LoginResultItem> {
             txtResult.text = it.toString()
@@ -78,62 +64,61 @@ class MainActivity : AppCompatActivity() {
         }
 
         // warning, do this in MainThread.
-        val kakaoDisposable = RxSocialLogin.kakao(kakaoLogin)
+        RxSocialLogin.kakao(kakaoLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val facebookDisposable = RxSocialLogin.facebook(facebookLogin)
+        RxSocialLogin.facebook(facebookLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val naverDisposable = RxSocialLogin.naver(naverLogin)
+        RxSocialLogin.naver(naverLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val lineDisposable = RxSocialLogin.line(lineLogin)
+        RxSocialLogin.line(lineLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val twitterDisposable = RxSocialLogin.twitter(twitterLogin)
+        RxSocialLogin.twitter(twitterLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val googleDisposable = RxSocialLogin.google(googleLogin)
+        RxSocialLogin.google(googleLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val githubDisposable = RxSocialLogin.github(githubLogin)
+        RxSocialLogin.github(githubLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val linkedinDisposable = RxSocialLogin.linkedin(linkedinLogin)
+        RxSocialLogin.linkedin(linkedinLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val wordpressDisposable = RxSocialLogin.wordpress(wordpressLogin)
+        RxSocialLogin.wordpress(wordpressLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val yahooDisposable = RxSocialLogin.yahoo(yahooLogin)
+        RxSocialLogin.yahoo(yahooLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val vkDisposable = RxSocialLogin.vk(vkLogin)
+        RxSocialLogin.vk(vkLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val windowsDisposable = RxSocialLogin.windows(windowsLogin)
+        RxSocialLogin.windows(windowsLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val disqusDisposable = RxSocialLogin.disqus(disqusLogin)
+        RxSocialLogin.disqus(disqusLogin)
                 .subscribe(consumer, error)
+                .addTo(compositeDisposable)
 
-        val foursquareDisposable = RxSocialLogin.foursquare(foursquareLogin)
+        RxSocialLogin.foursquare(foursquareLogin)
                 .subscribe(consumer, error)
-
-        compositeDisposable.add(kakaoDisposable)
-        compositeDisposable.add(facebookDisposable)
-        compositeDisposable.add(naverDisposable)
-        compositeDisposable.add(lineDisposable)
-        compositeDisposable.add(twitterDisposable)
-        compositeDisposable.add(googleDisposable)
-        compositeDisposable.add(githubDisposable)
-        compositeDisposable.add(linkedinDisposable)
-        compositeDisposable.add(wordpressDisposable)
-        compositeDisposable.add(yahooDisposable)
-        compositeDisposable.add(vkDisposable)
-        compositeDisposable.add(windowsDisposable)
-        compositeDisposable.add(disqusDisposable)
-        compositeDisposable.add(foursquareDisposable)
+                .addTo(compositeDisposable)
 
         btnKakao.setOnClickListener {
             kakaoLogin.onLogin()
