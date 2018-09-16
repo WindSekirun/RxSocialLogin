@@ -11,14 +11,12 @@ import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
     private val config: LinkedinConfig by lazy { getConfig(PlatformType.LINKEDIN) as LinkedinConfig }
-    private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
@@ -29,15 +27,9 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val intent = Intent(activity, LinkedInOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.LINKEDIN_REQUEST_CODE)
-    }
-
-    override fun onDestroy() {
-        if (::disposable.isInitialized && !disposable.isDisposed) {
-            disposable.dispose()
-        }
     }
 
     fun toObservable() = RxSocialLogin.linkedin(this)
@@ -58,7 +50,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
 
         val url = "https://api.linkedin.com/v1/people/~:(${parameters.joinToString(",")})?format=json"
 
-        disposable = url.httpGet()
+        val disposable = url.httpGet()
                 .header("Authorization" to "Bearer $accessToken")
                 .toResultObservable()
                 .subscribeOn(Schedulers.io())
@@ -70,6 +62,8 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
                         responseFail(PlatformType.LINKEDIN)
                     }
                 }
+
+        compositeDisposable.add(disposable)
     }
 
     private fun parseUserInfo(jsonStr: String?) {
@@ -86,7 +80,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         val emailAddress = response.getJSONString("emailAddress")
 
         var pictureUrl: String? = ""
-        if (response.has("pictureUrl") == true) {
+        if (response.has("pictureUrl")) {
             pictureUrl = response.getJSONString("pictureUrl")
         }
 

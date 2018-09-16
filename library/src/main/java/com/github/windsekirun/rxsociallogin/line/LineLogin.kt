@@ -16,7 +16,7 @@ class LineLogin(activity: Activity) : SocialLogin(activity) {
         if (requestCode == REQUEST_CODE) onResultLineLogin(data)
     }
 
-    override fun onLogin() {
+    override fun login() {
         val lineConfig = getConfig(PlatformType.LINE) as LineConfig
         val loginIntent = LineLoginApi.getLoginIntent(activity as Context,
                 lineConfig.channelId ?: "")

@@ -10,14 +10,12 @@ import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class WordpressLogin(activity: Activity) : SocialLogin(activity) {
-    private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE) {
@@ -28,15 +26,9 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val intent = Intent(activity, WordpressOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
-    }
-
-    override fun onDestroy() {
-        if (::disposable.isInitialized && !disposable.isDisposed) {
-            disposable.dispose()
-        }
     }
 
     fun toObservable() = RxSocialLogin.wordpress(this)
@@ -50,7 +42,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
         }
 
         val url = "https://public-api.wordpress.com/rest/v1.1/me"
-        disposable = OkHttpHelper.get(url, "Authorization" to "Bearer $accessToken")
+        val disposable = OkHttpHelper.get(url, "Authorization" to "Bearer $accessToken")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -82,5 +74,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
                 }, {
                     responseFail(PlatformType.WORDPRESS)
                 })
+
+        compositeDisposable.add(disposable)
     }
 }

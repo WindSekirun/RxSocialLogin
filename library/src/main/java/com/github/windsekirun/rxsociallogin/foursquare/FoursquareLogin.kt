@@ -15,7 +15,6 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
 class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
-    private val compositeDisposable = CompositeDisposable()
     private val config: FoursquareConfig by lazy { getConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -38,17 +37,13 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val intent = FoursquareOAuth.getConnectIntent(activity, config.clientId)
         if (intent.resolveActivity(activity!!.packageManager) != null) {
             activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
         } else {
             responseFail(PlatformType.FOURSQUARE)
         }
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
     }
 
     fun toObservable() = RxSocialLogin.foursquare(this)

@@ -2,7 +2,6 @@ package com.github.windsekirun.rxsociallogin.github
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Base64
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
@@ -17,14 +16,12 @@ import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class GithubLogin(activity: Activity) : SocialLogin(activity) {
     private val auth = FirebaseAuth.getInstance()
-    private val compositeDisposable = CompositeDisposable()
     private val config: GithubConfig by lazy { getConfig(PlatformType.GITHUB) as GithubConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -36,7 +33,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val accessToken = AccessTokenProvider.githubAccessToken
         if (accessToken.isNotEmpty()) {
             checkAccessTokenAvailable(accessToken)
@@ -44,10 +41,6 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
             val intent = Intent(activity, GithubOAuthActivity::class.java)
             activity?.startActivityForResult(intent, OAuthConstants.GITHUB_REQUEST_CODE)
         }
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
     }
 
     override fun logout(clearToken: Boolean) {

@@ -20,25 +20,19 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class NaverLogin(activity: Activity) : SocialLogin(activity) {
-    private val compositeDisposable = CompositeDisposable()
     private val requestUrl = "https://openapi.naver.com/v1/nid/me"
-
     private val authLogin = OAuthLogin.getInstance()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
     }
 
-    override fun onLogin() {
+    override fun login() {
         OAuthLoginDefine.MARKET_LINK_WORKING = false
 
         val config = getConfig(PlatformType.NAVER) as NaverConfig
         authLogin.init(activity, config.authClientId, config.authClientSecret, config.clientName)
         authLogin.startOauthLoginActivity(activity, NaverLoginHandler())
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
     }
 
     override fun logout(clearToken: Boolean) {

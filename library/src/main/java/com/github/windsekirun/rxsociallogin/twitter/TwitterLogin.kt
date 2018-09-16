@@ -19,13 +19,9 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
         twitterAuthClient.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onDestroy() {
-
-    }
-
     fun toObservable() = RxSocialLogin.twitter(this)
 
-    override fun onLogin() {
+    override fun login() {
         twitterAuthClient.authorize(activity, object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {
                 val item = LoginResultItem().apply {

@@ -11,4 +11,5 @@ import com.chibatching.kotpref.KotprefModel
  */
 object AccessTokenProvider : KotprefModel() {
     var githubAccessToken by stringPref("")
+    var twitchAccessToken by stringPref("")
 }

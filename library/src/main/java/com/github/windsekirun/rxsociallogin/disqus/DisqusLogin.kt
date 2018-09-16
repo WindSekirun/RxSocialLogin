@@ -18,7 +18,6 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
 class DisqusLogin(activity: Activity) : SocialLogin(activity) {
-    private val compositeDisposable = CompositeDisposable()
     private val config: DisqusConfig by lazy { getConfig(PlatformType.DISQUS) as DisqusConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -30,13 +29,9 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val intent = Intent(activity, DisqusOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.DISQUS_REQUEST_CODE)
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
     }
 
     fun toObservable() = RxSocialLogin.disqus(this)

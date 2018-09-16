@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
@@ -23,7 +22,6 @@ import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
 import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
 import com.jakewharton.rxbinding2.view.clicks
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
@@ -68,91 +66,91 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnDisqus.clicks()
-                .doOnNext { disqusLogin.onLogin() }
+                .doOnNext { disqusLogin.login() }
                 .flatMap { disqusLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnFacebook.clicks()
-                .doOnNext { facebookLogin.onLogin() }
+                .doOnNext { facebookLogin.login() }
                 .flatMap { facebookLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnFoursquare.clicks()
-                .doOnNext { foursquareLogin.onLogin() }
+                .doOnNext { foursquareLogin.login() }
                 .flatMap { foursquareLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnGithub.clicks()
-                .doOnNext { githubLogin.onLogin() }
+                .doOnNext { githubLogin.login() }
                 .flatMap { githubLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnGoogle.clicks()
-                .doOnNext { googleLogin.onLogin() }
+                .doOnNext { googleLogin.login() }
                 .flatMap { googleLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnKakao.clicks()
-                .doOnNext { kakaoLogin.onLogin() }
+                .doOnNext { kakaoLogin.login() }
                 .flatMap { kakaoLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnLine.clicks()
-                .doOnNext { lineLogin.onLogin() }
+                .doOnNext { lineLogin.login() }
                 .flatMap { lineLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnLinkedin.clicks()
-                .doOnNext { linkedinLogin.onLogin() }
+                .doOnNext { linkedinLogin.login() }
                 .flatMap { linkedinLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnNaver.clicks()
-                .doOnNext { naverLogin.onLogin() }
+                .doOnNext { naverLogin.login() }
                 .flatMap { naverLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnTwitch.clicks()
-                .doOnNext { twitchLogin.onLogin() }
+                .doOnNext { twitchLogin.login() }
                 .flatMap { twitchLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnTwitter.clicks()
-                .doOnNext { twitterLogin.onLogin() }
+                .doOnNext { twitterLogin.login() }
                 .flatMap { twitterLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnVK.clicks()
-                .doOnNext { vkLogin.onLogin() }
+                .doOnNext { vkLogin.login() }
                 .flatMap { vkLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnWindows.clicks()
-                .doOnNext { windowsLogin.onLogin() }
+                .doOnNext { windowsLogin.login() }
                 .flatMap { windowsLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnWordpress.clicks()
-                .doOnNext { wordpressLogin.onLogin() }
+                .doOnNext { wordpressLogin.login() }
                 .flatMap { wordpressLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)
 
         btnYahoo.clicks()
-                .doOnNext { yahooLogin.onLogin() }
+                .doOnNext { yahooLogin.login() }
                 .flatMap { yahooLogin.toObservable() }
                 .subscribe(consumer, error)
                 .addTo(compositeDisposable)

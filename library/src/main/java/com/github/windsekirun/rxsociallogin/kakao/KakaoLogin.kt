@@ -26,7 +26,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
         Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onLogin() {
+    override fun login() {
         checkSession()
         mSessionCallback = SessionCallback()
 
@@ -39,6 +39,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         checkSession()
 
         if (mSessionCallback != null) {

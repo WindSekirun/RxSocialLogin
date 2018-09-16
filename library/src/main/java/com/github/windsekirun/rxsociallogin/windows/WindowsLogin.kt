@@ -21,7 +21,6 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class WindowsLogin(activity: Activity) : SocialLogin(activity) {
     private val mConfig: WindowsConfig by lazy { getConfig(PlatformType.WINDOWS) as WindowsConfig }
-    private lateinit var disposable: Disposable
     private lateinit var clientApplication: PublicClientApplication
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -30,7 +29,7 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         clientApplication = PublicClientApplication(activity!!.applicationContext, mConfig.clientId)
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
@@ -50,12 +49,6 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
             }
 
         })
-    }
-
-    override fun onDestroy() {
-        if (::disposable.isInitialized && !disposable.isDisposed) {
-            disposable.dispose()
-        }
     }
 
     override fun logout(clearToken: Boolean) {
@@ -81,7 +74,7 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
 
         val requestUrl = "https://graph.microsoft.com/v1.0/me"
 
-        disposable = requestUrl.toRequest("Bearer ${authenticationResult.accessToken}")
+        val disposable = requestUrl.toRequest("Bearer ${authenticationResult.accessToken}")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -104,6 +97,8 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
                 }) {
                     responseFail(PlatformType.WINDOWS)
                 }
+
+        compositeDisposable.add(disposable)
     }
 
     private fun String.toRequest(authorization: String): Single<String> {

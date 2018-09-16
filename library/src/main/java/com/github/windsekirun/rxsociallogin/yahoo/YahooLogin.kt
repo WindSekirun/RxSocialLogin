@@ -23,13 +23,9 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val intent = Intent(activity, YahooOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.YAHOO_REQUEST_CODE)
-    }
-
-    override fun onDestroy() {
-
     }
 
     fun toObservable() = RxSocialLogin.yahoo(this)

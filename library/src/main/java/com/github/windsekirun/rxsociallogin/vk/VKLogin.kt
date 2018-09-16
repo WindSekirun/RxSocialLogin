@@ -10,12 +10,10 @@ import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.*
-import io.reactivex.disposables.Disposable
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class VKLogin(activity: Activity) : SocialLogin(activity) {
     private val mConfig: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
-    private lateinit var disposable: Disposable
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         !VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
@@ -29,19 +27,13 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
         })
     }
 
-    override fun onLogin() {
+    override fun login() {
         val scopeList = mutableListOf("status", "photos")
         if (mConfig.requireEmail) {
             scopeList.add("email")
         }
 
         VKSdk.login(activity as Activity, *scopeList.toTypedArray())
-    }
-
-    override fun onDestroy() {
-        if (::disposable.isInitialized && !disposable.isDisposed) {
-            disposable.dispose()
-        }
     }
 
     fun toObservable() = RxSocialLogin.vk(this)
@@ -62,10 +54,6 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
                 } else {
                     parseResponse(response, token)
                 }
-            }
-
-            override fun onProgress(progressType: VKRequest.VKProgressType?, bytesLoaded: Long, bytesTotal: Long) {
-                super.onProgress(progressType, bytesLoaded, bytesTotal)
             }
 
             override fun onError(error: VKError?) {

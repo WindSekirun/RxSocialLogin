@@ -18,6 +18,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKAccessTokenTracker
 import com.vk.sdk.VKSdk
+import io.reactivex.disposables.CompositeDisposable
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -33,17 +34,20 @@ import java.util.*
 
 abstract class SocialLogin(activity: Activity) {
     var responseListener: OnResponseListener? = null
-    private val mActivityWeakReference: WeakReference<Activity> = WeakReference(activity)
+    private val activityWeakReference: WeakReference<Activity> = WeakReference(activity)
     protected val kakaoSDKAdapter = KakaoSDKAdapter(activity.applicationContext)
+    protected val compositeDisposable = CompositeDisposable()
 
     protected val activity: Activity?
-        get() = mActivityWeakReference.get()
+        get() = activityWeakReference.get()
 
     abstract fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
-    abstract fun onLogin()
+    abstract fun login()
 
-    abstract fun onDestroy()
+    open fun onDestroy() {
+        compositeDisposable.clear()
+    }
 
     @JvmOverloads
     open fun logout(clearToken: Boolean = false) {

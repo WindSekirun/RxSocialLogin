@@ -14,12 +14,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import io.reactivex.disposables.Disposable
 
 class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     private val mGoogleApiClient: GoogleApiClient
     private val auth = FirebaseAuth.getInstance()
-    private lateinit var disposable: Disposable
 
     init {
         val googleConfig = getConfig(PlatformType.GOOGLE) as GoogleConfig
@@ -50,16 +48,10 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
-    }
-
-    override fun onDestroy() {
-        if (::disposable.isInitialized && !disposable.isDisposed) {
-            disposable.dispose()
-        }
     }
 
     override fun logout(clearToken: Boolean) {
@@ -70,8 +62,9 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        disposable = auth.signInWithCredential(credential, activity, PlatformType.GOOGLE)
+        val disposable = auth.signInWithCredential(credential, activity, PlatformType.GOOGLE)
                 .subscribe({ responseSuccess(it) }, {})
+        compositeDisposable.add(disposable)
     }
 
     companion object {

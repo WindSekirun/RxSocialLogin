@@ -22,7 +22,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
         }
     }
 
-    override fun onLogin() {
+    override fun login() {
         val config = getConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         if (config.isRequireWritePermissions) {
@@ -48,10 +48,6 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 responseFail(PlatformType.FACEBOOK)
             }
         })
-    }
-
-    override fun onDestroy() {
-
     }
 
     override fun logout(clearToken: Boolean) {
