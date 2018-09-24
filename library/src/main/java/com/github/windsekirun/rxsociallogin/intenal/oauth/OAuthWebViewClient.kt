@@ -3,14 +3,6 @@ package com.github.windsekirun.rxsociallogin.intenal.oauth
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-/**
- * RxSocialLogin
- * Class: OAuthWebViewClient
- * Created by pyxis on 18. 8. 1.
- *
- *
- * Description:
- */
 class OAuthWebViewClient(val callback: (String) -> Unit) : WebViewClient() {
     override fun shouldOverrideUrlLoading(view: WebView?, uri: String?): Boolean {
         super.shouldOverrideUrlLoading(view, uri)

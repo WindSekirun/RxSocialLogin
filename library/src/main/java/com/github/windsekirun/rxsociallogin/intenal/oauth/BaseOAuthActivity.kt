@@ -12,14 +12,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.security.SecureRandom
 
-/**
- * RxSocialLogin
- * Class: BaseOAuthActivity
- * Created by pyxis on 18. 8. 1.
- *
- *
- * Description:
- */
 abstract class BaseOAuthActivity : AppCompatActivity() {
     lateinit var disposable: Disposable
 

@@ -1,13 +1,5 @@
 package com.github.windsekirun.rxsociallogin
 
-/**
- * RxSocialLogin
- * Class: OAuthConstants
- * Created by Pyxis on 9/8/18.
- *
- * Description:
- */
-
 object OAuthConstants {
     const val GITHUB_URL = "https://github.com/login/oauth/authorize"
     const val GITHUB_OAUTH = "https://github.com/login/oauth/access_token"

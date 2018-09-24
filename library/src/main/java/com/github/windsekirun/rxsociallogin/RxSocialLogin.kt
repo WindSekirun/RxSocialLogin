@@ -41,17 +41,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
-
-/**
- * RxSocialLogin
- * Class: RxSocialLogin
- * Created by Pyxis on 2017-10-27.
- *
- *
- * Description:
- */
-
-
 abstract class RxSocialLogin @JvmOverloads constructor(childActivity: Activity? = null) {
     internal var responseListener: OnResponseListener? = null
 
@@ -97,6 +86,7 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: Activity? 
         private val alreadyInitializedList = ArrayList<PlatformType>()
 
         const val NOT_HAVE_APPLICATION = "No context is available, please declare RxSocialLogin.init(this)"
+        const val NOT_NEED_ACTIVITY_RESULT = "Not need to call onActivityResult in "
 
         private val lifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, bundle: Bundle?) {

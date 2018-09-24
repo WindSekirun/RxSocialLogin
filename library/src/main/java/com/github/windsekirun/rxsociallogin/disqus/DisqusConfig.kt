@@ -2,14 +2,6 @@ package com.github.windsekirun.rxsociallogin.disqus
 
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 
-/**
- * RxSocialLogin
- * Class: GithubConfig
- * Created by pyxis on 18. 7. 27.
- *
- *
- * Description:
- */
 class DisqusConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
                    val redirectUri: String) : SocialConfig() {
 

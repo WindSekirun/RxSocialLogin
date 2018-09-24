@@ -1,13 +1,5 @@
 package com.github.windsekirun.rxsociallogin.model
 
-/**
- * RxSocialLogin
- * Class: LoginResultItem
- * Created by pyxis on 18. 7. 11.
- *
- *
- * Description:
- */
 class LoginResultItem {
     var platform: PlatformType = PlatformType.NONE
     var result = false

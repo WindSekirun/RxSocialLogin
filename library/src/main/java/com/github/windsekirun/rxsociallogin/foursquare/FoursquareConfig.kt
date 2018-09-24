@@ -2,14 +2,6 @@ package com.github.windsekirun.rxsociallogin.foursquare
 
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 
-/**
- * RxSocialLogin
- * Class: GithubConfig
- * Created by pyxis on 18. 7. 27.
- *
- *
- * Description:
- */
 class FoursquareConfig(val clientId: String, val clientSecret: String) : SocialConfig() {
 
     class Builder {

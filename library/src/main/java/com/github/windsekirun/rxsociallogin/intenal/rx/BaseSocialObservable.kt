@@ -9,14 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
 
-/**
- * RxSocialLogin
- * Class: BaseSocialObservable
- * Created by pyxis on 18. 7. 11.
- *
- *
- * Description:
- */
 open class BaseSocialObservable<T : RxSocialLogin>(private val login: T) : Observable<LoginResultItem>() {
 
     override fun subscribeActual(observer: Observer<in LoginResultItem>?) {

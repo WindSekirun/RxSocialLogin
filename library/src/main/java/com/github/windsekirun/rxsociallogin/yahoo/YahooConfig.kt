@@ -2,21 +2,12 @@ package com.github.windsekirun.rxsociallogin.yahoo
 
 import com.github.windsekirun.rxsociallogin.model.SocialConfig
 
-/**
- * RxSocialLogin
- * Class: GithubConfig
- * Created by pyxis on 18. 7. 27.
- *
- *
- * Description:
- */
 class YahooConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
                   val redirectUri: String) : SocialConfig() {
 
     class Builder {
         private var clientId: String = ""
         private var clientSecret: String = ""
-        private var clearCookies: Boolean = false
         private var activityTitle: String = "Login to Yahoo"
         private var redirectUri: String = "http://example.com/auth/yahoo"
 

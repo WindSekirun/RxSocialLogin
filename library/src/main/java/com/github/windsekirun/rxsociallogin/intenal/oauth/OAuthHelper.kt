@@ -3,14 +3,6 @@ package com.github.windsekirun.rxsociallogin.intenal.oauth
 import android.os.Build
 import android.webkit.CookieManager
 
-/**
- * RxSocialLogin
- * Class: CookieHelper
- * Created by pyxis on 18. 8. 1.
- *
- * Description:
- */
-
 fun clearCookies() {
     val cookieManager = CookieManager.getInstance()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
