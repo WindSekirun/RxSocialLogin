@@ -1,16 +1,43 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pyxis.uzuki.live.sociallogin">
+    package="com.github.windsekirun.rxsociallogin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
-        <!--<activity-->
-            <!--android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"-->
-            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
-        <!--<activity-->
-            <!--android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"-->
-            <!--android:label="OAuth2.0 In-app" />-->
+
+        <activity
+            android:name=".github.GithubOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".linkedin.LinkedInOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".wordpress.WordpressOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".yahoo.YahooOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".disqus.DisqusOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".twitch.TwitchOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent" />
+
+        <activity
+            android:name="com.foursquare.android.nativeoauth.TokenExchangeActivity"
+            android:theme="@android:style/Theme.Dialog" />
 
     </application>
 </manifest>

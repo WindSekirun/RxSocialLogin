@@ -1,11 +1,10 @@
 package com.github.windsekirun.rxsociallogin.google
 
-import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
-import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.SocialType
+import android.support.v4.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -13,89 +12,57 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
-    private val mGoogleApiClient: GoogleApiClient
-    private val firebaseAuth = FirebaseAuth.getInstance()
-
-    init {
-        val googleConfig = getConfig(SocialType.GOOGLE) as GoogleConfig
+class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+    private val googleApiClient: GoogleApiClient by lazy {
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(googleConfig.clientTokenId)
+                .requestIdToken(config.clientTokenId)
 
-        if (googleConfig.requireEmail) {
+        if (config.requireEmail) {
             builder.requestEmail()
         }
 
         val googleSignInOptions = builder.build()
 
-        mGoogleApiClient = GoogleApiClient.Builder(activity)
+        GoogleApiClient.Builder(activity!!)
                 .enableAutoManage(activity) { _ -> }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
     }
 
+    private val config: GoogleConfig by lazy { getPlatformConfig(PlatformType.GOOGLE) as GoogleConfig }
+    private val auth = FirebaseAuth.getInstance()
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 authWithFirebase(account)
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                responseFail(SocialType.GOOGLE)
+                callbackFail(PlatformType.GOOGLE)
             }
         }
     }
 
-    override fun onLogin() {
-        if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
-        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+    override fun login() {
+        if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
+        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
     }
 
-    override fun onDestroy() {
-
-    }
-
     override fun logout(clearToken: Boolean) {
-        if (mGoogleApiClient.isConnected) mGoogleApiClient.clearDefaultAccountAndReconnect()
+        if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
     }
 
-    private fun handleSignInResult(user: FirebaseUser?) {
-        if (user == null) {
-            responseFail(SocialType.GOOGLE)
-            return
-        }
-
-        val item = LoginResultItem().apply {
-            this.name = user.displayName ?: ""
-            this.email = user.email ?: ""
-            this.profilePicture = user.photoUrl?.toString() ?: ""
-            this.id = user.uid
-            this.emailVerified = user.isEmailVerified
-            this.result = true
-            this.type = SocialType.GOOGLE
-        }
-
-        responseSuccess(item)
-    }
+    fun toObservable() = RxSocialLogin.google(this)
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity as Activity) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val user = firebaseAuth.currentUser
-                        handleSignInResult(user)
-                    } else {
-                        responseFail(SocialType.GOOGLE)
-                    }
-                }
+        val disposable = auth.signInWithCredential(credential, activity, PlatformType.GOOGLE)
+                .subscribe({ callbackItem(it) }, {})
+        compositeDisposable.add(disposable)
     }
 
     companion object {

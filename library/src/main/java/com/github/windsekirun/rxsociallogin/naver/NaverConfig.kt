@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.naver
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class NaverConfig private constructor(val authClientId: String?, val authClientSecret: String?,
                                       val clientName: String?) : SocialConfig() {

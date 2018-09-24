@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.line
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class LineConfig private constructor(val channelId: String?) : SocialConfig() {
 

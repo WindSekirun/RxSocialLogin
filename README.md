@@ -1,246 +1,201 @@
-## RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
-[![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
+# RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 
-Integrated SocialLogin such as [Facebook, Kakao, Naver, Line, Twitter, Google] with RxJava and [Firebase Authentication](https://firebase.google.com/docs/auth/), written in Kotlin. This library is enhanced version of [SocialLogin](https://github.com/WindSekirun/SocialLogin) which maintained by [WindSekirun](https://github.com/WindSekirun) and fully rewritten in Kotlin and integrate with RxJava and Firebase Authentication.
+ [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
 
-이 라이브러리에 대한 소개글은 PyxisPub 블로그에서 보실 수 있습니다. (한글만 제공됩니다.) https://blog.uzuki.live/introduction-to-rxsociallogin-provides-sociallogin/
+![](graphics/logo.png)
 
-### Difference from Original library, [SocialLogin](https://github.com/WindSekirun/SocialLogin)
-- RxJava2 integrated.
-- CircleCI integrated.
-- Firebase Authentication integrated when use GoogleLogin.
-- Rewrite all methods in Kotlin
-- Hold Context in WeakReference to solve memory leak
+*The license information for logo is located at the bottom of the document.*
 
-## Available Feature
-|Service|logout|Return Data|Config|
-|---|---|---|---|
-|Facebook|O|id, name, email, profilePicture, gender, firstName|setRequireEmail, setRequireWritePermission, setApplicationId, setRequireFriends, setBehaviorOnCancel, setPictureSize|
-|Kakao|O|id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified|setRequireEmail, setRequireAgeRange, setRequireBirthday, setRequireGender|
-|Naver|O|id, name, email, nickname, gender, profilePicture, age, birthDay|setAuthClientId, setAuthClientSecret, setClientName|
-|Line|X|id, name, accessToken|setChannelId|
-|Twitter|X|id, name|setConsumerKey, setConsumerSecret|
-|Google|O|id, name, email, profilePicture, emailVerified|setRequireEmail, setClientTokenId|
+These instructions are available in their respective languages.
 
-## Usages
+* [English](README.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
 
-*rootProject/build.gradle*
-```
+## Introduction
+
+This Android library is a library that provides social login for 15 platforms powered by [RxJava2](https://github.com/ReactiveX/RxJava), [Kotlin](http://kotlinlang.org/) and [Firebase Authentication](https://firebase.google.com/docs/auth/).
+
+This library is an improved version of [@WindSekirun](https://github.com/windsekirun) 's [SocialLogin](https://github.com/WindSekirun/SocialLogin) library. It has the following differences.
+
+* The result delivery method has been changed to be passed through RxJava instead of the Listener.
+* Compared to the original written in Java, the improved version is written in Kotlin only.
+* Compared to the original supported 6 platforms, the improved version is support 15 platforms.
+* All methods and code have been rewritten.
+* All code that are written in Kotlin but considered to be Java compatible.
+
+## Supported Platforms
+
+| Platform                                                       | Data                                                       | Version  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ----- |
+| [Disqus](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Disqus) | id, name, email, nickname, profilePicture                    | 1.0.0 |
+| [Facebook](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Facebook) | id, name, email, profilePicture, gender, firstName           | 0.5.0 |
+| [Foursquare](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Foursquare) | id, name, email, firstName, gender, birthDay, profilePicture | 1.0.0 |
+| [Github](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Github) | id, name, email, profilePicture, emailVerified               | 1.0.0 |
+| [Google](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Google) | id, name, email, profilePicture, emailVerified               | 0.5.0 |
+| [Kakao](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Kakao) | id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified | 0.5.0 |
+| [Line](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Line) | id, name, accessToken                                        | 0.5.0 |
+| [LinkedIn](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-LinkedIn) | id, name, email, profilePicture, firstName                   | 1.0.0 |
+| [Naver](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Naver) | id, name, email, nickname, gender, profilePicture, age, birthDay | 0.5.0 |
+| [Twitch](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Twitch) | id, name, email,  profilePicture                             | 1.0.0 |
+| [Twitter](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Twitter) | id, name, nickname, email, profilePicture                    | 0.5.0 |
+| [VK](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-VK) | id, name, email, profilePicture, nickname, firstName, birthDay | 1.0.0 |
+| [Windows](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Windows) | id, name, email                                              | 1.0.0 |
+| [Wordpress](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Wordpress) | id, name, email, profilePicture, emailVerified               | 1.0.0 |
+| [Yahoo](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Yahoo) | id, name                                                     | 1.0.0 |
+
+Click on the name of each platform to move to how to apply the platform.
+
+## Import
+
+Add the following code to `build.gradle` in the root folder.
+
+```groovy
 allprojects {
-    repositories {
-    	    maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
-	    maven { url 'https://jitpack.io' }
-    }
+	repositories {
+		maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+		maven { url 'https://jitpack.io' }
+	}
 }
 ```
 
-*app/build.gradle*
-```
+Add the following dependencies to the `build.gradle` of the module you want to use.
+
+```groovy
 dependencies {
-    implementation 'com.github.WindSekirun:RxSocialLogin:0.5.0'
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
     
-    // RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
-    implementation 'io.reactivex.rxjava2:rxjava:lastest-version'
+	// RxJava
+	implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
+	implementation 'io.reactivex.rxjava2:rxjava:lastest-version'
 }
 ```
+
+RxJava is an active library, and you should always keep the latest version for new enhancements to take effect. Therefore, we recommend that you add RxJava to the bottom of the dependency.
+
 * RxAndroid: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxandroid%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxandroid.svg'></a>
+
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
+## Very easy 5-step usage
 
-## Guide
+First, initialize the moduel by `RxSocialLogin.init(this)` in `Application` class and declare Config object for each platform. There Config object is necessary information to using platform, For config information for each platform, please click on each platform in the "Supported Platforms" section above to see the wiki. 
 
-### Declare xxxLogin variable to use
-```java
-private KakaoLogin mKakaoLogin;
+Note that `RxSocialLogin.init (this)` only needs to be called once.
 
-mKakaoLogin = new KakaoLogin(this);
+```kotlin
+RxSocialLogin.init(this)
+
+val facebookConfig = FacebookConfig.Builder()
+	.setApplicationId(getString(R.string.facebook_api_key))
+	.setRequireEmail()
+	.setBehaviorOnCancel()
+	.build()
+
+RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
 ```
 
-### Call onActivityResult() on onActivityResult
-```java
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (mKakaoLogin != null) {
-        mKakaoLogin.onActivityResult(requestCode, resultCode, data);
-    }
+Then create an instance of the class named Platform + Login to use in the code you want to use as a global variable (defined here as **social module variable**).
+
+```kotlin
+private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
+```
+
+Then, in the onActivityResult of the activity, call the `onActivityResult` method of the corresponding social module variable.
+
+```kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+	super.onActivityResult(requestCode, resultCode, data)
+	facebookLogin.onActivityResult(requestCode, resultCode, data)
 }
 ```
 
-### Subscribe observable by RxSocialLogin
-```java
-RxSocialLogin.kakao(mKakaoLogin)
-        .subscribe(data -> {
-            // TODO: do job with LoginResultItem
-        }, error -> {
-            // TODO: Error on login()
-        });
+Next, we pass `Observable` to each platform method of the` RxSocialLogin` class by passing the variable of the corresponding social module.
+
+```kotlin
+RxSocialLogin.facebook(facebookLogin)
+	.subscribe(data -> {
+		// TODO: do job with LoginResultItem
+	}, error -> {
+		// TODO: Error on login()
+	});
 ```
 
-#### Limitations
-1. Subscribe and observe should occur on Main Thread. if you try to change thread such as ```Schedulers.io``` using ```subscribeOn```, it will be call ```onError()```. instead, ```AndroidSchedulers.mainThread()``` will be fine.
-2. You should use ```subscribe(Consumer onNext, Consumer onError)```, not ```subscribe(Consumer onNext)``` whether you don't need onError callback.
-3. Sometimes it happen 'UndeliverableException'. if you prevent this exception, use ```RxJavaPlugins.setErrorHandler { e -> }``` statement. this methods occur change global error handler of RxJava, please use it only when you know exactly what you are doing. You can see [RxJava2 Wiki](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling)
+Finally, you start a social login by calling the `login` method of the social module variable where you want to start the social login (when the user requests a social login).
 
-### Call login() methods on anywhere
-```java
-kakaoLogin.onLogin()
+```kotlin
+facebookLogin.login()
 ```
 
-## Dependencies of service
-Requirements are different by service.
+#### Using with [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding)
 
-### Kakao
-It support v2 of Kakao User API. See [Document](https://developers.kakao.com/docs/android/user-management)
+You can use it with [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) for natural use. However, we know this approach is not the primary method.
 
-#### build.gradle
-```
-repositories {
-    maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
-}
-```
-
-```
-implementation 'com.kakao.sdk:usermgmt:1.11.1'
+```kotlin
+btnFacebook.clicks()
+	.doOnNext { facebookLogin.login() }
+	.flatMap { facebookLogin.toObservable() }
+	.subscribe(consumer, error)
+	.addTo(compositeDisposable)
 ```
 
-#### AndroidManifest.xml
-```XML
- <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="YOUR-API-KEY"/>
+### Instructions for use
+
+#### Social module variable matters.
+
+There are currently two types of constructors.
+
+* FacebookLogin() - Primary constructors.
+* FacebookLogin(activity: FragmentActivity) - Secondary constructors.
+
+If you use Secondary constructors, use the `FragmentActivity` object provided in the Seconday constructor. Otherwise, use the `FragmentActivity` object to cache internally.
+
+However, there may be a module that throw an error when it is created as the default constructor, so it is better to pass a `FragmentActivity` object through the Secondary constructor whenever possible.
+
+#### Apply to Proguard
+
+Please refer to [Proguard rule of sample app](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro).
+
+#### Constraints - all actions should keep the main thread
+
+Everything should work within the main thread. If library use a network inside the library, it will be handled correctly internally using [Fuel](https://github.com/kittinunf/Fuel), so the `Observable` returned by `RxSocialLogin` should keep the main thread. If it is not the main thread, login fails immediately.
+
+In other words, the following cases are not processed and are treated as `LoginFailedException` immediately.
+
+```kotlin
+RxSocialLogin.facebook(facebookLogin)
+		.subscribeOn(Schedulers.io())
+		.observeOn(AndroidSchedulers.mainThread())
+		...
 ```
 
-#### MainApplication
-```Java
-SocialLogin.init(this);
-KakaoConfig kakaoConfig = new KakaoConfig.Builder()
-                .setRequireEmail()
-                .build();
+Due to this constraints, it is not allowed to **start social login right after the network processing, such as `flatMap`**. If you need to handle this case, it is better to call `RxSocialLogin` separately in subscribe after network processing.
 
-SocialLogin.addType(SocialType.KAKAO, kakaoConfig);
-```
+#### Occurred OnErrorNotImplementedException
 
-### Facebook
+A common error is [OnErrorNotImplementedException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/OnErrorNotImplementedException.html), which is not handled for `onError` at the time of `subscribe`
 
-#### build.gradle
-```
-implementation 'com.facebook.android:facebook-android-sdk:4.23.0'
-```
+#### Occurred UndeliverableException
 
-#### AndroidManifest.xml
-```Java
-<activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+Based on 0.5.0 [UndeliverableException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/UndeliverableException.html) occurs when Exception is not passed to `onError`. You can use `RxJavaPlugins.setErrorHandler { e -> }` to solve the problem, but this will change the overall behavior of RxJavaPlugins.
 
-<meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="YOUR-API-KEY"/>
-```
+In 1.0.0 and later, `LoginFailedException` has been changed to inherit` IllegalStateException` to prevent this problem. Therefore, it is not intended to occur in later versions.
 
-#### MainApplication
-```Java
-SocialLogin.init(this);
-FacebookConfig facebookConfig = new FacebookConfig.Builder()
-                .setApplicationId("YOUR-API-KEY")
-                .setRequireEmail()
-                .build();
+See [Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling) for more details.
 
+## Author & Contributor
 
-SocialLogin.addType(SocialType.FACEBOOK, facebookConfig);
-```
+* Author: [@WindSekirun](https://github.com/windsekirun), E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
+* Contribuor: [Contributors](https://github.com/WindSekirun/RxSocialLogin/graphs/contributors)
 
-### Naver
-
-#### build.gradle
-```
-implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.0'
-```
-
-#### MainApplication
-```Java
-SocialLogin.init(this);
-NaverConfig naverConfig = new NaverConfig.Builder()
-                .setAuthClientId("YOUR-API-KEY")
-                .setAuthClientSecret("YOUR-API-KEY")
-                .setClientName(getString(R.string.app_name))
-                .build();
-
-
-SocialLogin.addType(SocialType.NAVER, naverConfig);
-```
-
-### Line
-
-#### MainApplication
-```Java
-SocialLogin.init(this);
-LineConfig lineConfig = new LineConfig.Builder()
-                .setChannelId("<YOUR-API-KEY>")
-                .build();
-
-
-SocialLogin.addType(SocialType.LINE, lineConfig);
-```
-
-### Twitter
-
-#### build.gradle
-```
-implementation 'com.twitter.sdk.android:twitter:3.3.0'
-```
-
-#### MainApplication
-```Java
-SocialLogin.init(this);
-TwitterConfig twitterConfig = new TwitterConfig.Builder()
-                .setConsumerKey("<YOUR-API-KEY>")
-                .setConsumerSecret("<YOUR-API-KEY>")
-                .build();
-
-
-SocialLogin.addType(SocialType.TWITTER, twitterConfig);
-```
-
-### Google
-
-#### Precondition
-Tutorial to implement Google Login with RxSocialLogin, [English](https://blog.uzuki.live/implement-google-login-with-rxsociallogin-english/), [Korean](https://blog.uzuki.live/implement-google-login-with-rxsociallogin-korean/)
-
-1. In AS 3.1, enter 'Firebase' and click 'Authentication' and click 'Connect to Firebase' and 'Add Firebase Authentication to your app'. in this step, you will save your 'google-services.json' in your app module directory.
-2.  Enable Google as authentication provider in Firebase Console
-3. Find 'Web Client ID' in Firebase console. you can find this information in sub-section of authentication provider.
-4. Provide your 'Web Client ID' into GoogleConfig.setClientTokenId()
-
-#### build.gradle
-```
-implementation 'com.google.android.gms:play-services-auth:15.0.0'
-implementation 'com.google.firebase:firebase-auth:15.0.0'
-```
-
-#### MainApplication
-```Java
-SocialLogin.init(this);
-GoogleConfig googleConfig = new GoogleConfig.Builder()
-                .setRequireEmail()
-                .setClientTokenId("<YOUR-WEB-CLIENT-ID>")
-                .build();
-
-SocialLogin.addType(SocialType.GOOGLE, googleConfig);
-```
-
-## Sample
-- [MainActivity.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainActivity.kt)
-- [MainApplication.kt](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt)
-
-## Proguard
-
-For usages with Proguard, please apply [these rules](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) according [issue #2](https://github.com/WindSekirun/RxSocialLogin/issues/2). 
-
+[Issue Tracker](https://github.com/WindSekirun/RxSocialLogin/issues) receives a variety of issues including bug findings, improvements, and new platform additions. [Pull Requests](https://github.com/WindSekirun/RxSocialLogin/pulls) is always welcome.
 
 ## License
+
+* The ReactiveX logo was taken from [Seeklogo](https://seeklogo.com/vector-logo/284342/reactivex).
+* The font used for the logo is Hanken Design Co. [Hanken round](https://www.behance.net/gallery/18871499/Hanken-Round-Free-Typeface) and this font follows SIL OFL. There is a PSD file for the logo in the project.
+* Copyright for the platform logo used in the sample exists in each company. The RxSocialLogin library is not associated with the platform company.
+
 ```
 Copyright 2017 - 2018 WindSekirun (DongGil, Seo)
 
