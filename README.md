@@ -12,7 +12,7 @@ These instructions are available in their respective languages.
 * [한국어](README-ko.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
 * [日本語](README-JP.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
 
-## 소개
+## Introduction
 
 This Android library is a library that provides social login for 15 platforms powered by [RxJava2](https://github.com/ReactiveX/RxJava), [Kotlin](http://kotlinlang.org/) and [Firebase Authentication](https://firebase.google.com/docs/auth/).
 
@@ -46,7 +46,7 @@ This library is an improved version of [@WindSekirun](https://github.com/windsek
 
 Click on the name of each platform to move to how to apply the platform.
 
-## 불러오기
+## Import
 
 Add the following code to `build.gradle` in the root folder.
 
@@ -154,7 +154,7 @@ However, there may be a module that throw an error when it is created as the def
 
 #### Apply to Proguard
 
-Please refer to [Proguard rule of sample app] (https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro).
+Please refer to [Proguard rule of sample app](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro).
 
 #### Constraints - all actions should keep the main thread
 
@@ -173,7 +173,7 @@ Due to this constraints, it is not allowed to **start social login right after t
 
 #### Occurred OnErrorNotImplementedException
 
-A common error is [OnErrorNotImplementedException] (http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/OnErrorNotImplementedException.html), which is not handled for `onError` at the time of `subscribe`
+A common error is [OnErrorNotImplementedException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/OnErrorNotImplementedException.html), which is not handled for `onError` at the time of `subscribe`
 
 #### Occurred UndeliverableException
 
@@ -181,7 +181,7 @@ Based on 0.5.0 [UndeliverableException](http://reactivex.io/RxJava/javadoc/io/re
 
 In 1.0.0 and later, `LoginFailedException` has been changed to inherit` IllegalStateException` to prevent this problem. Therefore, it is not intended to occur in later versions.
 
-See [Error handling] (https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling) for more details.
+See [Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling) for more details.
 
 ## Author & Contributor
 
