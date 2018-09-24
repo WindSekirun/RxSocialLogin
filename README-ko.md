@@ -22,7 +22,7 @@ These instructions are available in their respective languages.
 * 원본이 Java 로 작성된 것에 비해, 개선 버전은 Kotlin 으로만 작성되었습니다.
 * 원본이 6개의 플랫폼을 지원했던 반면, 개선판은 15개의 플랫폼을 제공합니다.
 * 모든 메서드와 코드를 재작성 하였습니다.
-* Kotlin 으로 작성되었지만 Java 와 호환되도록 외부에서 사용되는 메서드는 적절한 어노테이션을 부착하였습니다.
+* Kotlin 으로 작성되었지만 Java 와 호환되도록 고려되었습니다.
 
 ## 지원되는 플랫폼
 
