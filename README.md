@@ -4,7 +4,7 @@
 
 ![](graphics/logo.png)
 
-*The license information is located at the bottom of the document.*
+*The license information for logo is located at the bottom of the document.*
 
 These instructions are available in their respective languages.
 

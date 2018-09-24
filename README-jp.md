@@ -4,7 +4,7 @@
 
 ![](graphics/logo.png)
 
-*The license information is located at the bottom of the document.*
+*The license information for logo is located at the bottom of the document.*
 
 These instructions are available in their respective languages.
 
@@ -26,7 +26,7 @@ These instructions are available in their respective languages.
 
 ## サポートされているプラットフォーム
 
-| プラットフォーム                                                       | データ                                                       | バージョン  |
+| Platform                                                       | Data                                                       | Version  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----- |
 | [Disqus](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Disqus) | id, name, email, nickname, profilePicture                    | 1.0.0 |
 | [Facebook](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Facebook) | id, name, email, profilePicture, gender, firstName           | 0.5.0 |
@@ -44,11 +44,11 @@ These instructions are available in their respective languages.
 | [Wordpress](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Wordpress) | id, name, email, profilePicture, emailVerified               | 1.0.0 |
 | [Yahoo](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Yahoo) | id, name                                                     | 1.0.0 |
 
-Click on the name of each platform to move to how to apply the platform.
+プラットフォームの名前をクリックして、プラットフォームの適用方法に移動します。
 
-## Import
+## インポート
 
-Add the following code to `build.gradle` in the root folder.
+ルートフォルダの `build.gradle`に次のコードを追加します。
 
 ```groovy
 allprojects {
@@ -59,7 +59,7 @@ allprojects {
 }
 ```
 
-Add the following dependencies to the `build.gradle` of the module you want to use.
+使用するモジュールの `build.gradle`に次の依存関係を追加します。
 
 ```groovy
 dependencies {
@@ -71,17 +71,17 @@ dependencies {
 }
 ```
 
-RxJava is an active library, and you should always keep the latest version for new enhancements to take effect. Therefore, we recommend that you add RxJava to the bottom of the dependency.
+RxJavaはアクティブなライブラリです。新しい拡張機能を有効にするには、常に最新のバージョンを保持する必要があります。 したがって、RxJavaを依存関係の末尾に追加することをお勧めします。
 
 * RxAndroid: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxandroid%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxandroid.svg'></a>
 
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
-## Very easy 5-step usage
+## 簡単な5ステップの使用方法
 
-First, initialize the moduel by `RxSocialLogin.init(this)` in `Application` class and declare Config object for each platform. There Config object is necessary information to using platform, For config information for each platform, please click on each platform in the "Supported Platforms" section above to see the wiki. 
+まず、`Application`クラスの`RxSocialLogin.init（this）`でモジュールを初期化し、プラットフォームごとにConfigオブジェクトを宣言します。Configオブジェクトは、プラットフォームを使用するために必要な情報です。プラットフォームの設定情報については、上記の「サポートされているプラットフォーム」セクションのプラットフォームをクリックして、wikiを参照してください。
 
-Note that `RxSocialLogin.init (this)` only needs to be called once.
+`RxSocialLogin.init（this）`は一度だけ呼び出される必要があることに注意してください。
 
 ```kotlin
 RxSocialLogin.init(this)
@@ -95,13 +95,13 @@ val facebookConfig = FacebookConfig.Builder()
 RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
 ```
 
-Then create an instance of the class named Platform + Login to use in the code you want to use as a global variable (defined here as **social module variable**).
+次に、グローバル変数として使用するコードで使用する'Platform + Login'という名前のクラスのインスタンスを作成してください。ここでは**ソーシャルモジュール変数**と仮定します。
 
 ```kotlin
 private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
 ```
 
-Then, in the onActivityResult of the activity, call the `onActivityResult` method of the corresponding social module variable.
+次に、ActivityのonActivityResultで、対応するソーシャルモジュール変数の `onActivityResult`メソッドを呼び出してください。
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -110,7 +110,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 }
 ```
 
-Next, we pass `Observable` to each platform method of the` RxSocialLogin` class by passing the variable of the corresponding social module.
+次に、`RxSocialLogin`クラス対応するソーシャルモジュール変数を渡すことによって、`Observable`を得ることができます。
 
 ```kotlin
 RxSocialLogin.facebook(facebookLogin)
@@ -121,15 +121,14 @@ RxSocialLogin.facebook(facebookLogin)
 	});
 ```
 
-Finally, you start a social login by calling the `login` method of the social module variable where you want to start the social login (when the user requests a social login).
+最後に、ソーシャル・ログインを開始する時、ソーシャル・モジュール変数の `login`メソッドを呼び出してソーシャル・ログインを開始します。
 
 ```kotlin
 facebookLogin.login()
 ```
 
-#### Using with [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding)
-
-You can use it with [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) for natural use. However, we know this approach is not the primary method.
+#### [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) で使う
+自然な使用のために [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) と共に使用することができます。 しかし、我々はこのアプローチが主要な方法ではないことを知っています。
 
 ```kotlin
 btnFacebook.clicks()
@@ -139,16 +138,16 @@ btnFacebook.clicks()
 	.addTo(compositeDisposable)
 ```
 
-### Instructions for use
+### 使用にについての説明
 
-#### Social module variable matters.
+#### ソーシャルモジュール変数の問題。
 
-There are currently two types of constructors.
+現在、2つのタイプのコンストラクタがあります。
 
-* FacebookLogin() - Primary constructors.
-* FacebookLogin(activity: FragmentActivity) - Secondary constructors.
+* FacebookLogin() - 主なコンストラクタ
+* FacebookLogin(activity: FragmentActivity) - セカンダリコンストラクタ
 
-If you use Secondary constructors, use the `FragmentActivity` object provided in the Seconday constructor. Otherwise, use the `FragmentActivity` object to cache internally.
+セカンダリコンストラクタを使用する場合は、セカンダリコンストラクタで提供される `FragmentActivity`オブジェクトを使用します。 それ以外の場合は、 `FragmentActivity`オブジェクトを使用して内部的にキャッシュします。
 
 However, there may be a module that throw an error when it is created as the default constructor, so it is better to pass a `FragmentActivity` object through the Secondary constructor whenever possible.
 
