@@ -52,10 +52,10 @@ These instructions are available in their respective languages.
 
 ```groovy
 allprojects {
-    repositories {
-    	maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
-	    maven { url 'https://jitpack.io' }
-    }
+	repositories {
+		maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+		maven { url 'https://jitpack.io' }
+	}
 }
 ```
 
@@ -63,11 +63,11 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
     
-    // RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
-    implementation 'io.reactivex.rxjava2:rxjava:lastest-version'
+	// RxJava
+	implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
+	implementation 'io.reactivex.rxjava2:rxjava:lastest-version'
 }
 ```
 
@@ -87,10 +87,10 @@ RxJava는 활동이 활발한 라이브러리로, 새로운 개선 사항을 적
 RxSocialLogin.init(this)
 
 val facebookConfig = FacebookConfig.Builder()
-		.setApplicationId(getString(R.string.facebook_api_key))
-		.setRequireEmail()
-		.setBehaviorOnCancel()
-		.build()
+	.setApplicationId(getString(R.string.facebook_api_key))
+	.setRequireEmail()
+	.setBehaviorOnCancel()
+	.build()
 
 RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
 ```
@@ -105,8 +105,8 @@ private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        facebookLogin.onActivityResult(requestCode, resultCode, data)
+	super.onActivityResult(requestCode, resultCode, data)
+	facebookLogin.onActivityResult(requestCode, resultCode, data)
 }
 ```
 
@@ -114,11 +114,11 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 ```kotlin
 RxSocialLogin.facebook(facebookLogin)
-        .subscribe(data -> {
-            // TODO: do job with LoginResultItem
-        }, error -> {
-            // TODO: Error on login()
-        });
+	.subscribe(data -> {
+		// TODO: do job with LoginResultItem
+	}, error -> {
+		// TODO: Error on login()
+	});
 ```
 
 마지막으로, 소셜 로그인을 시작할 곳에(사용자가 소셜 로그인을 요청했을 경우) 소셜 모듈 변수의 `login` 메서드를 호출해 소셜 로그인을 시작합니다.
@@ -133,10 +133,10 @@ facebookLogin.login()
 
 ```kotlin
 btnFacebook.clicks()
-    .doOnNext { facebookLogin.login() }
-    .flatMap { facebookLogin.toObservable() }
-    .subscribe(consumer, error)
-    .addTo(compositeDisposable)
+	.doOnNext { facebookLogin.login() }
+	.flatMap { facebookLogin.toObservable() }
+	.subscribe(consumer, error)
+	.addTo(compositeDisposable)
 ```
 
 ### 사용시의 안내사항
@@ -167,8 +167,8 @@ btnFacebook.clicks()
 ```kotlin
 RxSocialLogin.facebook(facebookLogin)
 		.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        ...
+		.observeOn(AndroidSchedulers.mainThread())
+		...
 ```
 
 이 주의점으로 인해 **네트워크 처리 후 `flatMap` 등으로 바로 소셜 로그인을 시작하는 것이 허용되지 않습니다.** 이러한 케이스를 처리해야 될 경우에는 네트워크 처리 후 subscribe 내에서 따로 `RxSocialLogin` 를 호출하는 것이 바람직합니다.
