@@ -176,7 +176,7 @@ RxSocialLogin.facebook(facebookLogin)
 詳細については、[Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling)を参照してください。
 
 ## 著者&貢献者
-* 著者: @WindSekirun, E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
+* 著者: [@WindSekirun](https://github.com/windsekirun), E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
 * 貢献者: [Contributors](https://github.com/WindSekirun/RxSocialLogin/graphs/contributors)
 
 [Issue Tracker](https://github.com/WindSekirun/RxSocialLogin/issues)には、バグの発見、改善、新しいプラットフォームの追加など、さまざまな問題を受け取ります。[Pull Request](https://github.com/WindSekirun/RxSocialLogin/pulls)はいつでも歓迎します。

@@ -185,7 +185,7 @@ See [Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-i
 
 ## Author & Contributor
 
-* Author: @WindSekirun, E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
+* Author: [@WindSekirun](https://github.com/windsekirun), E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
 * Contribuor: [Contributors](https://github.com/WindSekirun/RxSocialLogin/graphs/contributors)
 
 [Issue Tracker](https://github.com/WindSekirun/RxSocialLogin/issues) receives a variety of issues including bug findings, improvements, and new platform additions. [Pull Requests](https://github.com/WindSekirun/RxSocialLogin/pulls) is always welcome.

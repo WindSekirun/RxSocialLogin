@@ -185,7 +185,7 @@ RxSocialLogin.facebook(facebookLogin)
 
 ## 제작자 & 기여자
 
-* 제작자: @WindSekirun, 메일 [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
+* 제작자: [@WindSekirun](https://github.com/windsekirun), 메일 [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
 * 기여자: [Contributors](https://github.com/WindSekirun/RxSocialLogin/graphs/contributors)
 
 버그 발견 사항, 개선 사항, 새로운 플랫폼 추가 등 다양한 사항을 [이슈 트래커](https://github.com/WindSekirun/RxSocialLogin/issues) 에서 접수받고 있습니다. [Pull Requests](https://github.com/WindSekirun/RxSocialLogin/pulls) 도 언제나 환영입니다.
