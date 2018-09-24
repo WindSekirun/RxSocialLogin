@@ -21,6 +21,7 @@ open class BaseSocialObservable<T : SocialLogin>(private val login: T) : Observa
 
     override fun subscribeActual(observer: Observer<in LoginResultItem>?) {
         if (observer == null || !Preconditions.checkMainThread(observer)) {
+            observer?.onError(LoginFailedException("Not in MainThread. cancel working."))
             return
         }
 
