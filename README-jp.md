@@ -13,7 +13,6 @@ These instructions are available in their respective languages.
 * [日本語](README-JP.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
-
 このAndroidライブラリは、[RxJava2](https://github.com/ReactiveX/RxJava)、[Kotlin](http://kotlinlang.org/)、[Firebase 認証](https://firebase.google.com/docs/auth/)を搭載した15プラットフォームのソーシャルログインを提供するライブラリです。
 
 このライブラリは、[@WindSekirun](https://github.com/windsekirun)の[SocialLogin](https://github.com/WindSekirun/SocialLogin)ライブラリの改良版です。 以下は、ライブラリの変更点です。
@@ -78,7 +77,6 @@ RxJavaはアクティブなライブラリです。新しい拡張機能を有�
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
 ## 簡単な5ステップの使用方法
-
 まず、`Application`クラスの`RxSocialLogin.init（this）`でモジュールを初期化し、プラットフォームごとにConfigオブジェクトを宣言します。Configオブジェクトは、プラットフォームを使用するために必要な情報です。プラットフォームの設定情報については、上記の「サポートされているプラットフォーム」セクションのプラットフォームをクリックして、wikiを参照してください。
 
 `RxSocialLogin.init（this）`は一度だけ呼び出される必要があることに注意してください。
@@ -141,25 +139,22 @@ btnFacebook.clicks()
 ### 使用にについての説明
 
 #### ソーシャルモジュール変数の問題。
-
 現在、2つのタイプのコンストラクタがあります。
 
-* FacebookLogin() - 主なコンストラクタ
+* FacebookLogin() - デフォルトコンストラクタ
 * FacebookLogin(activity: FragmentActivity) - セカンダリコンストラクタ
 
 セカンダリコンストラクタを使用する場合は、セカンダリコンストラクタで提供される `FragmentActivity`オブジェクトを使用します。 それ以外の場合は、 `FragmentActivity`オブジェクトを使用して内部的にキャッシュします。
 
-However, there may be a module that throw an error when it is created as the default constructor, so it is better to pass a `FragmentActivity` object through the Secondary constructor whenever possible.
+しかし、デフォルトコンストラクタとして生成されたときにエラーを投げるモジュールがあるかもしれないので、可能であれば、いつでも `FragmentActivity`オブジェクトをセカンダリコンストラクタに渡す方が良いと思います。
 
 #### Apply to Proguard
+[サンプルアプリケーションのProguardルール](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) を参照してください。
 
-Please refer to [Proguard rule of sample app](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro).
+#### 制約 - すべてのアクションはメインスレッドを保持する必要があります
+すべてのアクションはメインスレッドを保持する必要があります。 ライブラリが内でネットワークを使用している場合、[Fuel](https://github.com/kittinunf/Fuel)を使用して内部的に正しく処理されるため、 `RxSocialLogin`によって返される` Observable`はメインスレッドを保持します。 メインスレッドでない場合は、すぐにログインに失敗します。
 
-#### Constraints - all actions should keep the main thread
-
-Everything should work within the main thread. If library use a network inside the library, it will be handled correctly internally using [Fuel](https://github.com/kittinunf/Fuel), so the `Observable` returned by `RxSocialLogin` should keep the main thread. If it is not the main thread, login fails immediately.
-
-In other words, the following cases are not processed and are treated as `LoginFailedException` immediately.
+言い換えれば、以下のケースは処理されず、即座に `LoginFailedException`として扱われます。
 
 ```kotlin
 RxSocialLogin.facebook(facebookLogin)
@@ -168,32 +163,28 @@ RxSocialLogin.facebook(facebookLogin)
 		...
 ```
 
-Due to this constraints, it is not allowed to **start social login right after the network processing, such as `flatMap`**. If you need to handle this case, it is better to call `RxSocialLogin` separately in subscribe after network processing.
+この制約のため、**flatmapなのでネットワーク処理の直後にソーシャルログインを開始することはできません**。このケースを処理する必要がある場合は、ネットワーク処理後にサブスクライブする際に `RxSocialLogin`を別々に呼び出す方が良いと思います。
 
-#### Occurred OnErrorNotImplementedException
+#### OnErrorNotImplementedExceptionが発生しました
+一般的なエラーは[OnErrorNotImplementedException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/OnErrorNotImplementedException.html)です。これは `subscribe`時に` onError`を適切に処理していないからです。
 
-A common error is [OnErrorNotImplementedException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/OnErrorNotImplementedException.html), which is not handled for `onError` at the time of `subscribe`
+#### UndeliverableExceptionが発生しました
+0.5.0に基づいて、例外が `onError`に渡されないとき、[UndeliverableException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/UndeliverableException.html)が発生されます。`RxJavaPlugins.setErrorHandler { e -> }`によってこの問題を解決する事が出来るですが、ごのメソッドによってRxJavaPlugins全ての行動が変わるので、ご注意ください。
 
-#### Occurred UndeliverableException
+1.0.0以降では、この問題を解決するために `LoginFailedException`が` IllegalStateException`を継承するように変更されました。 したがって、それ以降のバージョンでは発生しません。
 
-Based on 0.5.0 [UndeliverableException](http://reactivex.io/RxJava/javadoc/io/reactivex/exceptions/UndeliverableException.html) occurs when Exception is not passed to `onError`. You can use `RxJavaPlugins.setErrorHandler { e -> }` to solve the problem, but this will change the overall behavior of RxJavaPlugins.
+詳細については、[Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling)を参照してください。
 
-In 1.0.0 and later, `LoginFailedException` has been changed to inherit` IllegalStateException` to prevent this problem. Therefore, it is not intended to occur in later versions.
+## 著者&貢献者
+* 著者: @WindSekirun, E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
+* 貢献者: [Contributors](https://github.com/WindSekirun/RxSocialLogin/graphs/contributors)
 
-See [Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling) for more details.
+[Issue Tracker](https://github.com/WindSekirun/RxSocialLogin/issues)には、バグの発見、改善、新しいプラットフォームの追加など、さまざまな問題を受け取ります。[Pull Request](https://github.com/WindSekirun/RxSocialLogin/pulls)はいつでも歓迎します。
 
-## Author & Contributor
-
-* Author: @WindSekirun, E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)
-* Contribuor: [Contributors](https://github.com/WindSekirun/RxSocialLogin/graphs/contributors)
-
-[Issue Tracker](https://github.com/WindSekirun/RxSocialLogin/issues) receives a variety of issues including bug findings, improvements, and new platform additions. [Pull Requests](https://github.com/WindSekirun/RxSocialLogin/pulls) is always welcome.
-
-## License
-
-* The ReactiveX logo was taken from [Seeklogo](https://seeklogo.com/vector-logo/284342/reactivex).
-* The font used for the logo is Hanken Design Co. [Hanken round](https://www.behance.net/gallery/18871499/Hanken-Round-Free-Typeface) and this font follows SIL OFL. There is a PSD file for the logo in the project.
-* Copyright for the platform logo used in the sample exists in each company. The RxSocialLogin library is not associated with the platform company.
+## ライセンス
+* ReactiveXロゴは[Seeklogo](https://seeklogo.com/vector-logo/284342/reactivex)から取得しました。
+* ロゴに使用されるフォントは'Hanken Design Co.'さんの[Hanken round](https://www.behance.net/gallery/18871499/Hanken-Round-Free-Typeface)で、このフォントはSIL OFLに従います。 プロジェクトにはロゴ用のPSDファイルがあります。
+* サンプルに使用されているプラットフォームロゴの著作権は、各社に存在します。 RxSocialLoginライブラリは、プラットフォーム会社に関連付けられていません。
 
 ```
 Copyright 2017 - 2018 WindSekirun (DongGil, Seo)
