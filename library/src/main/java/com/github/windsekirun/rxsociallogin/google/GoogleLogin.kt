@@ -15,25 +15,24 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
 class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
-    private val googleApiClient: GoogleApiClient
-    private val auth = FirebaseAuth.getInstance()
-
-    init {
-        val googleConfig = getPlatformConfig(PlatformType.GOOGLE) as GoogleConfig
+    private val googleApiClient: GoogleApiClient by lazy {
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(googleConfig.clientTokenId)
+                .requestIdToken(config.clientTokenId)
 
-        if (googleConfig.requireEmail) {
+        if (config.requireEmail) {
             builder.requestEmail()
         }
 
         val googleSignInOptions = builder.build()
 
-        googleApiClient = GoogleApiClient.Builder(activity!!)
+        GoogleApiClient.Builder(activity!!)
                 .enableAutoManage(activity) { _ -> }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
     }
+
+    private val config: GoogleConfig by lazy { getPlatformConfig(PlatformType.GOOGLE) as GoogleConfig }
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_SIGN_IN) {

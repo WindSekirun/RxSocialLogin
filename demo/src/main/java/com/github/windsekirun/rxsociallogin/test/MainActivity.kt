@@ -32,7 +32,7 @@ import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 class MainActivity : AppCompatActivity() {
     private val kakaoLogin: KakaoLogin by lazy { KakaoLogin() }
     private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
-    private val naverLogin: NaverLogin by lazy { NaverLogin() }
+    private val naverLogin: NaverLogin by lazy { NaverLogin(this) }
     private val lineLogin: LineLogin by lazy { LineLogin() }
     private val twitterLogin: TwitterLogin by lazy { TwitterLogin() }
     private val googleLogin: GoogleLogin by lazy { GoogleLogin() }

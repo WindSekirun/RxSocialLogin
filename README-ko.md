@@ -146,15 +146,17 @@ btnFacebook.clicks()
 현재 두 가지의 생성자 타입을 제공합니다.
 
 * FacebookLogin() - 기본 생성자
-* FacebookLogin(activity: Activity) - 추가 생성자
+* FacebookLogin(activity: FragmentActivity) - 추가 생성자
 
-이 중, 추가 생성자를 사용할 경우에는 추가 생성자에 제공된 `Activity` 객체를 사용합니다. 그렇지 않은 경우, 내부적으로 캐시하는 Activity 객체를 사용합니다.
+이 중, 추가 생성자를 사용할 경우에는 추가 생성자에 제공된 `FragmentActivity` 객체를 사용합니다. 그렇지 않은 경우, 내부적으로 캐시하는 `FragmentActivity` 객체를 사용합니다.
+
+단, 기본 생성자로 생성했을 때 오류가 발생하는 모듈이 있을 수 있으므로 가급적 추가 생성자를 통해 `FragmentActivity` 객체를 전달하는 편이 적합합니다.
 
 #### 프로가드(Proguard) 적용
 
 [샘플 앱의 프로가드 규칙](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) 을 참고하여 적용하기 바랍니다.
 
-#### 모든 행동은 메인 스레드를 유지해야 함
+#### 제약 - 모든 행동은 메인 스레드를 유지해야 함
 
 모든 행동은 메인 스레드 내에서 작동되야 합니다. 라이브러리 내부에서 네트워크를 사용할 경우에는 내부에서 [Fuel](https://github.com/kittinunf/Fuel) 를 사용하여 올바르게 처리되니, `RxSocialLogin` 으로 반환된 `Observable` 는 메인 스레드를 유지해야 합니다. 만일 메인 스레드가 아닐 경우 바로 로그인 실패가 이루어집니다.
 
