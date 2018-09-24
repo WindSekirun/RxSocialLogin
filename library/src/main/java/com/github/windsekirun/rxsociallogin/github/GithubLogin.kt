@@ -55,7 +55,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
                     .toResultObservable()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result, error ->
+                    .subscribe { _, _ ->
                         AccessTokenProvider.githubAccessToken = ""
                     }
 

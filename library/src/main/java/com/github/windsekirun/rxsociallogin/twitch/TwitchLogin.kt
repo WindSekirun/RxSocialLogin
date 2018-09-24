@@ -46,7 +46,7 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
                     .toResultObservable()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result, error ->
+                    .subscribe { _, _ ->
                         AccessTokenProvider.twitchAccessToken = ""
                     }
 
@@ -57,13 +57,13 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
     fun toObservable() = RxSocialLogin.twitch(this)
 
     private fun analyzeResult(jsonStr: String) {
-        val result = jsonStr.createJSONObject()
-        if (result == null) {
+        val accessTokenObject = jsonStr.createJSONObject()
+        if (accessTokenObject == null) {
             responseFail(PlatformType.TWITCH)
             return
         }
 
-        val accessToken = result.getJSONString("access_token", "")
+        val accessToken = accessTokenObject.getJSONString("access_token", "")
         if (accessToken.isEmpty()) {
             responseFail(PlatformType.TWITCH)
             return
