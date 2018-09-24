@@ -30,21 +30,21 @@ import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
 
 class MainActivity : AppCompatActivity() {
-    private val kakaoLogin: KakaoLogin by lazy { KakaoLogin(this) }
-    private val facebookLogin: FacebookLogin by lazy { FacebookLogin(this) }
-    private val naverLogin: NaverLogin by lazy { NaverLogin(this) }
-    private val lineLogin: LineLogin by lazy { LineLogin(this) }
-    private val twitterLogin: TwitterLogin by lazy { TwitterLogin(this) }
-    private val googleLogin: GoogleLogin by lazy { GoogleLogin(this) }
-    private val githubLogin: GithubLogin by lazy { GithubLogin(this) }
-    private val linkedinLogin: LinkedinLogin by lazy { LinkedinLogin(this) }
-    private val wordpressLogin: WordpressLogin by lazy { WordpressLogin(this) }
-    private val yahooLogin: YahooLogin by lazy { YahooLogin(this) }
-    private val vkLogin: VKLogin by lazy { VKLogin(this) }
-    private val windowsLogin: WindowsLogin by lazy { WindowsLogin(this) }
-    private val disqusLogin: DisqusLogin by lazy { DisqusLogin(this) }
-    private val foursquareLogin: FoursquareLogin by lazy { FoursquareLogin(this) }
-    private val twitchLogin: TwitchLogin by lazy { TwitchLogin(this) }
+    private val kakaoLogin: KakaoLogin by lazy { KakaoLogin() }
+    private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
+    private val naverLogin: NaverLogin by lazy { NaverLogin() }
+    private val lineLogin: LineLogin by lazy { LineLogin() }
+    private val twitterLogin: TwitterLogin by lazy { TwitterLogin() }
+    private val googleLogin: GoogleLogin by lazy { GoogleLogin() }
+    private val githubLogin: GithubLogin by lazy { GithubLogin() }
+    private val linkedinLogin: LinkedinLogin by lazy { LinkedinLogin() }
+    private val wordpressLogin: WordpressLogin by lazy { WordpressLogin() }
+    private val yahooLogin: YahooLogin by lazy { YahooLogin() }
+    private val vkLogin: VKLogin by lazy { VKLogin() }
+    private val windowsLogin: WindowsLogin by lazy { WindowsLogin() }
+    private val disqusLogin: DisqusLogin by lazy { DisqusLogin() }
+    private val foursquareLogin: FoursquareLogin by lazy { FoursquareLogin() }
+    private val twitchLogin: TwitchLogin by lazy { TwitchLogin() }
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
