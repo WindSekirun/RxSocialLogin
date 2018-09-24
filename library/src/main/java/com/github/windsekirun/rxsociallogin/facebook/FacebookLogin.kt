@@ -7,13 +7,12 @@ import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class FacebookLogin(activity: Activity) : SocialLogin(activity) {
+class FacebookLogin(activity: Activity) : RxSocialLogin(activity) {
     private val callbackManager: CallbackManager = CallbackManager.Factory.create()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -23,7 +22,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
     }
 
     override fun login() {
-        val config = getConfig(PlatformType.FACEBOOK) as FacebookConfig
+        val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         if (config.isRequireWritePermissions) {
             LoginManager.getInstance().logInWithPublishPermissions(activity!!, config.requestOptions)
@@ -40,12 +39,12 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 if (config.isBehaviorOnCancel) {
                     getUserInfo()
                 } else {
-                    responseFail(PlatformType.FACEBOOK)
+                    callbackFail(PlatformType.FACEBOOK)
                 }
             }
 
             override fun onError(error: FacebookException) {
-                responseFail(PlatformType.FACEBOOK)
+                callbackFail(PlatformType.FACEBOOK)
             }
         })
     }
@@ -57,11 +56,11 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
     fun toObservable() = RxSocialLogin.facebook(this)
 
     private fun getUserInfo() {
-        val config = getConfig(PlatformType.FACEBOOK) as FacebookConfig
+        val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
             if (obj == null) {
-                responseFail(PlatformType.FACEBOOK)
+                callbackFail(PlatformType.FACEBOOK)
                 return@GraphJSONObjectCallback
             }
 
@@ -79,7 +78,7 @@ class FacebookLogin(activity: Activity) : SocialLogin(activity) {
                 this.result = true
             }
 
-            responseSuccess(item)
+            callbackItem(item)
         }
 
         var originField = "id, name, email, gender, birthday, first_name, "

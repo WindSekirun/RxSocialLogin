@@ -5,7 +5,6 @@ import android.content.Intent
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
@@ -17,15 +16,15 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class DisqusLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: DisqusConfig by lazy { getConfig(PlatformType.DISQUS) as DisqusConfig }
+class DisqusLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: DisqusConfig by lazy { getPlatformConfig(PlatformType.DISQUS) as DisqusConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.DISQUS_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.DISQUS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.DISQUS)
+            callbackFail(PlatformType.DISQUS)
         }
     }
 
@@ -44,13 +43,13 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
     private fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()
         if (accessTokenResult == null) {
-            responseFail(PlatformType.DISQUS)
+            callbackFail(PlatformType.DISQUS)
             return
         }
 
         val accessToken = accessTokenResult.getJSONString("access_token", "")
         if (accessToken.isEmpty()) {
-            responseFail(PlatformType.DISQUS)
+            callbackFail(PlatformType.DISQUS)
             return
         }
 
@@ -66,7 +65,7 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserJson(result.component1())
                     } else {
-                        responseFail(PlatformType.DISQUS)
+                        callbackFail(PlatformType.DISQUS)
                     }
                 }
 
@@ -78,7 +77,7 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
         val responseObject = jsonObject?.getJSONObject("response")
 
         if (responseObject == null) {
-            responseFail(PlatformType.DISQUS)
+            callbackFail(PlatformType.DISQUS)
             return
         }
 
@@ -95,6 +94,6 @@ class DisqusLogin(activity: Activity) : SocialLogin(activity) {
             this.result = true
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

@@ -5,7 +5,6 @@ import android.content.Intent
 import com.foursquare.android.nativeoauth.FoursquareOAuth
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -13,8 +12,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
-class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: FoursquareConfig by lazy { getConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
+class FoursquareLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: FoursquareConfig by lazy { getPlatformConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CONNECT_REQUEST_CODE) {
@@ -24,14 +23,14 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
                         config.clientSecret, codeResponse.code)
                 activity!!.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
             } else {
-                responseFail(PlatformType.FOURSQUARE)
+                callbackFail(PlatformType.FOURSQUARE)
             }
         } else if (requestCode == EXCHANGE_REQUEST_CODE) {
             val tokenResponse = FoursquareOAuth.getTokenFromResult(resultCode, data)
             if (tokenResponse.accessToken != null && !tokenResponse.accessToken.isEmpty()) {
                 getUserInfo(tokenResponse.accessToken)
             } else {
-                responseFail(PlatformType.FOURSQUARE)
+                callbackFail(PlatformType.FOURSQUARE)
             }
         }
     }
@@ -41,7 +40,7 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
         if (intent.resolveActivity(activity!!.packageManager) != null) {
             activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
         } else {
-            responseFail(PlatformType.FOURSQUARE)
+            callbackFail(PlatformType.FOURSQUARE)
         }
     }
 
@@ -60,7 +59,7 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserJson(result.component1())
                     } else {
-                        responseFail(PlatformType.FOURSQUARE)
+                        callbackFail(PlatformType.FOURSQUARE)
                     }
                 }
 
@@ -71,7 +70,7 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr?.createJSONObject()
 
         if (jsonObject == null) {
-            responseFail(PlatformType.FOURSQUARE)
+            callbackFail(PlatformType.FOURSQUARE)
             return
         }
 
@@ -79,7 +78,7 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
         val user = response?.getJSONObject("user")
 
         if (user == null) {
-            responseFail(PlatformType.FOURSQUARE)
+            callbackFail(PlatformType.FOURSQUARE)
             return
         }
         val photo = user.getJSONObject("photo")
@@ -102,7 +101,7 @@ class FoursquareLogin(activity: Activity) : SocialLogin(activity) {
             this.result = true
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 
     companion object {

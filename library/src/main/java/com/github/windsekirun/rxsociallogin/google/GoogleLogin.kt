@@ -3,7 +3,6 @@ package com.github.windsekirun.rxsociallogin.google
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.google.android.gms.auth.api.Auth
@@ -15,12 +14,12 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
+class GoogleLogin(activity: AppCompatActivity) : RxSocialLogin(activity) {
     private val googleApiClient: GoogleApiClient
     private val auth = FirebaseAuth.getInstance()
 
     init {
-        val googleConfig = getConfig(PlatformType.GOOGLE) as GoogleConfig
+        val googleConfig = getPlatformConfig(PlatformType.GOOGLE) as GoogleConfig
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(googleConfig.clientTokenId)
 
@@ -43,7 +42,7 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
                 val account = task.getResult(ApiException::class.java)
                 authWithFirebase(account)
             } catch (e: ApiException) {
-                responseFail(PlatformType.GOOGLE)
+                callbackFail(PlatformType.GOOGLE)
             }
         }
     }
@@ -63,7 +62,7 @@ class GoogleLogin(activity: AppCompatActivity) : SocialLogin(activity) {
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         val disposable = auth.signInWithCredential(credential, activity, PlatformType.GOOGLE)
-                .subscribe({ responseSuccess(it) }, {})
+                .subscribe({ callbackItem(it) }, {})
         compositeDisposable.add(disposable)
     }
 

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.kakao.auth.AuthType
@@ -18,7 +17,7 @@ import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 
-class KakaoLogin(activity: Activity) : SocialLogin(activity) {
+class KakaoLogin(activity: Activity) : RxSocialLogin(activity) {
     private var mSessionCallback: SessionCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,16 +74,16 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
             val message = exception?.message ?: ""
             Log.d("SessionCallback", "OpenFailed:: $message")
 
-            responseFail(PlatformType.KAKAO)
+            callbackFail(PlatformType.KAKAO)
         }
     }
 
     private fun requestMe() {
-        val config = getConfig(PlatformType.KAKAO) as KakaoConfig
+        val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
 
         UserManagement.getInstance().me(config.requestOptions, object : MeV2ResponseCallback() {
             override fun onSessionClosed(errorResult: ErrorResult) {
-                responseFail(PlatformType.KAKAO)
+                callbackFail(PlatformType.KAKAO)
             }
 
             override fun onSuccess(result: MeV2Response) {
@@ -133,7 +132,7 @@ class KakaoLogin(activity: Activity) : SocialLogin(activity) {
                     this.platform = PlatformType.KAKAO
                 }
 
-                responseSuccess(item)
+                callbackItem(item)
             }
         })
     }

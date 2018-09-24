@@ -1,7 +1,7 @@
 package com.github.windsekirun.rxsociallogin.model
 
 /**
- * SocialLogin
+ * RxSocialLogin
  * Class: SocialConfig
  * Created by Pyxis on 2017-10-27.
  *

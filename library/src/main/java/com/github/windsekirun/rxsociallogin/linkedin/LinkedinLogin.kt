@@ -5,7 +5,6 @@ import android.content.Intent
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
@@ -16,15 +15,15 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: LinkedinConfig by lazy { getConfig(PlatformType.LINKEDIN) as LinkedinConfig }
+class LinkedinLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: LinkedinConfig by lazy { getPlatformConfig(PlatformType.LINKEDIN) as LinkedinConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.LINKEDIN)
+            callbackFail(PlatformType.LINKEDIN)
         }
     }
 
@@ -44,7 +43,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            responseFail(PlatformType.LINKEDIN)
+            callbackFail(PlatformType.LINKEDIN)
             return
         }
 
@@ -65,7 +64,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        responseFail(PlatformType.LINKEDIN)
+                        callbackFail(PlatformType.LINKEDIN)
                     }
                 }
 
@@ -76,7 +75,7 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
         val response = jsonStr?.createJSONObject()
 
         if (response == null) {
-            responseFail(PlatformType.LINKEDIN)
+            callbackFail(PlatformType.LINKEDIN)
             return
         }
 
@@ -101,6 +100,6 @@ class LinkedinLogin(activity: Activity) : SocialLogin(activity) {
             this.platform = PlatformType.LINKEDIN
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

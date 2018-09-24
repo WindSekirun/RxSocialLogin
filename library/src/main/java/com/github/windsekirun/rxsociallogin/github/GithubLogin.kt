@@ -6,7 +6,6 @@ import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
@@ -20,16 +19,16 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class GithubLogin(activity: Activity) : SocialLogin(activity) {
+class GithubLogin(activity: Activity) : RxSocialLogin(activity) {
     private val auth = FirebaseAuth.getInstance()
-    private val config: GithubConfig by lazy { getConfig(PlatformType.GITHUB) as GithubConfig }
+    private val config: GithubConfig by lazy { getPlatformConfig(PlatformType.GITHUB) as GithubConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.GITHUB_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.GITHUB_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.GITHUB)
+            callbackFail(PlatformType.GITHUB)
         }
     }
 
@@ -69,7 +68,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            responseFail(PlatformType.GITHUB)
+            callbackFail(PlatformType.GITHUB)
             return
         }
 
@@ -99,7 +98,7 @@ class GithubLogin(activity: Activity) : SocialLogin(activity) {
     private fun getUserInfo(accessToken: String) {
         val credential = GithubAuthProvider.getCredential(accessToken)
         val disposable = auth.signInWithCredential(credential, activity, PlatformType.GITHUB)
-                .subscribe({ responseSuccess(it) }, {})
+                .subscribe({ callbackItem(it) }, {})
         compositeDisposable.add(disposable)
     }
 }

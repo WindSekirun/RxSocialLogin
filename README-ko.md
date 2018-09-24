@@ -22,6 +22,7 @@ These instructions are available in their respective languages.
 * 원본이 Java 로 작성된 것에 비해, 개선 버전은 Kotlin 으로만 작성되었습니다.
 * 원본이 6개의 플랫폼을 지원했던 반면, 개선판은 15개의 플랫폼을 제공합니다.
 * 모든 메서드와 코드를 재작성 하였습니다.
+* Kotlin 으로 작성되었지만 Java 와 호환되도록 외부에서 사용되는 메서드는 적절한 어노테이션을 부착하였습니다.
 
 ## 지원되는 플랫폼
 
@@ -76,12 +77,28 @@ RxJava는 활동이 활발한 라이브러리로, 새로운 개선 사항을 적
 
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
-## 아주 쉬운 4단계 사용법
+## 아주 쉬운 5단계 사용법
 
-먼저, 사용할 플랫폼 + Login 이란 이름의 클래스의 인스턴스(여기서는 **소셜 모듈 변수** 이라 정의합니다.)를 전역변수로서 생성합니다.
+먼저, `Application` 클래스에서 `RxSocialLogin.init(this)` 로 모듈을 초기화하고 각 플랫폼에 대한 Config 객체를 선언하여 삽입합니다. 이 Config 객체는 해당 플랫폼을 사용하기 위해서 반드시 필요한 정보이며, 각 플랫폼에 대한 Config 정보는 위 '지원되는 플랫폼' 문단의 각 플랫폼을 클릭해 위키를 참조하시기 바랍니다.
+
+주의할 점으로, `RxSocialLogin.init(this)` 는 한 번만 호출하면 됩니다.
 
 ```kotlin
-private val facebookLogin: FacebookLogin by lazy { FacebookLogin(this) }
+RxSocialLogin.init(this)
+
+val facebookConfig = FacebookConfig.Builder()
+		.setApplicationId(getString(R.string.facebook_api_key))
+		.setRequireEmail()
+		.setBehaviorOnCancel()
+		.build()
+
+RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
+```
+
+그 다음 사용할 코드에서 사용할 플랫폼 + Login 이란 이름의 클래스의 인스턴스(여기서는 **소셜 모듈 변수** 이라 정의합니다.)를 전역변수로서 생성합니다.
+
+```kotlin
+private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
 ```
 
 그 다음, 액티비티의 onActivityResult 에서 해당 소셜 모듈 변수의 `onActivityResult` 메서드를 호출합니다.
@@ -124,13 +141,26 @@ btnFacebook.clicks()
 
 ### 사용시의 안내사항
 
+#### 소셜 모듈 변수 생성시 사항
+
+현재 두 가지의 생성자 타입을 제공합니다.
+
+* FacebookLogin() - 기본 생성자
+* FacebookLogin(activity: Activity) - 추가 생성자
+
+이 중, 추가 생성자를 사용할 경우에는 추가 생성자에 제공된 `Activity` 객체를 사용합니다. 그렇지 않은 경우, 내부적으로 캐시하는 Activity 객체를 사용합니다.
+
+#### onActivityResult 호출시 'Not need to call onActivityResult in ***Login' 로그 출력
+
+[이슈 #17번](https://github.com/WindSekirun/RxSocialLogin/issues/17) 를 통해 SDK 가 지원하는 경우 onActivityResult 를 따로 호출할 필요 없이 라이브러리 내부에서 처리합니다. 이 로그는 무시해도 되는 로그입니다.
+
 #### 프로가드(Proguard) 적용
 
 [샘플 앱의 프로가드 규칙](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) 을 참고하여 적용하기 바랍니다.
 
 #### 모든 행동은 메인 스레드를 유지해야 함
 
-모든 행동은 메인 스레드 내에서 작동되야 합니다. 라이브러리 내에서 네트워크를 사용할 경우에는 내부에서 [Fuel](https://github.com/kittinunf/Fuel) 를 사용하여 올바르게 처리되니, `RxSocialLogin` 으로 반환된 `Observable` 는 메인 스레드를 유지해야 합니다. 만일 메인 스레드가 아닐 경우 바로 로그인 실패가 이루어집니다.
+모든 행동은 메인 스레드 내에서 작동되야 합니다. 라이브러리 내부에서 네트워크를 사용할 경우에는 내부에서 [Fuel](https://github.com/kittinunf/Fuel) 를 사용하여 올바르게 처리되니, `RxSocialLogin` 으로 반환된 `Observable` 는 메인 스레드를 유지해야 합니다. 만일 메인 스레드가 아닐 경우 바로 로그인 실패가 이루어집니다.
 
 즉, 아래의 경우에는 처리되지 않고 바로 `LoginFailedException` 으로 처리됩니다.
 

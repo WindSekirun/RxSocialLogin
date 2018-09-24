@@ -5,21 +5,20 @@ import android.content.Intent
 import android.util.Base64
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class YahooLogin(activity: Activity) : SocialLogin(activity) {
+class YahooLogin(activity: Activity) : RxSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.YAHOO_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.YAHOO)
+            callbackFail(PlatformType.YAHOO)
         }
     }
 
@@ -35,7 +34,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
         val idToken = jsonObject?.getJSONString("id_token") ?: ""
         val guid = jsonObject?.getJSONString("xoauth_yahoo_guid") ?: ""
         if (guid.isEmpty() || idToken.isEmpty()) {
-            responseFail(PlatformType.YAHOO)
+            callbackFail(PlatformType.YAHOO)
             return
         }
 
@@ -45,7 +44,7 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
         val response = decodedStr.createJSONObject()
 
         if (response == null) {
-            responseFail(PlatformType.YAHOO)
+            callbackFail(PlatformType.YAHOO)
             return
         }
 
@@ -58,6 +57,6 @@ class YahooLogin(activity: Activity) : SocialLogin(activity) {
             this.platform = PlatformType.YAHOO
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

@@ -4,20 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.linecorp.linesdk.LineApiResponseCode
 import com.linecorp.linesdk.auth.LineLoginApi
 
-class LineLogin(activity: Activity) : SocialLogin(activity) {
+class LineLogin(activity: Activity) : RxSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE) onResultLineLogin(data)
     }
 
     override fun login() {
-        val lineConfig = getConfig(PlatformType.LINE) as LineConfig
+        val lineConfig = getPlatformConfig(PlatformType.LINE) as LineConfig
         val loginIntent = LineLoginApi.getLoginIntent(activity as Context,
                 lineConfig.channelId ?: "")
         activity!!.startActivityForResult(loginIntent, REQUEST_CODE)
@@ -36,7 +35,7 @@ class LineLogin(activity: Activity) : SocialLogin(activity) {
                 val accessToken = result.lineCredential?.accessToken?.accessToken
                 val lineProfile = result.lineProfile
                 if (lineProfile == null) {
-                    responseFail(PlatformType.LINE)
+                    callbackFail(PlatformType.LINE)
                     return
                 }
 
@@ -48,10 +47,10 @@ class LineLogin(activity: Activity) : SocialLogin(activity) {
                     this.name = lineProfile.displayName
                 }
 
-                responseSuccess(item)
+                callbackItem(item)
             }
 
-            else -> responseFail(PlatformType.LINE)
+            else -> callbackFail(PlatformType.LINE)
         }
     }
 

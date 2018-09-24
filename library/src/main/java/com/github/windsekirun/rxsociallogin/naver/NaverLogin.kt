@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -18,7 +17,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class NaverLogin(activity: Activity) : SocialLogin(activity) {
+class NaverLogin(activity: Activity) : RxSocialLogin(activity) {
     private val requestUrl = "https://openapi.naver.com/v1/nid/me"
     private val authLogin = OAuthLogin.getInstance()
 
@@ -29,7 +28,7 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
     override fun login() {
         OAuthLoginDefine.MARKET_LINK_WORKING = false
 
-        val config = getConfig(PlatformType.NAVER) as NaverConfig
+        val config = getPlatformConfig(PlatformType.NAVER) as NaverConfig
         authLogin.init(activity, config.authClientId, config.authClientSecret, config.clientName)
         authLogin.startOauthLoginActivity(activity, NaverLoginHandler())
     }
@@ -66,7 +65,7 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        responseFail(PlatformType.NAVER)
+                        callbackFail(PlatformType.NAVER)
                     }
                 }
 
@@ -78,7 +77,7 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
         val responseObject = getJSONObject(jsonObject, "response")
 
         if (responseObject == null) {
-            responseFail(PlatformType.NAVER)
+            callbackFail(PlatformType.NAVER)
             return
         }
 
@@ -95,6 +94,6 @@ class NaverLogin(activity: Activity) : SocialLogin(activity) {
             this.result = true
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

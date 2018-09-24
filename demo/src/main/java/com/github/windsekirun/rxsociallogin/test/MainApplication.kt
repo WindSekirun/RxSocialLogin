@@ -1,7 +1,7 @@
 package com.github.windsekirun.rxsociallogin.test
 
 import android.app.Application
-import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareConfig
@@ -21,7 +21,7 @@ import com.github.windsekirun.rxsociallogin.yahoo.YahooConfig
 
 
 /**
- * SocialLogin
+ * RxSocialLogin
  * Class: MainApplication
  * Created by Pyxis on 7/2/18.
  *
@@ -33,14 +33,14 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        SocialLogin.init(this)
+        RxSocialLogin.init(this)
 
         val twitterConfig = TwitterConfig.Builder()
                 .setConsumerKey(getString(R.string.twitter_api_id))
                 .setConsumerSecret(getString(R.string.twitter_api_secret))
                 .build()
 
-        SocialLogin.addType(PlatformType.TWITTER, twitterConfig)
+        RxSocialLogin.addType(PlatformType.TWITTER, twitterConfig)
 
         val facebookConfig = FacebookConfig.Builder()
                 .setApplicationId(getString(R.string.facebook_api_key))
@@ -48,7 +48,7 @@ class MainApplication : Application() {
                 .setBehaviorOnCancel()
                 .build()
 
-        SocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
+        RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
 
         val kakaoConfig = KakaoConfig.Builder()
                 .setRequireEmail()
@@ -58,7 +58,7 @@ class MainApplication : Application() {
                 .setRequireGender()
                 .build()
 
-        SocialLogin.addType(PlatformType.KAKAO, kakaoConfig)
+        RxSocialLogin.addType(PlatformType.KAKAO, kakaoConfig)
 
         val naverConfig = NaverConfig.Builder()
                 .setAuthClientId(getString(R.string.naver_api_id))
@@ -66,27 +66,27 @@ class MainApplication : Application() {
                 .setClientName(getString(R.string.app_name))
                 .build()
 
-        SocialLogin.addType(PlatformType.NAVER, naverConfig)
+        RxSocialLogin.addType(PlatformType.NAVER, naverConfig)
 
         val lineConfig = LineConfig.Builder()
                 .setChannelId(getString(R.string.line_api_channel))
                 .build()
 
-        SocialLogin.addType(PlatformType.LINE, lineConfig)
+        RxSocialLogin.addType(PlatformType.LINE, lineConfig)
 
         val googleConfig = GoogleConfig.Builder()
                 .setRequireEmail()
                 .setClientTokenId(getString(R.string.server_client_id))
                 .build()
 
-        SocialLogin.addType(PlatformType.GOOGLE, googleConfig)
+        RxSocialLogin.addType(PlatformType.GOOGLE, googleConfig)
 
         val githubConfig = GithubConfig.Builder()
                 .setClientId(getString(R.string.github_api_key))
                 .setClientSecret(getString(R.string.github_api_secret))
                 .build()
 
-        SocialLogin.addType(PlatformType.GITHUB, githubConfig)
+        RxSocialLogin.addType(PlatformType.GITHUB, githubConfig)
 
         val linkedinConfig = LinkedinConfig.Builder()
                 .setRedirectUri("http://example.com/oauth/callback")
@@ -95,7 +95,7 @@ class MainApplication : Application() {
                 .setClientSecret(getString(R.string.linkedin_api_secret))
                 .build()
 
-        SocialLogin.addType(PlatformType.LINKEDIN, linkedinConfig)
+        RxSocialLogin.addType(PlatformType.LINKEDIN, linkedinConfig)
 
         val wordpressConfig = WordpressConfig.Builder()
                 .setClientId(getString(R.string.wordpress_api_key))
@@ -103,7 +103,7 @@ class MainApplication : Application() {
                 .setRedirectUri("http://example.com/oauth/callback")
                 .build()
 
-        SocialLogin.addType(PlatformType.WORDPRESS, wordpressConfig)
+        RxSocialLogin.addType(PlatformType.WORDPRESS, wordpressConfig)
 
         val yahooConfig = YahooConfig.Builder()
                 .setClientId(getString(R.string.yahoo_api_key))
@@ -111,19 +111,19 @@ class MainApplication : Application() {
                 .setRedirectUri("http://example.com")
                 .build()
 
-        SocialLogin.addType(PlatformType.YAHOO, yahooConfig)
+        RxSocialLogin.addType(PlatformType.YAHOO, yahooConfig)
 
         val vkConfig = VKConfig.Builder()
                 .setRequireEmail()
                 .build()
 
-        SocialLogin.addType(PlatformType.VK, vkConfig)
+        RxSocialLogin.addType(PlatformType.VK, vkConfig)
 
         val windowsConfig = WindowsConfig.Builder()
                 .setClientId(getString(R.string.windows_api_key))
                 .build()
 
-        SocialLogin.addType(PlatformType.WINDOWS, windowsConfig)
+        RxSocialLogin.addType(PlatformType.WINDOWS, windowsConfig)
 
         val disqusConfig = DisqusConfig.Builder()
                 .setClientId(getString(R.string.disqus_api_key))
@@ -131,14 +131,14 @@ class MainApplication : Application() {
                 .setRedirectUri("http://www.example.com/oauth_redirect")
                 .build()
 
-        SocialLogin.addType(PlatformType.DISQUS, disqusConfig)
+        RxSocialLogin.addType(PlatformType.DISQUS, disqusConfig)
 
         val foursquareConfig = FoursquareConfig.Builder()
                 .setClientId(getString(R.string.foursquare_api_key))
                 .setClientSecret(getString(R.string.foursquare_api_secret))
                 .build()
 
-        SocialLogin.addType(PlatformType.FOURSQUARE, foursquareConfig)
+        RxSocialLogin.addType(PlatformType.FOURSQUARE, foursquareConfig)
 
         val twitchConfig = TwitchConfig.Builder()
                 .setClientId(getString(R.string.twitch_api_key))
@@ -147,6 +147,6 @@ class MainApplication : Application() {
                 .setRequireEmail()
                 .build()
 
-        SocialLogin.addType(PlatformType.TWITCH, twitchConfig)
+        RxSocialLogin.addType(PlatformType.TWITCH, twitchConfig)
     }
 }

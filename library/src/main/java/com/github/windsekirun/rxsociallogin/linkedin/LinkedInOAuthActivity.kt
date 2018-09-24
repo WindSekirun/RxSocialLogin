@@ -3,7 +3,7 @@ package com.github.windsekirun.rxsociallogin.linkedin
 import android.annotation.SuppressLint
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.OAuthConstants
-import com.github.windsekirun.rxsociallogin.SocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthWebViewClient
@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_oauth.*
 
 class LinkedInOAuthActivity : BaseOAuthActivity() {
-    private val linkedinConfig: LinkedinConfig by lazy { SocialLogin.getConfig(PlatformType.LINKEDIN) as LinkedinConfig }
+    private val linkedinConfig: LinkedinConfig by lazy { RxSocialLogin.getPlatformConfig(PlatformType.LINKEDIN) as LinkedinConfig }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun init() {

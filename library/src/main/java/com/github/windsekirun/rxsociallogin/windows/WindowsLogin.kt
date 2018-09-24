@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
@@ -18,8 +17,8 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
-class WindowsLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: WindowsConfig by lazy { getConfig(PlatformType.WINDOWS) as WindowsConfig }
+class WindowsLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: WindowsConfig by lazy { getPlatformConfig(PlatformType.WINDOWS) as WindowsConfig }
     private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity.applicationContext, config.clientId) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -32,18 +31,18 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {
-                    responseFail(PlatformType.WINDOWS)
+                    callbackFail(PlatformType.WINDOWS)
                     return
                 }
                 getUserInfo(authenticationResult)
             }
 
             override fun onCancel() {
-                responseFail(PlatformType.WINDOWS)
+                callbackFail(PlatformType.WINDOWS)
             }
 
             override fun onError(exception: MsalException?) {
-                responseFail(PlatformType.WINDOWS)
+                callbackFail(PlatformType.WINDOWS)
             }
         })
     }
@@ -63,7 +62,7 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
 
     private fun getUserInfo(authenticationResult: AuthenticationResult) {
         if (authenticationResult.accessToken == null) {
-            responseFail(PlatformType.WINDOWS)
+            callbackFail(PlatformType.WINDOWS)
             return
         }
 
@@ -78,7 +77,7 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        responseFail(PlatformType.WINDOWS)
+                        callbackFail(PlatformType.WINDOWS)
                     }
                 }
 
@@ -89,7 +88,7 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr?.createJSONObject()
 
         if (jsonObject == null) {
-            responseFail(PlatformType.WINDOWS)
+            callbackFail(PlatformType.WINDOWS)
             return
         }
 
@@ -101,6 +100,6 @@ class WindowsLogin(activity: Activity) : SocialLogin(activity) {
             this.result = true
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

@@ -3,14 +3,13 @@ package com.github.windsekirun.rxsociallogin.twitter
 import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.models.User
 
-class TwitterLogin(activity: Activity) : SocialLogin(activity) {
+class TwitterLogin(activity: Activity) : RxSocialLogin(activity) {
     private val twitterAuthClient = TwitterAuthClient()
     private val twitterApiClient: TwitterApiClient by lazy { TwitterCore.getInstance().apiClient }
 
@@ -27,7 +26,7 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
             }
 
             override fun failure(exception: TwitterException) {
-                responseFail(PlatformType.TWITTER)
+                callbackFail(PlatformType.TWITTER)
             }
         })
     }
@@ -37,13 +36,13 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
                 .enqueue(object : Callback<User>() {
                     override fun success(result: Result<User>?) {
                         if (result == null) {
-                            responseFail(PlatformType.TWITTER)
+                            callbackFail(PlatformType.TWITTER)
                             return
                         }
 
                         val user = result.data
                         if (user == null) {
-                            responseFail(PlatformType.TWITTER)
+                            callbackFail(PlatformType.TWITTER)
                             return
                         }
 
@@ -57,11 +56,11 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
                             this.profilePicture = user.profileImageUrl
                         }
 
-                        responseSuccess(item)
+                        callbackItem(item)
                     }
 
                     override fun failure(exception: TwitterException?) {
-                        responseFail(PlatformType.TWITTER)
+                        callbackFail(PlatformType.TWITTER)
                     }
 
                 })
@@ -74,6 +73,6 @@ class TwitterLogin(activity: Activity) : SocialLogin(activity) {
             this.result = true
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

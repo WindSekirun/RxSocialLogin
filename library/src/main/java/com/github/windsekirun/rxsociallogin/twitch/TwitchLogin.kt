@@ -6,7 +6,6 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -18,15 +17,15 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class TwitchLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: TwitchConfig by lazy { getConfig(PlatformType.TWITCH) as TwitchConfig }
+class TwitchLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: TwitchConfig by lazy { getPlatformConfig(PlatformType.TWITCH) as TwitchConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.TWITCH_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.TWITCH_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.TWITCH)
+            callbackFail(PlatformType.TWITCH)
         }
     }
 
@@ -59,13 +58,13 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
     private fun analyzeResult(jsonStr: String) {
         val accessTokenObject = jsonStr.createJSONObject()
         if (accessTokenObject == null) {
-            responseFail(PlatformType.TWITCH)
+            callbackFail(PlatformType.TWITCH)
             return
         }
 
         val accessToken = accessTokenObject.getJSONString("access_token", "")
         if (accessToken.isEmpty()) {
-            responseFail(PlatformType.TWITCH)
+            callbackFail(PlatformType.TWITCH)
             return
         }
 
@@ -83,7 +82,7 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        responseFail(PlatformType.TWITCH)
+                        callbackFail(PlatformType.TWITCH)
                     }
                 }
 
@@ -95,14 +94,14 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
         val responseArray = jsonObject?.getJSONArray("data")
 
         if (responseArray == null) {
-            responseFail(PlatformType.TWITCH)
+            callbackFail(PlatformType.TWITCH)
             return
         }
 
         val responseObject = responseArray.getJSONObject(0)
 
         if (responseObject == null) {
-            responseFail(PlatformType.TWITCH)
+            callbackFail(PlatformType.TWITCH)
             return
         }
 
@@ -115,6 +114,6 @@ class TwitchLogin(activity: Activity) : SocialLogin(activity) {
             this.profilePicture = responseObject.getJSONString("profile_image_url", "")
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }

@@ -3,7 +3,6 @@ package com.github.windsekirun.rxsociallogin.vk
 import android.app.Activity
 import android.content.Intent
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
 import com.github.windsekirun.rxsociallogin.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.model.PlatformType
 import com.vk.sdk.VKAccessToken
@@ -12,13 +11,13 @@ import com.vk.sdk.VKSdk
 import com.vk.sdk.api.*
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class VKLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: VKConfig by lazy { getConfig(PlatformType.VK) as VKConfig }
+class VKLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: VKConfig by lazy { getPlatformConfig(PlatformType.VK) as VKConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         !VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
             override fun onError(error: VKError?) {
-                responseFail(PlatformType.VK)
+                callbackFail(PlatformType.VK)
             }
 
             override fun onResult(res: VKAccessToken?) {
@@ -43,14 +42,14 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
         request.executeWithListener(object : VKRequest.VKRequestListener() {
             override fun attemptFailed(request: VKRequest?, attemptNumber: Int, totalAttempts: Int) {
                 super.attemptFailed(request, attemptNumber, totalAttempts)
-                responseFail(PlatformType.VK)
+                callbackFail(PlatformType.VK)
             }
 
             override fun onComplete(response: VKResponse?) {
                 super.onComplete(response)
 
                 if (response == null) {
-                    responseFail(PlatformType.VK)
+                    callbackFail(PlatformType.VK)
                 } else {
                     parseResponse(response, token)
                 }
@@ -58,7 +57,7 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
 
             override fun onError(error: VKError?) {
                 super.onError(error)
-                responseFail(PlatformType.VK)
+                callbackFail(PlatformType.VK)
             }
         })
     }
@@ -66,7 +65,7 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
     private fun parseResponse(response: VKResponse, token: VKAccessToken?) {
         val jsonObject = response.json
         if (jsonObject == null) {
-            responseFail(PlatformType.VK)
+            callbackFail(PlatformType.VK)
             return
         }
 
@@ -92,6 +91,6 @@ class VKLogin(activity: Activity) : SocialLogin(activity) {
             this.email = email
         }
 
-        responseSuccess(result)
+        callbackItem(result)
     }
 }

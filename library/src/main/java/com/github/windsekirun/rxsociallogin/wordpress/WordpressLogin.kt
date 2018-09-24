@@ -5,8 +5,6 @@ import android.content.Intent
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.SocialLogin
-import com.github.windsekirun.rxsociallogin.github.GithubOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
@@ -19,15 +17,15 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class WordpressLogin(activity: Activity) : SocialLogin(activity) {
-    private val config: WordpressConfig by lazy { getConfig(PlatformType.WORDPRESS) as WordpressConfig }
+class WordpressLogin(activity: Activity) : RxSocialLogin(activity) {
+    private val config: WordpressConfig by lazy { getPlatformConfig(PlatformType.WORDPRESS) as WordpressConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE) {
             val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            responseFail(PlatformType.WORDPRESS)
+            callbackFail(PlatformType.WORDPRESS)
         }
     }
 
@@ -53,7 +51,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            responseFail(PlatformType.WORDPRESS)
+            callbackFail(PlatformType.WORDPRESS)
             return
         }
 
@@ -92,7 +90,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        responseFail(PlatformType.WORDPRESS)
+                        callbackFail(PlatformType.WORDPRESS)
                     }
                 }
 
@@ -103,7 +101,7 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
         val response = jsonStr?.createJSONObject()
 
         if (response == null) {
-            responseFail(PlatformType.WORDPRESS)
+            callbackFail(PlatformType.WORDPRESS)
             return
         }
 
@@ -124,6 +122,6 @@ class WordpressLogin(activity: Activity) : SocialLogin(activity) {
             this.platform = PlatformType.WORDPRESS
         }
 
-        responseSuccess(item)
+        callbackItem(item)
     }
 }
