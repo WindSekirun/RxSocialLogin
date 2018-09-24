@@ -10,23 +10,23 @@ These instructions are available in their respective languages.
 
 * [English](README.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
 * [한국어](README-ko.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-JP.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 
-This Android library is a library that provides social login for 15 platforms powered by [RxJava2](https://github.com/ReactiveX/RxJava), [Kotlin](http://kotlinlang.org/) and [Firebase Authentication](https://firebase.google.com/docs/auth/).
+このAndroidライブラリは、[RxJava2](https://github.com/ReactiveX/RxJava)、[Kotlin](http://kotlinlang.org/)、[Firebase 認証](https://firebase.google.com/docs/auth/)を搭載した15プラットフォームのソーシャルログインを提供するライブラリです。
 
-This library is an improved version of [@WindSekirun](https://github.com/windsekirun) 's [SocialLogin](https://github.com/WindSekirun/SocialLogin) library. It has the following differences.
+このライブラリは、[@WindSekirun](https://github.com/windsekirun)の[SocialLogin](https://github.com/WindSekirun/SocialLogin)ライブラリの改良版です。 以下は、ライブラリの変更点です。
 
-* The result delivery method has been changed to be passed through RxJava instead of the Listener.
-* Compared to the original written in Java, the improved version is written in Kotlin only.
-* Compared to the original supported 6 platforms, the improved version is support 15 platforms.
-* All methods and code have been rewritten.
-* All code that are written in Kotlin but considered to be Java compatible.
+* 結果の配信方法が'Listener'の代わりに'RxJava'を経由するように変更されました。
+* Javaで書かれた元と比較して、改良されたバージョンはKotlinでのみ書かれています。
+* サポートされている元の6プラットフォームと比較して、改良されたバージョンは15プラットフォームをサポートしています。
+* すべてのメソッドとコードが書き直されました。
+* Kotlinで書かれているが、Javaと互換性があるように作成しました。
 
-## Supported Platforms
+## サポートされているプラットフォーム
 
-| Platform                                                       | Data                                                       | Version  |
+| プラットフォーム                                                       | データ                                                       | バージョン  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----- |
 | [Disqus](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Disqus) | id, name, email, nickname, profilePicture                    | 1.0.0 |
 | [Facebook](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Facebook) | id, name, email, profilePicture, gender, firstName           | 0.5.0 |
