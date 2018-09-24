@@ -44,12 +44,12 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
 
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
     }

@@ -26,23 +26,23 @@ These instructions are available in their respective languages.
 
 ## 지원되는 플랫폼
 
-| 플랫폼     | 데이터                                                       | 버전  |
-| ---------- | ------------------------------------------------------------ | ----- |
-| Disqus     | id, name, email, nickname, profilePicture                    | 1.0.0 |
-| Facebook   | id, name, email, profilePicture, gender, firstName           | 0.5.0 |
-| Foursquare | id, name, email, firstName, gender, birthDay, profilePicture | 1.0.0 |
-| Github     | id, name, email, profilePicture, emailVerified               | 1.0.0 |
-| Google     | id, name, email, profilePicture, emailVerified               | 0.5.0 |
-| Kakao      | id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified | 0.5.0 |
-| Line       | id, name, accessToken                                        | 0.5.0 |
-| LinkedIn   | id, name, email, profilePicture, firstName                   | 1.0.0 |
-| Naver      | id, name, email, nickname, gender, profilePicture, age, birthDay | 0.5.0 |
-| Twitch     | id, name, email,  profilePicture                             | 1.0.0 |
-| Twitter    | id, name, nickname, email, profilePicture                    | 0.5.0 |
-| VK         | id, name, email, profilePicture, nickname, firstName, birthDay | 1.0.0 |
-| Windows    | id, name, email                                              | 1.0.0 |
-| Wordpress  | id, name, email, profilePicture, emailVerified               | 1.0.0 |
-| Yahoo      | id, name                                                     | 1.0.0 |
+| 플랫폼                                                       | 데이터                                                       | 버전  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ----- |
+| [Disqus](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Disqus) | id, name, email, nickname, profilePicture                    | 1.0.0 |
+| [Facebook](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Facebook) | id, name, email, profilePicture, gender, firstName           | 0.5.0 |
+| [Foursquare](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Foursquare) | id, name, email, firstName, gender, birthDay, profilePicture | 1.0.0 |
+| [Github](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Github) | id, name, email, profilePicture, emailVerified               | 1.0.0 |
+| [Google](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Google) | id, name, email, profilePicture, emailVerified               | 0.5.0 |
+| [Kakao](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Kakao) | id, name, email, profilePicture, thumbnailImage, ageRange, birthDay, gender, emailVerified | 0.5.0 |
+| [Line](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Line) | id, name, accessToken                                        | 0.5.0 |
+| [LinkedIn](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-LinkedIn) | id, name, email, profilePicture, firstName                   | 1.0.0 |
+| [Naver](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Naver) | id, name, email, nickname, gender, profilePicture, age, birthDay | 0.5.0 |
+| [Twitch](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Twitch) | id, name, email,  profilePicture                             | 1.0.0 |
+| [Twitter](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Twitter) | id, name, nickname, email, profilePicture                    | 0.5.0 |
+| [VK](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-VK) | id, name, email, profilePicture, nickname, firstName, birthDay | 1.0.0 |
+| [Windows](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Windows) | id, name, email                                              | 1.0.0 |
+| [Wordpress](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Wordpress) | id, name, email, profilePicture, emailVerified               | 1.0.0 |
+| [Yahoo](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Yahoo) | id, name                                                     | 1.0.0 |
 
 각 플랫폼의 이름을 누르면 해당 플랫폼의 적용 방법 가이드로 이동합니다.
 
@@ -149,10 +149,6 @@ btnFacebook.clicks()
 * FacebookLogin(activity: Activity) - 추가 생성자
 
 이 중, 추가 생성자를 사용할 경우에는 추가 생성자에 제공된 `Activity` 객체를 사용합니다. 그렇지 않은 경우, 내부적으로 캐시하는 Activity 객체를 사용합니다.
-
-#### onActivityResult 호출시 'Not need to call onActivityResult in ***Login' 로그 출력
-
-[이슈 #17번](https://github.com/WindSekirun/RxSocialLogin/issues/17) 를 통해 SDK 가 지원하는 경우 onActivityResult 를 따로 호출할 필요 없이 라이브러리 내부에서 처리합니다. 이 로그는 무시해도 되는 로그입니다.
 
 #### 프로가드(Proguard) 적용
 
