@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.kakao
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import java.io.Serializable
 import java.util.*
 

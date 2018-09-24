@@ -1,8 +1,8 @@
 package com.github.windsekirun.rxsociallogin.intenal.firebase
 
 import android.app.Activity
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.github
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.OAuthConstants
@@ -11,7 +12,7 @@ import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class GithubLogin(activity: Activity) : RxSocialLogin(activity) {
+class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val auth = FirebaseAuth.getInstance()
     private val config: GithubConfig by lazy { getPlatformConfig(PlatformType.GITHUB) as GithubConfig }
 

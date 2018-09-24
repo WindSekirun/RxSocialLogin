@@ -4,7 +4,7 @@ import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable

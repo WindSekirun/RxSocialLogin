@@ -2,14 +2,15 @@ package com.github.windsekirun.rxsociallogin.twitter
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.models.User
 
-class TwitterLogin(activity: Activity) : RxSocialLogin(activity) {
+class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val twitterAuthClient = TwitterAuthClient()
     private val twitterApiClient: TwitterApiClient by lazy { TwitterCore.getInstance().apiClient }
 

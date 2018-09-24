@@ -1,18 +1,18 @@
 package com.github.windsekirun.rxsociallogin.foursquare
 
-import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import com.foursquare.android.nativeoauth.FoursquareOAuth
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
-class FoursquareLogin(activity: Activity) : RxSocialLogin(activity) {
+class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val config: FoursquareConfig by lazy { getPlatformConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

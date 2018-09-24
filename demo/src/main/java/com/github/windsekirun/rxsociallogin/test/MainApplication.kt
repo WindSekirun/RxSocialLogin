@@ -10,7 +10,7 @@ import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 import com.github.windsekirun.rxsociallogin.line.LineConfig
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitch.TwitchConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig

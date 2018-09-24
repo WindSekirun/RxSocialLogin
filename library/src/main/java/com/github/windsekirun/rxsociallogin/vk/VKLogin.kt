@@ -2,16 +2,17 @@ package com.github.windsekirun.rxsociallogin.vk
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.VKCallback
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.*
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class VKLogin(activity: Activity) : RxSocialLogin(activity) {
+class VKLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val config: VKConfig by lazy { getPlatformConfig(PlatformType.VK) as VKConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

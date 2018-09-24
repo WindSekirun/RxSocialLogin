@@ -1,10 +1,10 @@
 package com.github.windsekirun.rxsociallogin.google
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -14,7 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin(activity: AppCompatActivity) : RxSocialLogin(activity) {
+class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val googleApiClient: GoogleApiClient
     private val auth = FirebaseAuth.getInstance()
 
@@ -29,7 +29,7 @@ class GoogleLogin(activity: AppCompatActivity) : RxSocialLogin(activity) {
 
         val googleSignInOptions = builder.build()
 
-        googleApiClient = GoogleApiClient.Builder(activity)
+        googleApiClient = GoogleApiClient.Builder(activity!!)
                 .enableAutoManage(activity) { _ -> }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()

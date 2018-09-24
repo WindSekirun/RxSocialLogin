@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.vk
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class VKConfig(val requireEmail: Boolean) : SocialConfig() {
 

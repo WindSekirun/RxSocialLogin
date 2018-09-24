@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class LinkedinConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
                      val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {

@@ -2,16 +2,17 @@ package com.github.windsekirun.rxsociallogin.yahoo
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import android.util.Base64
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class YahooLogin(activity: Activity) : RxSocialLogin(activity) {
+class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {

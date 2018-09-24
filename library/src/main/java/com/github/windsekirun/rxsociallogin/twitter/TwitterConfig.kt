@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.twitter
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class TwitterConfig private constructor(var consumerKey: String?, var consumerSecret: String?) : SocialConfig() {
 

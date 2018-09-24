@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.windows
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class WindowsConfig(val clientId: String) : SocialConfig() {
 

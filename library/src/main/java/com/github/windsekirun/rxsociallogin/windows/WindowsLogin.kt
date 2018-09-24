@@ -1,12 +1,12 @@
 package com.github.windsekirun.rxsociallogin.windows
 
-import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.AuthenticationResult
 import com.microsoft.identity.client.MsalException
@@ -17,14 +17,14 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
-class WindowsLogin(activity: Activity) : RxSocialLogin(activity) {
+class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val config: WindowsConfig by lazy { getPlatformConfig(PlatformType.WINDOWS) as WindowsConfig }
-    private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity.applicationContext, config.clientId) }
+    private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity!!.applicationContext, config.clientId) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-       if (requestCode == 1001) { // found on InteractiveRequest.java
-           clientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data)
-       }
+        if (requestCode == 1001) { // found on InteractiveRequest.java
+            clientApplication.handleInteractiveRequestRedirect(requestCode, resultCode, data)
+        }
     }
 
     override fun login() {

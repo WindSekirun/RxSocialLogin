@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.google
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 
 class GoogleConfig private constructor(val requireEmail: Boolean, val clientTokenId: String) : SocialConfig() {

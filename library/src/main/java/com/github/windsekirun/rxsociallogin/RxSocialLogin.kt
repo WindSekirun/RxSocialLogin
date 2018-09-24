@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CheckResult
+import android.support.v4.app.FragmentActivity
 import com.facebook.FacebookSdk
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
@@ -20,9 +21,9 @@ import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
@@ -41,12 +42,12 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
-abstract class RxSocialLogin @JvmOverloads constructor(childActivity: Activity? = null) {
+abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentActivity? = null) {
     internal var responseListener: OnResponseListener? = null
 
     protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(activity!!.applicationContext) }
     protected val compositeDisposable = CompositeDisposable()
-    protected var activity: Activity? by weak(null)
+    protected var activity: FragmentActivity? by weak(null)
     protected val TAG = RxSocialLogin::class.java.simpleName
 
     init {
@@ -82,7 +83,7 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: Activity? 
     companion object {
         private var availableTypeMap: MutableMap<PlatformType, SocialConfig> = HashMap()
         private var application: Application? by weak(null)
-        private var activityReference: Activity? by weak(null)
+        private var activityReference: FragmentActivity? by weak(null)
         private val alreadyInitializedList = ArrayList<PlatformType>()
 
         const val NOT_HAVE_APPLICATION = "No context is available, please declare RxSocialLogin.init(this)"
@@ -272,7 +273,7 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: Activity? 
         }
 
         private fun setActivityWeakReference(activity: Activity) {
-            if (activityReference == null || activity != activityReference) {
+            if ((activityReference == null || activity != activityReference) && (activity is FragmentActivity)) {
                 activityReference = activity
             }
         }

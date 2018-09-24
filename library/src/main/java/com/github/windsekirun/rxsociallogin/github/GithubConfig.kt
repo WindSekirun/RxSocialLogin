@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.github
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class GithubConfig(val clientId: String, val clientSecret: String, val scopeList: ArrayList<String>,
                   val activityTitle: String) : SocialConfig() {

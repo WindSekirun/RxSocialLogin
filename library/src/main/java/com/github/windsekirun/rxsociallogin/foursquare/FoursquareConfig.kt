@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.foursquare
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class FoursquareConfig(val clientId: String, val clientSecret: String) : SocialConfig() {
 

@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.disqus
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class DisqusConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
                    val redirectUri: String) : SocialConfig() {

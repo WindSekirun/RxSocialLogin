@@ -1,11 +1,11 @@
 package com.github.windsekirun.rxsociallogin.kakao
 
-import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.KakaoSDK
@@ -17,7 +17,7 @@ import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 
-class KakaoLogin(activity: Activity) : RxSocialLogin(activity) {
+class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private var mSessionCallback: SessionCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,7 +58,7 @@ class KakaoLogin(activity: Activity) : RxSocialLogin(activity) {
 
     private fun checkSession() {
         try {
-           Session.getCurrentSession().checkAndImplicitOpen()
+            Session.getCurrentSession().checkAndImplicitOpen()
         } catch (e: Exception) {
             KakaoSDK.init(kakaoSDKAdapter)
         }

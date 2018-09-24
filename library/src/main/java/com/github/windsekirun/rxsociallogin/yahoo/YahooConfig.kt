@@ -1,6 +1,6 @@
 package com.github.windsekirun.rxsociallogin.yahoo
 
-import com.github.windsekirun.rxsociallogin.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
 class YahooConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
                   val redirectUri: String) : SocialConfig() {

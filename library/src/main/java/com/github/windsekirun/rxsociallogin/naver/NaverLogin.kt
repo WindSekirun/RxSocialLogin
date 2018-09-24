@@ -1,13 +1,13 @@
 package com.github.windsekirun.rxsociallogin.naver
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginDefine
 import com.nhn.android.naverlogin.OAuthLoginHandler
@@ -17,7 +17,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class NaverLogin(activity: Activity) : RxSocialLogin(activity) {
+class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val requestUrl = "https://openapi.naver.com/v1/nid/me"
     private val authLogin = OAuthLogin.getInstance()
 
