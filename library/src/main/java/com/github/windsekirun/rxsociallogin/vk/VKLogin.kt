@@ -36,6 +36,8 @@ class VKLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : R
         VKSdk.login(activity as Activity, *scopeList.toTypedArray())
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.vk(this)
 
     private fun getUserInfo(token: VKAccessToken?) {

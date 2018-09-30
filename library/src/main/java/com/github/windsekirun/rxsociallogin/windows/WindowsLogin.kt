@@ -58,6 +58,8 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.windows(this)
 
     private fun getUserInfo(authenticationResult: AuthenticationResult) {

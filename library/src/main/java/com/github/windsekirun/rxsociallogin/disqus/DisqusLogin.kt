@@ -39,6 +39,8 @@ class DisqusLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
         clearCookies()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.disqus(this)
 
     private fun analyzeResult(jsonStr: String) {

@@ -1,16 +1,15 @@
 package com.github.windsekirun.rxsociallogin.intenal.rx
 
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
-import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
+import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
 
-@Deprecated("Use SocialObservable instead.")
-open class BaseSocialObservable<T : RxSocialLogin>(private val login: T) : Observable<LoginResultItem>() {
+open class SocialObservable(private val login: RxSocialLogin) : Observable<LoginResultItem>() {
 
     override fun subscribeActual(observer: Observer<in LoginResultItem>?) {
         if (observer == null || !Preconditions.checkMainThread(observer)) {
@@ -23,7 +22,7 @@ open class BaseSocialObservable<T : RxSocialLogin>(private val login: T) : Obser
         observer.onSubscribe(listener)
     }
 
-    private class Listener<out T : RxSocialLogin>(val login: T, val observer: Observer<in LoginResultItem>?) :
+    private class Listener(val login: RxSocialLogin, val observer: Observer<in LoginResultItem>?) :
             MainThreadDisposable(), OnResponseListener {
 
         override fun onDispose() {

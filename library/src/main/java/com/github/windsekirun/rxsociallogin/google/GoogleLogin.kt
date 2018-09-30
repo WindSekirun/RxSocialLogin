@@ -56,6 +56,8 @@ class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.google(this)
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {

@@ -26,6 +26,8 @@ class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : 
 
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.line(this)
 
     private fun onResultLineLogin(data: Intent?) {

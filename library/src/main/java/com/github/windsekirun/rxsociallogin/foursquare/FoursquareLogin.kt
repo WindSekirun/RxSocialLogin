@@ -44,6 +44,8 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.foursquare(this)
 
     private fun getUserInfo(token: String) {

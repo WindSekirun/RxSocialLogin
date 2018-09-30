@@ -41,6 +41,8 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.naver(this)
 
     @SuppressLint("HandlerLeak")

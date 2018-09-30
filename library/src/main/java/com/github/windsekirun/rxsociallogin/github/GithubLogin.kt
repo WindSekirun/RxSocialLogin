@@ -63,6 +63,8 @@ class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.github(this)
 
     private fun analyzeResult(jsonStr: String) {
