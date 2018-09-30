@@ -9,9 +9,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-JP.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-JP.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 このAndroidライブラリは、[RxJava2](https://github.com/ReactiveX/RxJava)、[Kotlin](http://kotlinlang.org/)、[Firebase 認証](https://firebase.google.com/docs/auth/)を搭載した15プラットフォームのソーシャルログインを提供するライブラリです。
