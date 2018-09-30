@@ -34,6 +34,8 @@ class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     }
 
     override fun login() {
+        addWeakMap(PlatformType.GITHUB, this)
+
         val accessToken = AccessTokenProvider.githubAccessToken
         if (accessToken.isNotEmpty()) {
             checkAccessTokenAvailable(accessToken)

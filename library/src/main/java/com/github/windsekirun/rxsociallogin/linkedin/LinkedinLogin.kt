@@ -29,6 +29,7 @@ class LinkedinLogin @JvmOverloads constructor(activity: FragmentActivity? = null
     }
 
     override fun login() {
+        addWeakMap(PlatformType.LINKEDIN, this)
         val intent = Intent(activity, LinkedInOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.LINKEDIN_REQUEST_CODE)
     }

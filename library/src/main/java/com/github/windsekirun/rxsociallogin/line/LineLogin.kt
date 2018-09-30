@@ -16,6 +16,7 @@ class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : 
     }
 
     override fun login() {
+        addWeakMap(PlatformType.LINE, this)
         val lineConfig = getPlatformConfig(PlatformType.LINE) as LineConfig
         val loginIntent = LineLoginApi.getLoginIntent(activity as Context,
                 lineConfig.channelId ?: "")

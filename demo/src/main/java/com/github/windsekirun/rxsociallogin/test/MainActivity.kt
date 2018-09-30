@@ -130,20 +130,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        kakaoLogin.onActivityResult(requestCode, resultCode, data)
-        facebookLogin.onActivityResult(requestCode, resultCode, data)
-        naverLogin.onActivityResult(requestCode, resultCode, data)
-        lineLogin.onActivityResult(requestCode, resultCode, data)
-        twitterLogin.onActivityResult(requestCode, resultCode, data)
-        googleLogin.onActivityResult(requestCode, resultCode, data)
-        githubLogin.onActivityResult(requestCode, resultCode, data)
-        linkedinLogin.onActivityResult(requestCode, resultCode, data)
-        wordpressLogin.onActivityResult(requestCode, resultCode, data)
-        yahooLogin.onActivityResult(requestCode, resultCode, data)
-        vkLogin.onActivityResult(requestCode, resultCode, data)
-        windowsLogin.onActivityResult(requestCode, resultCode, data)
-        disqusLogin.onActivityResult(requestCode, resultCode, data)
-        foursquareLogin.onActivityResult(requestCode, resultCode, data)
-        twitchLogin.onActivityResult(requestCode, resultCode, data)
+        RxSocialLogin.activityResult(requestCode, resultCode, data)
     }
 }

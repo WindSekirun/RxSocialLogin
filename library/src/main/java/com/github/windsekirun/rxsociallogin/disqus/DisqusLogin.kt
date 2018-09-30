@@ -30,6 +30,8 @@ class DisqusLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     }
 
     override fun login() {
+        addWeakMap(PlatformType.DISQUS, this)
+
         val intent = Intent(activity, DisqusOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.DISQUS_REQUEST_CODE)
     }

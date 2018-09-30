@@ -28,6 +28,7 @@ class VKLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : R
     }
 
     override fun login() {
+        addWeakMap(PlatformType.VK, this)
         val scopeList = mutableListOf("status", "photos")
         if (config.requireEmail) {
             scopeList.add("email")

@@ -36,6 +36,8 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
     }
 
     override fun login() {
+        addWeakMap(PlatformType.FOURSQUARE, this)
+
         val intent = FoursquareOAuth.getConnectIntent(activity, config.clientId)
         if (intent.resolveActivity(activity!!.packageManager) != null) {
             activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
