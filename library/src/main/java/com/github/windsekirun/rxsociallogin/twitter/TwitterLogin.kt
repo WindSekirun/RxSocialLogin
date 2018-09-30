@@ -22,7 +22,6 @@ class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
     fun toObservable() = RxSocialLogin.twitter(this)
 
     override fun login() {
-        addWeakMap(PlatformType.TWITTER, this)
         twitterAuthClient.authorize(activity, object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {
                 getUserInfo(result)

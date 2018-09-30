@@ -31,7 +31,6 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
     }
 
     override fun login() {
-        addWeakMap(PlatformType.WORDPRESS, this)
         val accessToken = AccessTokenProvider.wordpressAccessToken
         if (accessToken.isNotEmpty()) {
             checkAccessTokenAvailable(accessToken)

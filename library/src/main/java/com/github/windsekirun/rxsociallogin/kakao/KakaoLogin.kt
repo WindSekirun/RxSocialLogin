@@ -26,7 +26,6 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     }
 
     override fun login() {
-        addWeakMap(PlatformType.KAKAO, this)
         checkSession()
         mSessionCallback = SessionCallback()
 

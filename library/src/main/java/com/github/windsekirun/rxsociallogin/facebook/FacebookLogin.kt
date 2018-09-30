@@ -22,8 +22,6 @@ class FacebookLogin @JvmOverloads constructor(activity: FragmentActivity? = null
     }
 
     override fun login() {
-        addWeakMap(PlatformType.FACEBOOK, this)
-
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         if (config.isRequireWritePermissions) {

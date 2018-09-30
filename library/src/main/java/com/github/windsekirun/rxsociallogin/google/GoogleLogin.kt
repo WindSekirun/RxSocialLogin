@@ -47,7 +47,6 @@ class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     }
 
     override fun login() {
-        addWeakMap(PlatformType.GOOGLE, this)
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)

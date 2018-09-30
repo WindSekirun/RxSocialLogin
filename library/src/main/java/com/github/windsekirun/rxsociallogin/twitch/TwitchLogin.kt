@@ -31,7 +31,6 @@ class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null)
     }
 
     override fun login() {
-        addWeakMap(PlatformType.TWITCH, this)
         val intent = Intent(activity, TwitchOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.TWITCH_REQUEST_CODE)
     }

@@ -13,13 +13,13 @@ import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
+import com.github.windsekirun.rxsociallogin.intenal.rx.SocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.intenal.rx.BaseSocialObservable
-import com.github.windsekirun.rxsociallogin.intenal.rx.SocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.utils.weak
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
@@ -86,7 +86,6 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentAc
         private var application: Application? by weak(null)
         private var activityReference: FragmentActivity? by weak(null)
         private val alreadyInitializedList = ArrayList<PlatformType>()
-        private val platformHashMap: WeakHashMap<PlatformType, RxSocialLogin> = WeakHashMap()
 
         const val NOT_HAVE_APPLICATION = "No context is available, please declare RxSocialLogin.init(this)"
         const val NOT_NEED_ACTIVITY_RESULT = "Not need to call onActivityResult in "
@@ -136,13 +135,6 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentAc
 
             availableTypeMap[platformType] = socialConfig
             initPlatform()
-        }
-
-        @JvmStatic
-        fun activityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            platformHashMap.values.forEach {
-                it.onActivityResult(requestCode, resultCode, data)
-            }
         }
 
         @CheckResult
@@ -256,7 +248,7 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentAc
 
         @CheckResult
         @JvmStatic
-        fun result(vararg login: RxSocialLogin): Observable<LoginResultItem> = Observable.merge(login.map { SocialObservable(it) })
+        fun result(vararg login: RxSocialLogin): Observable<LoginResultItem> = Observable.concat(login.map { SocialObservable(it) })
 
         internal fun getPlatformConfig(type: PlatformType): SocialConfig {
             if (!availableTypeMap.containsKey(type)) {
@@ -264,10 +256,6 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentAc
             }
 
             return availableTypeMap[type]!!
-        }
-
-        internal fun addWeakMap(platformType: PlatformType, login: RxSocialLogin) {
-            platformHashMap[platformType] = login
         }
 
         @Deprecated("use SocialObservable instead.")

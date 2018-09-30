@@ -28,7 +28,6 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
     }
 
     override fun login() {
-        addWeakMap(PlatformType.WINDOWS, this)
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {
