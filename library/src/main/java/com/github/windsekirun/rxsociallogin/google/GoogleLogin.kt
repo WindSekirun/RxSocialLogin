@@ -47,6 +47,7 @@ class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     }
 
     override fun login() {
+        addWeakMap(PlatformType.GOOGLE, this)
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
@@ -56,6 +57,8 @@ class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.google(this)
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {

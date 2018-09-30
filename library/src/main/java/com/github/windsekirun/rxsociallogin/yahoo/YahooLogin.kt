@@ -24,10 +24,13 @@ class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     }
 
     override fun login() {
+        addWeakMap(PlatformType.YAHOO, this)
         val intent = Intent(activity, YahooOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.YAHOO_REQUEST_CODE)
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.yahoo(this)
 
     private fun analyzeResult(jsonStr: String) {

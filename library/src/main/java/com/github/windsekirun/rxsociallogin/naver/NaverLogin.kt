@@ -26,6 +26,7 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     }
 
     override fun login() {
+        addWeakMap(PlatformType.NAVER, this)
         OAuthLoginDefine.MARKET_LINK_WORKING = false
 
         val config = getPlatformConfig(PlatformType.NAVER) as NaverConfig
@@ -41,6 +42,8 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.naver(this)
 
     @SuppressLint("HandlerLeak")

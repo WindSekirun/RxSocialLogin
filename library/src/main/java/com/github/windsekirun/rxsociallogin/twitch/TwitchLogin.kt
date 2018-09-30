@@ -31,6 +31,7 @@ class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null)
     }
 
     override fun login() {
+        addWeakMap(PlatformType.TWITCH, this)
         val intent = Intent(activity, TwitchOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.TWITCH_REQUEST_CODE)
     }
@@ -54,6 +55,8 @@ class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null)
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.twitch(this)
 
     private fun analyzeResult(jsonStr: String) {

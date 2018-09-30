@@ -31,6 +31,7 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
     }
 
     override fun login() {
+        addWeakMap(PlatformType.WORDPRESS, this)
         val accessToken = AccessTokenProvider.wordpressAccessToken
         if (accessToken.isNotEmpty()) {
             checkAccessTokenAvailable(accessToken)
@@ -46,6 +47,8 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
         AccessTokenProvider.wordpressAccessToken = ""
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.wordpress(this)
 
     private fun analyzeResult(jsonStr: String) {

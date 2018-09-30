@@ -28,6 +28,7 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
     }
 
     override fun login() {
+        addWeakMap(PlatformType.WINDOWS, this)
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {
@@ -58,6 +59,8 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.windows(this)
 
     private fun getUserInfo(authenticationResult: AuthenticationResult) {
