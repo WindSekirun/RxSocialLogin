@@ -126,17 +126,6 @@ RxSocialLogin.facebook(facebookLogin)
 facebookLogin.login()
 ```
 
-#### [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) で使う
-自然な使用のために [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) と共に使用することができます。 しかし、我々はこのアプローチが主要な方法ではないことを知っています。
-
-```kotlin
-btnFacebook.clicks()
-	.doOnNext { facebookLogin.login() }
-	.flatMap { facebookLogin.toObservable() }
-	.subscribe(consumer, error)
-	.addTo(compositeDisposable)
-```
-
 ### 使用にについての説明
 
 #### ソーシャルモジュール変数の問題。

@@ -127,18 +127,6 @@ Finally, you start a social login by calling the `login` method of the social mo
 facebookLogin.login()
 ```
 
-#### Using with [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding)
-
-You can use it with [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) for natural use. However, we know this approach is not the primary method.
-
-```kotlin
-btnFacebook.clicks()
-	.doOnNext { facebookLogin.login() }
-	.flatMap { facebookLogin.toObservable() }
-	.subscribe(consumer, error)
-	.addTo(compositeDisposable)
-```
-
 ### Instructions for use
 
 #### Social module variable matters.
