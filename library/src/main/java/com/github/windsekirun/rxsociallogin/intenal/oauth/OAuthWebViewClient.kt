@@ -3,7 +3,6 @@ package com.github.windsekirun.rxsociallogin.intenal.oauth
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-@Deprecated("not used")
 class OAuthWebViewClient(val callback: (String) -> Unit) : WebViewClient() {
     override fun shouldOverrideUrlLoading(view: WebView?, uri: String?): Boolean {
         super.shouldOverrideUrlLoading(view, uri)

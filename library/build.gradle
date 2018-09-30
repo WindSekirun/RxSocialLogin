@@ -81,8 +81,6 @@ dependencies {
     // kotpref
     implementation 'com.chibatching.kotpref:kotpref:2.6.0'
     implementation 'com.chibatching.kotpref:initializer:2.6.0'
-    // guava
-    implementation 'com.google.guava:guava:22.0-android'
 }
 
 task sourcesJar(type: Jar) {
