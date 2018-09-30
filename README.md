@@ -9,8 +9,8 @@
 These instructions are available in their respective languages.
 
 * [English](README.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-09-25, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-09-25, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 
