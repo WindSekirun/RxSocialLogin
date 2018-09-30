@@ -46,8 +46,6 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
         AccessTokenProvider.wordpressAccessToken = ""
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.wordpress(this)
 
     private fun analyzeResult(jsonStr: String) {

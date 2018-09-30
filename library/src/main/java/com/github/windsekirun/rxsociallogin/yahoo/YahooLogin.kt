@@ -28,8 +28,6 @@ class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
         activity?.startActivityForResult(intent, OAuthConstants.YAHOO_REQUEST_CODE)
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.yahoo(this)
 
     private fun analyzeResult(jsonStr: String) {

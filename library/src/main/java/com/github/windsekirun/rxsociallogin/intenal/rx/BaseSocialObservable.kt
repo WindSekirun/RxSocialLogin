@@ -9,7 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
 
-@Deprecated("Use SocialObservable instead.")
 open class BaseSocialObservable<T : RxSocialLogin>(private val login: T) : Observable<LoginResultItem>() {
 
     override fun subscribeActual(observer: Observer<in LoginResultItem>?) {

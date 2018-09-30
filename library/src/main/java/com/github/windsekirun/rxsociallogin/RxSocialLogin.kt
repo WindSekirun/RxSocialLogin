@@ -13,18 +13,17 @@ import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
-import com.github.windsekirun.rxsociallogin.intenal.rx.SocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
-import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.intenal.rx.BaseSocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.utils.weak
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import com.github.windsekirun.rxsociallogin.line.LineLogin
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
+import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
@@ -139,116 +138,63 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentAc
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun facebook(login: FacebookLogin): Observable<LoginResultItem> = RxFacebookLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun kakao(login: KakaoLogin): Observable<LoginResultItem> = RxKakaoLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun naver(login: NaverLogin): Observable<LoginResultItem> = RxNaverLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun line(login: LineLogin): Observable<LoginResultItem> = RxLineLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun twitter(login: TwitterLogin): Observable<LoginResultItem> = RxTwitterLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun google(login: GoogleLogin): Observable<LoginResultItem> = RxGoogleLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun github(login: GithubLogin): Observable<LoginResultItem> = RxGithubLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun linkedin(login: LinkedinLogin): Observable<LoginResultItem> = RxLinkedinLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun wordpress(login: WordpressLogin): Observable<LoginResultItem> = RxWordpressLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun yahoo(login: YahooLogin): Observable<LoginResultItem> = RxYahooLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun vk(login: VKLogin): Observable<LoginResultItem> = RxVKLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun windows(login: WindowsLogin): Observable<LoginResultItem> = RxWindowsLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun disqus(login: DisqusLogin): Observable<LoginResultItem> = RxDisqusLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun foursquare(login: FoursquareLogin): Observable<LoginResultItem> = RxFoursquareLogin(login)
 
         @CheckResult
         @JvmStatic
-        @Deprecated("use RxSocialLogin.result instead. See issue #18",
-                replaceWith = ReplaceWith("RxSocialLogin.result(login)",
-                        "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
         fun twitch(login: TwitchLogin): Observable<LoginResultItem> = RxTwitchLogin(login)
-
-        @CheckResult
-        @JvmStatic
-        fun result(login: RxSocialLogin): Observable<LoginResultItem> = SocialObservable(login)
-
-        @CheckResult
-        @JvmStatic
-        fun result(vararg login: RxSocialLogin): Observable<LoginResultItem> = Observable.concat(login.map { SocialObservable(it) })
 
         internal fun getPlatformConfig(type: PlatformType): SocialConfig {
             if (!availableTypeMap.containsKey(type)) {
@@ -258,49 +204,20 @@ abstract class RxSocialLogin @JvmOverloads constructor(childActivity: FragmentAc
             return availableTypeMap[type]!!
         }
 
-        @Deprecated("use SocialObservable instead.")
         internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxGoogleLogin(login: GoogleLogin) : BaseSocialObservable<GoogleLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxKakaoLogin(login: KakaoLogin) : BaseSocialObservable<KakaoLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxLineLogin(login: LineLogin) : BaseSocialObservable<LineLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxLinkedinLogin(login: LinkedinLogin) : BaseSocialObservable<LinkedinLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxNaverLogin(login: NaverLogin) : BaseSocialObservable<NaverLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxTwitterLogin(login: TwitterLogin) : BaseSocialObservable<TwitterLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxWordpressLogin(login: WordpressLogin) : BaseSocialObservable<WordpressLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxYahooLogin(login: YahooLogin) : BaseSocialObservable<YahooLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxVKLogin(login: VKLogin) : BaseSocialObservable<VKLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxWindowsLogin(login: WindowsLogin) : BaseSocialObservable<WindowsLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxDisqusLogin(login: DisqusLogin) : BaseSocialObservable<DisqusLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxFoursquareLogin(login: FoursquareLogin) : BaseSocialObservable<FoursquareLogin>(login)
-
-        @Deprecated("use SocialObservable instead.")
         internal class RxTwitchLogin(login: TwitchLogin) : BaseSocialObservable<TwitchLogin>(login)
 
         private fun initPlatform() {

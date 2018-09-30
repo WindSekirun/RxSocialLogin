@@ -12,7 +12,7 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class FacebookLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class FacebookLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : RxSocialLogin(activity) {
     private val callbackManager: CallbackManager = CallbackManager.Factory.create()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -53,8 +53,6 @@ class FacebookLogin @JvmOverloads constructor(activity: FragmentActivity? = null
         LoginManager.getInstance().logOut()
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.facebook(this)
 
     private fun getUserInfo() {

@@ -38,8 +38,6 @@ class LinkedinLogin @JvmOverloads constructor(activity: FragmentActivity? = null
         clearCookies()
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.linkedin(this)
 
     private fun analyzeResult(jsonStr: String) {

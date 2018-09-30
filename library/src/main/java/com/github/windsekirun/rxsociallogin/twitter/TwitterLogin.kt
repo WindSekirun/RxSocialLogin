@@ -1,5 +1,6 @@
 package com.github.windsekirun.rxsociallogin.twitter
 
+import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
@@ -17,8 +18,6 @@ class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
         twitterAuthClient.onActivityResult(requestCode, resultCode, data)
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.twitter(this)
 
     override fun login() {

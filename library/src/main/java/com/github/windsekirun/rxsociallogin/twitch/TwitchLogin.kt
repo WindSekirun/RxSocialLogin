@@ -54,8 +54,6 @@ class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null)
         }
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
     fun toObservable() = RxSocialLogin.twitch(this)
 
     private fun analyzeResult(jsonStr: String) {
