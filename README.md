@@ -1,6 +1,6 @@
 # RxSocialLogin [![CircleCI](https://circleci.com/gh/WindSekirun/RxSocialLogin.svg?style=svg)](https://circleci.com/gh/WindSekirun/RxSocialLogin) [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
 
- [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028)
+ [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028) [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 ![](graphics/logo.png)
 
@@ -8,9 +8,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-08-25, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-09-25, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-09-25, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 
