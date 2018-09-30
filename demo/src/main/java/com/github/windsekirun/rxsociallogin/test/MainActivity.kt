@@ -100,6 +100,10 @@ class MainActivity : AppCompatActivity() {
             vkLogin.login()
         }
 
+        btnWordpress.setOnClickListener {
+            wordpressLogin.login()
+        }
+
         btnWindows.setOnClickListener {
             windowsLogin.login()
         }
@@ -110,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
         RxSocialLogin.result(disqusLogin, facebookLogin, foursquareLogin, githubLogin, googleLogin,
                 kakaoLogin, lineLogin, linkedinLogin, naverLogin, twitchLogin, twitchLogin, vkLogin,
-                windowsLogin, yahooLogin)
+                wordpressLogin, windowsLogin, yahooLogin)
                 .subscribe({
                     txtResult.text = it.toString()
                     txtResult.setTextColor(Color.BLACK)
