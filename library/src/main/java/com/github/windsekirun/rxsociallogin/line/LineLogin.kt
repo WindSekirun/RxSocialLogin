@@ -45,6 +45,7 @@ class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : 
                     this.accessToken = accessToken ?: ""
                     this.id = lineProfile.userId
                     this.name = lineProfile.displayName
+                    this.profilePicture = lineProfile.pictureUrl?.path ?: ""
                 }
 
                 callbackItem(item)
