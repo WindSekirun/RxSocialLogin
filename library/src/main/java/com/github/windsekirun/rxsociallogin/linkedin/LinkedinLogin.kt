@@ -5,14 +5,15 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
+import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
@@ -23,7 +24,7 @@ class LinkedinLogin @JvmOverloads constructor(activity: FragmentActivity? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
+            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
             callbackFail(PlatformType.LINKEDIN)
@@ -31,8 +32,25 @@ class LinkedinLogin @JvmOverloads constructor(activity: FragmentActivity? = null
     }
 
     override fun login() {
-        val intent = Intent(activity, LinkedInOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, OAuthConstants.LINKEDIN_REQUEST_CODE)
+        val state = randomString(22)
+
+        var authUrl = "${OAuthConstants.LINKEDIN_URL}?response_type=code&" +
+                "client_id=${config.clientId}&redirect_uri=${config.redirectUri}&" +
+                "state=$state&scope=r_basicprofile"
+
+        if (config.requireEmail) authUrl += "%20r_emailaddress"
+
+        val title = config.activityTitle
+        val oauthUrl = OAuthConstants.LINKEDIN_URL
+        val parameters = listOf(
+                "grant_type" to "authorization_code",
+                "redirect_uri" to config.redirectUri,
+                "client_id" to config.clientId,
+                "client_secret" to config.clientSecret)
+        val map = hashMapOf(*parameters.toTypedArray())
+
+        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.LINKEDIN_REQUEST_CODE,
+                PlatformType.LINKEDIN, authUrl, title, oauthUrl, map)
     }
 
     override fun logout(clearToken: Boolean) {

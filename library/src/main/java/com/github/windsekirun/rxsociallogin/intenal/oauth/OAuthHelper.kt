@@ -13,8 +13,8 @@ fun clearCookies() {
 }
 
 fun String.getCode(): String {
-    val githubCode = this.substring(this.lastIndexOf("?code") + 1)
-    val tokenCode = githubCode.split("=")
+    val codeParameter = this.substring(this.lastIndexOf("?code") + 1)
+    val tokenCode = codeParameter.split("=")
     val tokenFetchedIds = tokenCode[1]
     val cleanToken = tokenFetchedIds.split("&")
 

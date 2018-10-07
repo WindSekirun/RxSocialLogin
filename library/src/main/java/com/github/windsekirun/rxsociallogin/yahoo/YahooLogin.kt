@@ -5,19 +5,21 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import android.util.Base64
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
+import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+    private val config: YahooConfig by lazy { RxSocialLogin.getPlatformConfig(PlatformType.YAHOO) as YahooConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
+            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.YAHOO_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
             callbackFail(PlatformType.YAHOO)
@@ -25,8 +27,25 @@ class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     }
 
     override fun login() {
-        val intent = Intent(activity, YahooOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, OAuthConstants.YAHOO_REQUEST_CODE)
+        val nonce = randomString(21)
+
+        val authUrl = "${OAuthConstants.YAHOO_URL}?client_id=${config.clientId}&" +
+                "redirect_uri=${config.redirectUri}&response_type=code&scope=openid%20sdps-r&nonce=$nonce"
+
+        val title = config.activityTitle
+        val oauthUrl = OAuthConstants.YAHOO_OAUTH
+        val parameters = listOf(
+                "grant_type" to "authorization_code",
+                "redirect_uri" to config.redirectUri,
+                "client_id" to config.clientId,
+                "client_secret" to config.clientSecret)
+        val map = hashMapOf(*parameters.toTypedArray())
+        val token = "${config.clientId}:${config.clientSecret}"
+        val basicToken = String(Base64.encode(token.toByteArray(), Base64.URL_SAFE))
+                .replace("\n", "")
+
+        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.YAHOO_REQUEST_CODE,
+                PlatformType.YAHOO, authUrl, title, oauthUrl, map, basicToken)
     }
 
     @Suppress("DeprecatedCallableAddReplaceWith")

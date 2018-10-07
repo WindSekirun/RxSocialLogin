@@ -1,11 +1,10 @@
 package com.github.windsekirun.rxsociallogin.intenal.rx
 
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
-import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
+import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.utils.Preconditions
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable

@@ -1,7 +1,6 @@
 package com.github.windsekirun.rxsociallogin.intenal.rx
 
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
