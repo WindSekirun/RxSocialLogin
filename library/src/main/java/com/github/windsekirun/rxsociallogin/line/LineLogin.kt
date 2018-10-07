@@ -39,7 +39,10 @@ class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activi
             LineApiResponseCode.SUCCESS -> {
                 val accessToken = result.lineCredential?.accessToken?.accessToken
                 val lineProfile = result.lineProfile
-                        ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                if (lineProfile == null) {
+                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                    return
+                }
 
                 val item = LoginResultItem().apply {
                     this.platform = PlatformType.LINE
@@ -49,10 +52,10 @@ class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activi
                     this.name = lineProfile.displayName
                 }
 
-                callbackItem(item)
+                callbackAsSuccess(item)
             }
 
-            else -> throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, Exception(result.errorData.message))
+            else -> callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, Exception(result.errorData.message)))
         }
     }
 

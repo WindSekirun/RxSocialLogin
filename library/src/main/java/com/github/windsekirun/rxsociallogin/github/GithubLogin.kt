@@ -34,7 +34,7 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.GITHUB_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            throw LoginFailedException(EXCEPTION_USER_CANCELLED)
+            callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -74,7 +74,10 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (accessToken.isEmpty()) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         AccessTokenProvider.githubAccessToken = accessToken
         getUserInfo(accessToken)
@@ -119,7 +122,11 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun getUserInfo(accessToken: String) {
         val credential = GithubAuthProvider.getCredential(accessToken)
         val disposable = auth.signInWithCredential(credential, activity, PlatformType.GITHUB)
-                .subscribe({ callbackItem(it) }, { throw LoginFailedException(EXCEPTION_FAILED_RESULT, it) })
+                .subscribe({
+                    callbackAsSuccess(it)
+                }, {
+                    callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT, it))
+                })
         compositeDisposable.add(disposable)
     }
 }

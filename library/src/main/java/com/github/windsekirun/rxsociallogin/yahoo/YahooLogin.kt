@@ -23,7 +23,7 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.YAHOO_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -57,13 +57,19 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         val jsonObject = jsonStr.createJSONObject()
         val idToken = jsonObject?.getJSONString("id_token") ?: ""
         val guid = jsonObject?.getJSONString("xoauth_yahoo_guid") ?: ""
-        if (guid.isEmpty() || idToken.isEmpty()) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (guid.isEmpty() || idToken.isEmpty()) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         // decode idToken by https://developer.yahoo.com/oauth2/guide/openid_connect/decode_id_token.html
         val array = idToken.split(".")
         val decodedStr = String(Base64.decode(array[1], Base64.DEFAULT))
         val response = decodedStr.createJSONObject()
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (response == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val name = response.getJSONString("name")
 
@@ -74,6 +80,6 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             this.platform = PlatformType.YAHOO
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

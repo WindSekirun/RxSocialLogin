@@ -32,7 +32,7 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.TWITCH_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            throw LoginFailedException(EXCEPTION_USER_CANCELLED)
+            callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -84,10 +84,16 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
 
     private fun analyzeResult(jsonStr: String) {
         val accessTokenObject = jsonStr.createJSONObject()
-                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (accessTokenObject == null) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val accessToken = accessTokenObject.getJSONString("access_token", "")
-        if (accessToken.isEmpty()) throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (accessToken.isEmpty()) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         AccessTokenProvider.twitchAccessToken = accessToken
 
@@ -103,7 +109,7 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                        callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -113,9 +119,15 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun parseUserInfo(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseArray = jsonObject?.getJSONArray("data")
-                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (responseArray == null) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
         val responseObject = responseArray.getJSONObject(0)
-                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (responseObject == null) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val item = LoginResultItem().apply {
             this.result = true
@@ -126,6 +138,6 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             this.profilePicture = responseObject.getJSONString("profile_image_url", "")
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

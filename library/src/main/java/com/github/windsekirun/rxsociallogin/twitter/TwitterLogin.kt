@@ -30,7 +30,7 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
             }
 
             override fun failure(exception: TwitterException) {
-                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception))
             }
         })
     }
@@ -40,10 +40,15 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
                 .enqueue(object : Callback<User>() {
                     override fun success(result: Result<User>?) {
                         if (result == null) {
-                            throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                            return
                         }
 
-                        val user = result.data ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                        val user = result.data
+                        if (user == null) {
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                            return
+                        }
 
                         val item = LoginResultItem().apply {
                             this.id = user.idStr
@@ -55,14 +60,14 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
                             this.profilePicture = user.profileImageUrl
                         }
 
-                        callbackItem(item)
+                        callbackAsSuccess(item)
                     }
 
                     override fun failure(exception: TwitterException?) {
                         if (exception != null) {
-                            throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception)
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception))
                         } else {
-                            throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
                         }
                     }
 
@@ -76,6 +81,6 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

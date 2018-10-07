@@ -53,6 +53,7 @@ object RxSocialLogin {
     const val EXCEPTION_MAIN_THREAD = "Expected to be called on the main thread but was "
     const val EXCEPTION_USER_CANCELLED = "User has cancelled the job."
     const val EXCEPTION_FOURSQUARE_INTENT = "The device doesn't have Foursquare applicaiton"
+    const val EXCEPTION_UNKNOWN_ERROR = "Unknown error"
     private const val EXCEPTION_CONFIG_MISSING = "Config object is missing."
 
     /**
@@ -136,8 +137,14 @@ object RxSocialLogin {
         if (moduleMap.isEmpty() && fragmentActivity != null) initialize(fragmentActivity)
 
         val listener = object : OnResponseListener {
-            override fun onResult(item: LoginResultItem) {
-                callback(item)
+            override fun onResult(item: LoginResultItem?, error: Throwable?) {
+                if (item != null && error == null) {
+                    callback(item)
+                } else if (error != null) {
+                    throw LoginFailedException(error)
+                } else {
+                    throw LoginFailedException(EXCEPTION_UNKNOWN_ERROR)
+                }
             }
         }
 

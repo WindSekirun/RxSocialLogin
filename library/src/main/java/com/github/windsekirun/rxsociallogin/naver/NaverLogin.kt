@@ -70,7 +70,7 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -80,7 +80,10 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
     private fun parseUserInfo(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseObject = getJSONObject(jsonObject, "response")
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (responseObject == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val item = LoginResultItem().apply {
             this.id = responseObject.getJSONString("id")
@@ -95,6 +98,6 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

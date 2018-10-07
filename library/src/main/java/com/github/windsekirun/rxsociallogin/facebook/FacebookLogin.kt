@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import com.facebook.*
+import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
@@ -45,13 +46,13 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                 if (config.behaviorOnCancel) {
                     getUserInfo()
                 } else {
-                    throw LoginFailedException("$EXCEPTION_USER_CANCELLED If you prevent this error," +
-                            "set 'behaviorOnCancel` in FacebookConfig object.")
+                    callbackAsFail(LoginFailedException("$EXCEPTION_USER_CANCELLED If you prevent this error," +
+                            "set 'behaviorOnCancel` in FacebookConfig object."))
                 }
             }
 
             override fun onError(error: FacebookException) {
-                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
             }
         })
     }
@@ -68,7 +69,10 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
-            if (obj == null) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+            if (obj == null) {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                return@GraphJSONObjectCallback
+            }
 
             val data = getJSONObject(getJSONObject(obj, "picture"), "data")
             val profilePicture = data!!.getJSONString("url")
@@ -84,7 +88,7 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                 this.result = true
             }
 
-            callbackItem(item)
+            callbackAsSuccess(item)
         }
 
         var originField = "id, name, email, gender, birthday, first_name, "

@@ -26,14 +26,14 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
                         config.clientSecret, codeResponse.code)
                 activity!!.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
             } else {
-                throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
         } else if (requestCode == EXCHANGE_REQUEST_CODE) {
             val tokenResponse = FoursquareOAuth.getTokenFromResult(resultCode, data)
             if (tokenResponse.accessToken != null && !tokenResponse.accessToken.isEmpty()) {
                 getUserInfo(tokenResponse.accessToken)
             } else {
-                throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
         }
     }
@@ -43,7 +43,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
         if (intent.resolveActivity(activity!!.packageManager) != null) {
             activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
         } else {
-            throw LoginFailedException(RxSocialLogin.EXCEPTION_FOURSQUARE_INTENT)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FOURSQUARE_INTENT))
         }
     }
 
@@ -64,7 +64,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
                     if (error == null && result.component1() != null) {
                         parseUserJson(result.component1())
                     } else {
-                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -73,11 +73,17 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
 
     private fun parseUserJson(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (jsonObject == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val response = jsonObject.getJSONObject("response")
         val user = response?.getJSONObject("user")
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (user == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val photo = user.getJSONObject("photo")
         val contact = user.getJSONObject("contact")
@@ -98,7 +104,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 
     companion object {

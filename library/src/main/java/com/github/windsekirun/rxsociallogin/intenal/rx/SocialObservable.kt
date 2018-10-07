@@ -26,20 +26,18 @@ open class SocialObservable(private val login: BaseSocialLogin) : Observable<Log
 
     private class Listener(val login: BaseSocialLogin, val observer: Observer<in LoginResultItem>?) :
             MainThreadDisposable(), OnResponseListener {
+        override fun onResult(item: LoginResultItem?, error: Throwable?) {
+            if (!isDisposed) {
+                when {
+                    item != null && item.result -> observer?.onNext(item)
+                    error != null -> observer?.onError(error)
+                    else -> observer?.onError(LoginFailedException(RxSocialLogin.EXCEPTION_UNKNOWN_ERROR))
+                }
+            }
+        }
 
         override fun onDispose() {
             login.onDestroy()
-        }
-
-        override fun onResult(item: LoginResultItem) {
-            if (!isDisposed) {
-                val result = item.result
-                if (result) { //
-                    observer?.onNext(item)
-                } else if (!isDisposed) {
-                    observer?.onError(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
-                }
-            }
         }
     }
 

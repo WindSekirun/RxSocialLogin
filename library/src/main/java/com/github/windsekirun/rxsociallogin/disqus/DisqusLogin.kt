@@ -28,7 +28,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.DISQUS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -60,10 +60,17 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
 
     private fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+
+        if (accessTokenResult == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val accessToken = accessTokenResult.getJSONString("access_token", "")
-        if (accessToken.isEmpty()) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (accessToken.isEmpty()) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val requestUrl = "https://disqus.com/api/3.0/users/details.json" +
                 "?access_token=$accessToken&api_key=${config.clientId}&api_secret=${config.clientSecret}"
@@ -77,7 +84,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
                     if (error == null && result.component1() != null) {
                         parseUserJson(result.component1())
                     } else {
-                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -87,7 +94,10 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun parseUserJson(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseObject = jsonObject?.getJSONObject("response")
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (responseObject == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val avatarObject = responseObject.getJSONObject("avatar")
         val profilePicture = avatarObject?.getJSONString("permalink") ?: ""
@@ -102,6 +112,6 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

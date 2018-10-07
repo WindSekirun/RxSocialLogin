@@ -39,7 +39,11 @@ abstract class BaseSocialLogin constructor(childActivity: FragmentActivity) {
 
     }
 
-    protected fun callbackItem(loginResultItem: LoginResultItem) {
-        responseListener?.onResult(loginResultItem)
+    protected fun callbackAsFail(exception: Exception) {
+        responseListener?.onResult(null, exception)
+    }
+
+    protected fun callbackAsSuccess(loginResultItem: LoginResultItem) {
+        responseListener?.onResult(loginResultItem, null)
     }
 }

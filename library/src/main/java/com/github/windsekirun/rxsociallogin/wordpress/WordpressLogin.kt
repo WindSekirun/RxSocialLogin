@@ -29,7 +29,7 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -55,7 +55,10 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (accessToken.isEmpty()) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         AccessTokenProvider.wordpressAccessToken = accessToken
         getUserInfo(accessToken)
@@ -108,7 +111,7 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -117,7 +120,10 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
 
     private fun parseUserInfo(jsonStr: String?) {
         val response = jsonStr?.createJSONObject()
-                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+        if (response == null) {
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val id = response.getJSONString("ID")
         val username = response.getJSONString("username")
@@ -136,6 +142,6 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
             this.platform = PlatformType.WORDPRESS
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

@@ -30,7 +30,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            throw LoginFailedException(EXCEPTION_USER_CANCELLED)
+            callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -68,7 +68,10 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (accessToken.isEmpty()) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val parameters = mutableListOf("id", "picture-url", "first-name", "formatted-name")
 
@@ -86,7 +89,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -95,7 +98,10 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
 
     private fun parseUserInfo(jsonStr: String?) {
         val response = jsonStr?.createJSONObject()
-                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
+        if (response == null) {
+            callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
+            return
+        }
 
         val firstName = response.getJSONString("firstName")
         val id = response.getJSONString("id")
@@ -118,6 +124,6 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
             this.platform = PlatformType.LINKEDIN
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

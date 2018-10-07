@@ -10,9 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
 
-internal fun handleSignInResult(user: FirebaseUser?, platformType: PlatformType): LoginResultItem {
-    if (user == null) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
-
+internal fun handleSignInResult(user: FirebaseUser, platformType: PlatformType): LoginResultItem {
     return LoginResultItem().apply {
         name = user.displayName ?: ""
         email = user.email ?: ""
@@ -31,6 +29,11 @@ internal fun FirebaseAuth.signInWithCredential(credential: AuthCredential, activ
                 .addOnCompleteListener(activity as Activity) {
                     if (it.isSuccessful) {
                         val user = this.currentUser
+                        if (user == null) {
+                            emitter.onError(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                            return@addOnCompleteListener
+                        }
+
                         emitter.onNext(handleSignInResult(user, platformType))
                     } else {
                         emitter.onError(it.exception!!)
