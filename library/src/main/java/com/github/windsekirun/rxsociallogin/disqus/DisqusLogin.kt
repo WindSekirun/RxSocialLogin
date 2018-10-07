@@ -19,7 +19,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class DisqusLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: DisqusConfig by lazy { getPlatformConfig(PlatformType.DISQUS) as DisqusConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -34,7 +34,7 @@ class DisqusLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     override fun login() {
         val authUrl = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
                 "scope=read&response_type=code&redirect_uri=${config.redirectUri}"
-        val oauthUrl = OAuthConstants.DISQUS_URL
+        val oauthUrl = OAuthConstants.DISQUS_OAUTH
         val parameters = listOf(
                 "redirect_uri" to config.redirectUri,
                 "client_id" to config.clientId,

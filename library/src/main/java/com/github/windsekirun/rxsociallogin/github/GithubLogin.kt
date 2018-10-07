@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val auth = FirebaseAuth.getInstance()
     private val config: GithubConfig by lazy { getPlatformConfig(PlatformType.GITHUB) as GithubConfig }
 

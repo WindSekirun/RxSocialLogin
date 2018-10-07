@@ -16,7 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val googleApiClient: GoogleApiClient by lazy {
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(config.clientTokenId)

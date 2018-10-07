@@ -19,7 +19,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val requestUrl = "https://openapi.naver.com/v1/nid/me"
     private val authLogin = OAuthLogin.getInstance()
 

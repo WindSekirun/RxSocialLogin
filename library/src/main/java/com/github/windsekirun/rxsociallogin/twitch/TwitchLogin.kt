@@ -21,7 +21,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: TwitchConfig by lazy { getPlatformConfig(PlatformType.TWITCH) as TwitchConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

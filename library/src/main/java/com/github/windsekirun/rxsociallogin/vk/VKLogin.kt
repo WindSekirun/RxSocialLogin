@@ -14,7 +14,7 @@ import com.vk.sdk.VKSdk
 import com.vk.sdk.api.*
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class VKLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class VKLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: VKConfig by lazy { getPlatformConfig(PlatformType.VK) as VKConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

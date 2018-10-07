@@ -19,7 +19,7 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class LinkedinLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: LinkedinConfig by lazy { getPlatformConfig(PlatformType.LINKEDIN) as LinkedinConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -41,7 +41,7 @@ class LinkedinLogin @JvmOverloads constructor(activity: FragmentActivity? = null
         if (config.requireEmail) authUrl += "%20r_emailaddress"
 
         val title = config.activityTitle
-        val oauthUrl = OAuthConstants.LINKEDIN_URL
+        val oauthUrl = OAuthConstants.LINKEDIN_OAUTH
         val parameters = listOf(
                 "grant_type" to "authorization_code",
                 "redirect_uri" to config.redirectUri,

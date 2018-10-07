@@ -11,7 +11,7 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.linecorp.linesdk.LineApiResponseCode
 import com.linecorp.linesdk.auth.LineLoginApi
 
-class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE) onResultLineLogin(data)

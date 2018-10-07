@@ -1,9 +1,7 @@
 package com.github.windsekirun.rxsociallogin
 
-import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.os.Bundle
 import android.support.annotation.CheckResult
 import android.support.v4.app.FragmentActivity
 import com.facebook.FacebookSdk
@@ -14,10 +12,11 @@ import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
+import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType.*
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
-import com.github.windsekirun.rxsociallogin.intenal.rx.BaseSocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.rx.SocialObservable
 import com.github.windsekirun.rxsociallogin.intenal.utils.weak
 import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
@@ -45,29 +44,95 @@ object RxSocialLogin {
     private var availableTypeMap: MutableMap<PlatformType, SocialConfig> = HashMap()
     private var application: Application? by weak(null)
     private val alreadyInitializedList = ArrayList<PlatformType>()
+    private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin> = WeakHashMap()
 
-    const val NOT_HAVE_APPLICATION = "No context is available, please declare RxSocialLogin.init(this)"
-    const val NOT_NEED_ACTIVITY_RESULT = "Not need to call onActivityResult in "
+    private const val NOT_HAVE_APPLICATION = "Context object is missing."
+    private const val NOT_HAVE_CONFIG = "Config object is missing."
 
-    internal var activityReference: FragmentActivity? by weak(null)
+    /**
+     * Initialize 'Social module object' in once by Configs on Application class
+     *
+     * @param fragmentActivity [FragmentActivity] to initialize individual Social module object.
+     */
+    @JvmStatic
+    fun initialize(fragmentActivity: FragmentActivity) {
+        val map = availableTypeMap.map {
+            it.key to when (it.key) {
+                KAKAO -> KakaoLogin(fragmentActivity)
+                GOOGLE -> GoogleLogin(fragmentActivity)
+                FACEBOOK -> FacebookLogin(fragmentActivity)
+                LINE -> LineLogin(fragmentActivity)
+                NAVER -> NaverLogin(fragmentActivity)
+                TWITTER -> TwitterLogin(fragmentActivity)
+                GITHUB -> GithubLogin(fragmentActivity)
+                LINKEDIN -> LinkedinLogin(fragmentActivity)
+                WORDPRESS -> WordpressLogin(fragmentActivity)
+                YAHOO -> YahooLogin(fragmentActivity)
+                VK -> VKLogin(fragmentActivity)
+                DISQUS -> DisqusLogin(fragmentActivity)
+                FOURSQUARE -> FoursquareLogin(fragmentActivity)
+                TWITCH -> TwitchLogin(fragmentActivity)
+                WINDOWS -> WindowsLogin(fragmentActivity)
+            }
+        }.toMap().toMutableMap()
 
-    private val lifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
-            setActivityWeakReference(activity)
+        moduleMap.clear()
+        moduleMap.putAll(map)
+    }
+
+    /**
+     * Try Login of [BaseSocialLogin] using given [PlatformType]
+     */
+    @JvmStatic
+    fun login(platformType: PlatformType) {
+        val socialLogin = moduleMap[platformType] ?: throw LoginFailedException(NOT_HAVE_CONFIG)
+        socialLogin.login()
+    }
+
+    /**
+     * Receive [FragmentActivity.onActivityResult] event to handle result of platform process
+     */
+    @JvmStatic
+    fun activityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        moduleMap.values.forEach {
+            it?.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    /**
+     * Observe SocialLogin result by RxJava2 way
+     */
+    @CheckResult
+    @JvmStatic
+    @JvmOverloads
+    fun result(fragmentActivity: FragmentActivity? = null): Observable<LoginResultItem> {
+        if (moduleMap.isEmpty() && fragmentActivity != null) initialize(fragmentActivity)
+        return Observable.merge(moduleMap.values.map { SocialObservable(it) })
+    }
+
+    /**
+     * Observe SocialLogin result by traditional (Listener) way
+     */
+    @JvmOverloads
+    fun result(callback: (LoginResultItem) -> Unit, fragmentActivity: FragmentActivity? = null) {
+        if (moduleMap.isEmpty() && fragmentActivity != null) initialize(fragmentActivity)
+
+        val listener = object : OnResponseListener {
+            override fun onResult(item: LoginResultItem) {
+                callback(item)
+            }
         }
 
-        override fun onActivityStarted(activity: Activity) {
-            setActivityWeakReference(activity)
+        val newMap = mutableMapOf<PlatformType, BaseSocialLogin>()
+
+        moduleMap.forEach {
+            val moduleObject = it.value
+            moduleObject?.responseListener = listener
+            newMap[it.key] = moduleObject
         }
 
-        override fun onActivityResumed(activity: Activity) {
-            setActivityWeakReference(activity)
-        }
-
-        override fun onActivityDestroyed(activity: Activity) {}
-        override fun onActivityPaused(activity: Activity) {}
-        override fun onActivityStopped(activity: Activity) {}
-        override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle?) {}
+        moduleMap.clear()
+        moduleMap.putAll(newMap)
     }
 
     /**
@@ -77,8 +142,6 @@ object RxSocialLogin {
     @JvmStatic
     fun init(application: Application) {
         this.application = application
-        this.application?.registerActivityLifecycleCallbacks(lifecycleCallbacks)
-
         clear()
     }
 
@@ -98,9 +161,64 @@ object RxSocialLogin {
         initPlatform()
     }
 
-    @JvmStatic
-    fun activityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    internal fun getPlatformConfig(type: PlatformType): SocialConfig {
+        if (!availableTypeMap.containsKey(type)) {
+            throw LoginFailedException(String.format("No config is available :: Platform -> ${type.name}"))
+        }
 
+        return availableTypeMap[type]!!
+    }
+
+    private fun initPlatform() {
+        for ((key, value) in availableTypeMap) {
+            if (alreadyInitializedList.contains(key)) {
+                continue
+            }
+
+            alreadyInitializedList.add(key)
+            when (key) {
+                KAKAO -> initKakao()
+                TWITTER -> initTwitter(value as TwitterConfig)
+                FACEBOOK -> initFacebook(value as FacebookConfig)
+                VK -> initVK()
+                else -> {
+                }
+            }
+        }
+    }
+
+    private fun initKakao() {
+        KakaoSDK.init(KakaoSDKAdapter(application!!.applicationContext))
+    }
+
+    private fun initFacebook(config: FacebookConfig) {
+        FacebookSdk.setApplicationId(config.applicationId)
+    }
+
+    private fun initTwitter(config: TwitterConfig) {
+        val twitterConfig = com.twitter.sdk.android.core.TwitterConfig.Builder(application!!)
+                .twitterAuthConfig(TwitterAuthConfig(config.consumerKey, config.consumerSecret))
+                .build()
+
+        Twitter.initialize(twitterConfig)
+    }
+
+    private fun initVK() {
+        val vkAccessTokenTracker = object : VKAccessTokenTracker() {
+            override fun onVKAccessTokenChanged(oldToken: VKAccessToken?, newToken: VKAccessToken?) {
+                if (newToken == null) {
+                    // VKAccessToken is invalid
+                }
+            }
+        }
+
+        vkAccessTokenTracker.startTracking()
+        VKSdk.initialize(application)
+    }
+
+    private fun clear() {
+        availableTypeMap.clear()
+        alreadyInitializedList.clear()
     }
 
     @CheckResult
@@ -208,126 +326,48 @@ object RxSocialLogin {
                     "com.github.windsekirun.rxsociallogin.RxSocialLogin"))
     fun twitch(login: TwitchLogin): Observable<LoginResultItem> = RxTwitchLogin(login)
 
-    @CheckResult
-    @JvmStatic
-    fun result(login: BaseSocialLogin): Observable<LoginResultItem> = SocialObservable(login)
-
-    @CheckResult
-    @JvmStatic
-    fun result(vararg login: BaseSocialLogin): Observable<LoginResultItem> = Observable.merge(login.map { SocialObservable(it) })
-
-    internal fun getPlatformConfig(type: PlatformType): SocialConfig {
-        if (!availableTypeMap.containsKey(type)) {
-            throw LoginFailedException(String.format("No config is available :: Platform -> ${type.name}"))
-        }
-
-        return availableTypeMap[type]!!
-    }
-
-    internal fun addWeakMap(platformType: PlatformType, login: RxSocialLogin) {
-
-    }
+    @Deprecated("use SocialObservable instead.")
+    internal class RxFacebookLogin(login: FacebookLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxFacebookLogin(login: FacebookLogin) : BaseSocialObservable<FacebookLogin>(login)
+    internal class RxGithubLogin(login: GithubLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxGithubLogin(login: GithubLogin) : BaseSocialObservable<GithubLogin>(login)
+    internal class RxGoogleLogin(login: GoogleLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxGoogleLogin(login: GoogleLogin) : BaseSocialObservable<GoogleLogin>(login)
+    internal class RxKakaoLogin(login: KakaoLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxKakaoLogin(login: KakaoLogin) : BaseSocialObservable<KakaoLogin>(login)
+    internal class RxLineLogin(login: LineLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxLineLogin(login: LineLogin) : BaseSocialObservable<LineLogin>(login)
+    internal class RxLinkedinLogin(login: LinkedinLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxLinkedinLogin(login: LinkedinLogin) : BaseSocialObservable<LinkedinLogin>(login)
+    internal class RxNaverLogin(login: NaverLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxNaverLogin(login: NaverLogin) : BaseSocialObservable<NaverLogin>(login)
+    internal class RxTwitterLogin(login: TwitterLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxTwitterLogin(login: TwitterLogin) : BaseSocialObservable<TwitterLogin>(login)
+    internal class RxWordpressLogin(login: WordpressLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxWordpressLogin(login: WordpressLogin) : BaseSocialObservable<WordpressLogin>(login)
+    internal class RxYahooLogin(login: YahooLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxYahooLogin(login: YahooLogin) : BaseSocialObservable<YahooLogin>(login)
+    internal class RxVKLogin(login: VKLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxVKLogin(login: VKLogin) : BaseSocialObservable<VKLogin>(login)
+    internal class RxWindowsLogin(login: WindowsLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxWindowsLogin(login: WindowsLogin) : BaseSocialObservable<WindowsLogin>(login)
+    internal class RxDisqusLogin(login: DisqusLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxDisqusLogin(login: DisqusLogin) : BaseSocialObservable<DisqusLogin>(login)
+    internal class RxFoursquareLogin(login: FoursquareLogin) : SocialObservable(login)
 
     @Deprecated("use SocialObservable instead.")
-    internal class RxFoursquareLogin(login: FoursquareLogin) : BaseSocialObservable<FoursquareLogin>(login)
-
-    @Deprecated("use SocialObservable instead.")
-    internal class RxTwitchLogin(login: TwitchLogin) : BaseSocialObservable<TwitchLogin>(login)
-
-    private fun initPlatform() {
-        for ((key, value) in availableTypeMap) {
-            if (alreadyInitializedList.contains(key)) {
-                continue
-            }
-
-            alreadyInitializedList.add(key)
-            when (key) {
-                PlatformType.KAKAO -> initKakao()
-                PlatformType.TWITTER -> initTwitter(value as TwitterConfig)
-                PlatformType.FACEBOOK -> initFacebook(value as FacebookConfig)
-                PlatformType.VK -> initVK()
-                else -> {
-                }
-            }
-        }
-    }
-
-    private fun initKakao() {
-        KakaoSDK.init(KakaoSDKAdapter(application!!.applicationContext))
-    }
-
-    private fun initFacebook(config: FacebookConfig) {
-        FacebookSdk.setApplicationId(config.applicationId)
-    }
-
-    private fun initTwitter(config: TwitterConfig) {
-        val twitterConfig = com.twitter.sdk.android.core.TwitterConfig.Builder(application!!)
-                .twitterAuthConfig(TwitterAuthConfig(config.consumerKey, config.consumerSecret))
-                .build()
-
-        Twitter.initialize(twitterConfig)
-    }
-
-    private fun initVK() {
-        val vkAccessTokenTracker = object : VKAccessTokenTracker() {
-            override fun onVKAccessTokenChanged(oldToken: VKAccessToken?, newToken: VKAccessToken?) {
-                if (newToken == null) {
-                    // VKAccessToken is invalid
-                }
-            }
-        }
-
-        vkAccessTokenTracker.startTracking()
-        VKSdk.initialize(application)
-    }
-
-    private fun clear() {
-        availableTypeMap.clear()
-        alreadyInitializedList.clear()
-    }
-
-    private fun setActivityWeakReference(activity: Activity) {
-        if ((activityReference == null || activity != activityReference) && (activity is FragmentActivity)) {
-            activityReference = activity
-        }
-    }
+    internal class RxTwitchLogin(login: TwitchLogin) : SocialObservable(login)
 }

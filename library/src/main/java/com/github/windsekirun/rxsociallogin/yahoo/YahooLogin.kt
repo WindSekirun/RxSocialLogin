@@ -14,7 +14,7 @@ import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: YahooConfig by lazy { RxSocialLogin.getPlatformConfig(PlatformType.YAHOO) as YahooConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -10,7 +10,7 @@ import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.models.User
 
-class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val twitterAuthClient = TwitterAuthClient()
     private val twitterApiClient: TwitterApiClient by lazy { TwitterCore.getInstance().apiClient }
 

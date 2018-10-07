@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
-class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: FoursquareConfig by lazy { getPlatformConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

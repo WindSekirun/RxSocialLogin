@@ -19,7 +19,7 @@ import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 
-class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private var mSessionCallback: SessionCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

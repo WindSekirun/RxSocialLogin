@@ -20,7 +20,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: WordpressConfig by lazy { getPlatformConfig(PlatformType.WORDPRESS) as WordpressConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

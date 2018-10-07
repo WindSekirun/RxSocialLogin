@@ -14,7 +14,7 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class FacebookLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val callbackManager: CallbackManager = CallbackManager.Factory.create()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

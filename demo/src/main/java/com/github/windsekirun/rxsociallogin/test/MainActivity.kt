@@ -6,44 +6,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
-import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
-import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
-import com.github.windsekirun.rxsociallogin.github.GithubLogin
-import com.github.windsekirun.rxsociallogin.google.GoogleLogin
-import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
-import com.github.windsekirun.rxsociallogin.line.LineLogin
-import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
-import com.github.windsekirun.rxsociallogin.naver.NaverLogin
-import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
-import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
-import com.github.windsekirun.rxsociallogin.vk.VKLogin
-import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
-import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
-import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
 
 class MainActivity : AppCompatActivity() {
-    private val kakaoLogin: KakaoLogin by lazy { KakaoLogin() }
-    private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
-    private val naverLogin: NaverLogin by lazy { NaverLogin(this) }
-    private val lineLogin: LineLogin by lazy { LineLogin() }
-    private val twitterLogin: TwitterLogin by lazy { TwitterLogin() }
-    private val googleLogin: GoogleLogin by lazy { GoogleLogin() }
-    private val githubLogin: GithubLogin by lazy { GithubLogin() }
-    private val linkedinLogin: LinkedinLogin by lazy { LinkedinLogin() }
-    private val wordpressLogin: WordpressLogin by lazy { WordpressLogin() }
-    private val yahooLogin: YahooLogin by lazy { YahooLogin() }
-    private val vkLogin: VKLogin by lazy { VKLogin() }
-    private val windowsLogin: WindowsLogin by lazy { WindowsLogin() }
-    private val disqusLogin: DisqusLogin by lazy { DisqusLogin() }
-    private val foursquareLogin: FoursquareLogin by lazy { FoursquareLogin() }
-    private val twitchLogin: TwitchLogin by lazy { TwitchLogin() }
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,77 +23,81 @@ class MainActivity : AppCompatActivity() {
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
         btnDisqus.setOnClickListener {
-            disqusLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.DISQUS)
         }
 
         btnFacebook.setOnClickListener {
-            facebookLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.FACEBOOK)
         }
 
         btnFoursquare.setOnClickListener {
-            foursquareLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.FOURSQUARE)
         }
 
         btnGithub.setOnClickListener {
-            githubLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.GITHUB)
         }
 
         btnGoogle.setOnClickListener {
-            googleLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.GOOGLE)
         }
 
         btnKakao.setOnClickListener {
-            kakaoLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.KAKAO)
         }
 
         btnLine.setOnClickListener {
-            lineLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.LINE)
         }
 
         btnLinkedin.setOnClickListener {
-            linkedinLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.LINKEDIN)
         }
 
         btnNaver.setOnClickListener {
-            naverLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.NAVER)
         }
 
         btnTwitch.setOnClickListener {
-            twitchLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.TWITCH)
         }
 
         btnTwitter.setOnClickListener {
-            twitterLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.TWITTER)
         }
 
         btnVK.setOnClickListener {
-            vkLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.VK)
         }
 
         btnWordpress.setOnClickListener {
-            wordpressLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.WORDPRESS)
         }
 
         btnWindows.setOnClickListener {
-            windowsLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.WINDOWS)
         }
 
         btnYahoo.setOnClickListener {
-            yahooLogin.login()
+            observeEvent()
+            RxSocialLogin.login(PlatformType.YAHOO)
         }
 
-        RxSocialLogin.result(disqusLogin, facebookLogin, foursquareLogin, githubLogin, googleLogin,
-                kakaoLogin, lineLogin, linkedinLogin, naverLogin, twitchLogin, twitchLogin, vkLogin,
-                wordpressLogin, windowsLogin, yahooLogin)
-                .subscribe({
-                    txtResult.text = it.toString()
-                    txtResult.setTextColor(Color.BLACK)
-                    txtPlatform.text = it.platform.name
-                }, {
-                    Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
-                    txtResult.text = "Login Failed"
-                    txtResult.setTextColor(Color.RED)
-                })
+        RxSocialLogin.initialize(this)
 
     }
 
@@ -135,5 +109,18 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         RxSocialLogin.activityResult(requestCode, resultCode, data)
+    }
+
+    private fun observeEvent() {
+        RxSocialLogin.result()
+                .subscribe({
+                    txtResult.text = it.toString()
+                    txtResult.setTextColor(Color.BLACK)
+                    txtPlatform.text = it.platform.name
+                }, {
+                    Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
+                    txtResult.text = "Login Failed"
+                    txtResult.setTextColor(Color.RED)
+                }).addTo(compositeDisposable)
     }
 }

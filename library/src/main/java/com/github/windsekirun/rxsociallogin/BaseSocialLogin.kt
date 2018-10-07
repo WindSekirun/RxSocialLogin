@@ -2,7 +2,6 @@ package com.github.windsekirun.rxsociallogin
 
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -17,21 +16,15 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * Description:
  */
-abstract class BaseSocialLogin @JvmOverloads constructor(childActivity: FragmentActivity? = null) {
+abstract class BaseSocialLogin constructor(childActivity: FragmentActivity) {
     internal var responseListener: OnResponseListener? = null
 
     protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(activity!!.applicationContext) }
     protected val compositeDisposable = CompositeDisposable()
     protected var activity: FragmentActivity? by weak(null)
-    protected val TAG = RxSocialLogin::class.java.simpleName
 
     init {
-        if (childActivity != null) { // using given activity object when creating instance
-            this.activity = childActivity
-        } else {
-            this.activity = RxSocialLogin.activityReference
-            if (this.activity == null) throw LoginFailedException(RxSocialLogin.NOT_HAVE_APPLICATION)
-        }
+        this.activity = childActivity
     }
 
     abstract fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)

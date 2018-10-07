@@ -19,7 +19,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
-class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
+class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: WindowsConfig by lazy { getPlatformConfig(PlatformType.WINDOWS) as WindowsConfig }
     private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity!!.applicationContext, config.clientId) }
 
