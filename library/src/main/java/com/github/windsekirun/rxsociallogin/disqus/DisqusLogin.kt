@@ -8,11 +8,12 @@ import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
@@ -27,7 +28,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.DISQUS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackFail(PlatformType.DISQUS)
+            throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
         }
     }
 
@@ -59,16 +60,10 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
 
     private fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()
-        if (accessTokenResult == null) {
-            callbackFail(PlatformType.DISQUS)
-            return
-        }
+                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val accessToken = accessTokenResult.getJSONString("access_token", "")
-        if (accessToken.isEmpty()) {
-            callbackFail(PlatformType.DISQUS)
-            return
-        }
+        if (accessToken.isEmpty()) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val requestUrl = "https://disqus.com/api/3.0/users/details.json" +
                 "?access_token=$accessToken&api_key=${config.clientId}&api_secret=${config.clientSecret}"
@@ -82,7 +77,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
                     if (error == null && result.component1() != null) {
                         parseUserJson(result.component1())
                     } else {
-                        callbackFail(PlatformType.DISQUS)
+                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
                     }
                 }
 
@@ -92,11 +87,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun parseUserJson(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseObject = jsonObject?.getJSONObject("response")
-
-        if (responseObject == null) {
-            callbackFail(PlatformType.DISQUS)
-            return
-        }
+                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val avatarObject = responseObject.getJSONObject("avatar")
         val profilePicture = avatarObject?.getJSONString("permalink") ?: ""

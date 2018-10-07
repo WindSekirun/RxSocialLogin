@@ -5,15 +5,18 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
@@ -27,7 +30,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackFail(PlatformType.LINKEDIN)
+            throw LoginFailedException(EXCEPTION_USER_CANCELLED)
         }
     }
 
@@ -65,10 +68,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) {
-            callbackFail(PlatformType.LINKEDIN)
-            return
-        }
+        if (accessToken.isEmpty()) throw LoginFailedException(EXCEPTION_FAILED_RESULT)
 
         val parameters = mutableListOf("id", "picture-url", "first-name", "formatted-name")
 
@@ -77,7 +77,6 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
         }
 
         val url = "https://api.linkedin.com/v1/people/~:(${parameters.joinToString(",")})?format=json"
-
         val disposable = url.httpGet()
                 .header("Authorization" to "Bearer $accessToken")
                 .toResultObservable()
@@ -87,7 +86,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        callbackFail(PlatformType.LINKEDIN)
+                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
                     }
                 }
 
@@ -96,11 +95,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
 
     private fun parseUserInfo(jsonStr: String?) {
         val response = jsonStr?.createJSONObject()
-
-        if (response == null) {
-            callbackFail(PlatformType.LINKEDIN)
-            return
-        }
+                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
 
         val firstName = response.getJSONString("firstName")
         val id = response.getJSONString("id")

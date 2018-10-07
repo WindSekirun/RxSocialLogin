@@ -5,11 +5,12 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import android.util.Base64
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
@@ -22,7 +23,7 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.YAHOO_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackFail(PlatformType.YAHOO)
+            throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
         }
     }
 
@@ -56,20 +57,13 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         val jsonObject = jsonStr.createJSONObject()
         val idToken = jsonObject?.getJSONString("id_token") ?: ""
         val guid = jsonObject?.getJSONString("xoauth_yahoo_guid") ?: ""
-        if (guid.isEmpty() || idToken.isEmpty()) {
-            callbackFail(PlatformType.YAHOO)
-            return
-        }
+        if (guid.isEmpty() || idToken.isEmpty()) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         // decode idToken by https://developer.yahoo.com/oauth2/guide/openid_connect/decode_id_token.html
         val array = idToken.split(".")
         val decodedStr = String(Base64.decode(array[1], Base64.DEFAULT))
         val response = decodedStr.createJSONObject()
-
-        if (response == null) {
-            callbackFail(PlatformType.YAHOO)
-            return
-        }
+                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val name = response.getJSONString("name")
 

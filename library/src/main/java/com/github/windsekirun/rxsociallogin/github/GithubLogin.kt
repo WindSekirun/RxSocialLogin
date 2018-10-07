@@ -8,7 +8,10 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
 import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
@@ -31,7 +34,7 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.GITHUB_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackFail(PlatformType.GITHUB)
+            throw LoginFailedException(EXCEPTION_USER_CANCELLED)
         }
     }
 
@@ -71,10 +74,7 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
-        if (accessToken.isEmpty()) {
-            callbackFail(PlatformType.GITHUB)
-            return
-        }
+        if (accessToken.isEmpty()) throw LoginFailedException(EXCEPTION_FAILED_RESULT)
 
         AccessTokenProvider.githubAccessToken = accessToken
         getUserInfo(accessToken)
@@ -119,7 +119,7 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun getUserInfo(accessToken: String) {
         val credential = GithubAuthProvider.getCredential(accessToken)
         val disposable = auth.signInWithCredential(credential, activity, PlatformType.GITHUB)
-                .subscribe({ callbackItem(it) }, {})
+                .subscribe({ callbackItem(it) }, { throw LoginFailedException(EXCEPTION_FAILED_RESULT, it) })
         compositeDisposable.add(disposable)
     }
 }

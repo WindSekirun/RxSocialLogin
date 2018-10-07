@@ -4,7 +4,10 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.utils.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.android.gms.auth.api.Auth
@@ -43,7 +46,7 @@ class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
                 val account = task.getResult(ApiException::class.java)
                 authWithFirebase(account)
             } catch (e: ApiException) {
-                callbackFail(PlatformType.GOOGLE)
+                throw LoginFailedException(EXCEPTION_USER_CANCELLED, e)
             }
         }
     }
@@ -65,7 +68,7 @@ class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         val disposable = auth.signInWithCredential(credential, activity, PlatformType.GOOGLE)
-                .subscribe({ callbackItem(it) }, {})
+                .subscribe({ callbackItem(it) }, { throw LoginFailedException(EXCEPTION_FAILED_RESULT, it)})
         compositeDisposable.add(disposable)
     }
 

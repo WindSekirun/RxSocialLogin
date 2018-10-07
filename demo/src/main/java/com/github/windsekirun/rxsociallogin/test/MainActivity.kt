@@ -1,5 +1,6 @@
 package com.github.windsekirun.rxsociallogin.test
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -16,6 +17,7 @@ import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 class MainActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -106,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                     txtPlatform.text = it.platform.name
                 }, {
                     Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
-                    txtResult.text = "Login Failed"
+                    txtResult.text = "Login Failed - ${it.message}"
                     txtResult.setTextColor(Color.RED)
                 }).addTo(compositeDisposable)
     }

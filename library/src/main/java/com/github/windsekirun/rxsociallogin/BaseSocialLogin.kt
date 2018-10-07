@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.utils.weak
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import io.reactivex.disposables.CompositeDisposable
@@ -38,10 +37,6 @@ abstract class BaseSocialLogin constructor(childActivity: FragmentActivity) {
     @JvmOverloads
     open fun logout(clearToken: Boolean = false) {
 
-    }
-
-    protected fun callbackFail(platformType: PlatformType) {
-        callbackItem(LoginResultItem.createFail(platformType))
     }
 
     protected fun callbackItem(loginResultItem: LoginResultItem) {

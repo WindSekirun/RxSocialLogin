@@ -6,6 +6,7 @@ import android.util.Log
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.kakao.auth.AuthType
@@ -18,7 +19,7 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
-import java.util.ArrayList
+import java.util.*
 
 class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private var sessionCallback: SessionCallback? = null
@@ -76,10 +77,11 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         }
 
         override fun onSessionOpenFailed(exception: KakaoException?) {
-            val message = exception?.message ?: ""
-            Log.d("SessionCallback", "OpenFailed:: $message")
-
-            callbackFail(PlatformType.KAKAO)
+            if (exception != null) {
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception)
+            } else {
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+            }
         }
     }
 
@@ -98,7 +100,7 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
 
         UserManagement.getInstance().me(requestOptions, object : MeV2ResponseCallback() {
             override fun onSessionClosed(errorResult: ErrorResult) {
-                callbackFail(PlatformType.KAKAO)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
             }
 
             override fun onSuccess(result: MeV2Response) {

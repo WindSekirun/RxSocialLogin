@@ -8,7 +8,9 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
@@ -43,12 +45,13 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                 if (config.behaviorOnCancel) {
                     getUserInfo()
                 } else {
-                    callbackFail(PlatformType.FACEBOOK)
+                    throw LoginFailedException("$EXCEPTION_USER_CANCELLED If you prevent this error," +
+                            "set 'behaviorOnCancel` in FacebookConfig object.")
                 }
             }
 
             override fun onError(error: FacebookException) {
-                callbackFail(PlatformType.FACEBOOK)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
             }
         })
     }
@@ -65,10 +68,7 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
-            if (obj == null) {
-                callbackFail(PlatformType.FACEBOOK)
-                return@GraphJSONObjectCallback
-            }
+            if (obj == null) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
             val data = getJSONObject(getJSONObject(obj, "picture"), "data")
             val profilePicture = data!!.getJSONString("url")

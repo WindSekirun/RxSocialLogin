@@ -6,22 +6,25 @@ import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(activity) {
+class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: TwitchConfig by lazy { getPlatformConfig(PlatformType.TWITCH) as TwitchConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -29,7 +32,7 @@ class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(act
             val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.TWITCH_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackFail(PlatformType.TWITCH)
+            throw LoginFailedException(EXCEPTION_USER_CANCELLED)
         }
     }
 
@@ -81,16 +84,10 @@ class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(act
 
     private fun analyzeResult(jsonStr: String) {
         val accessTokenObject = jsonStr.createJSONObject()
-        if (accessTokenObject == null) {
-            callbackFail(PlatformType.TWITCH)
-            return
-        }
+                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
 
         val accessToken = accessTokenObject.getJSONString("access_token", "")
-        if (accessToken.isEmpty()) {
-            callbackFail(PlatformType.TWITCH)
-            return
-        }
+        if (accessToken.isEmpty()) throw LoginFailedException(EXCEPTION_FAILED_RESULT)
 
         AccessTokenProvider.twitchAccessToken = accessToken
 
@@ -106,7 +103,7 @@ class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(act
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        callbackFail(PlatformType.TWITCH)
+                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
                     }
                 }
 
@@ -116,18 +113,9 @@ class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(act
     private fun parseUserInfo(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseArray = jsonObject?.getJSONArray("data")
-
-        if (responseArray == null) {
-            callbackFail(PlatformType.TWITCH)
-            return
-        }
-
+                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
         val responseObject = responseArray.getJSONObject(0)
-
-        if (responseObject == null) {
-            callbackFail(PlatformType.TWITCH)
-            return
-        }
+                ?: throw LoginFailedException(EXCEPTION_FAILED_RESULT)
 
         val item = LoginResultItem().apply {
             this.result = true

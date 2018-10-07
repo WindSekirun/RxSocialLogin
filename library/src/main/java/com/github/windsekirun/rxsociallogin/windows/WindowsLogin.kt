@@ -6,9 +6,10 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.AuthenticationResult
 import com.microsoft.identity.client.MsalException
@@ -32,19 +33,20 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
     override fun login() {
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
-                if (authenticationResult == null) {
-                    callbackFail(PlatformType.WINDOWS)
-                    return
-                }
+                if (authenticationResult == null) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
                 getUserInfo(authenticationResult)
             }
 
             override fun onCancel() {
-                callbackFail(PlatformType.WINDOWS)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED)
             }
 
             override fun onError(exception: MsalException?) {
-                callbackFail(PlatformType.WINDOWS)
+                if (exception != null) {
+                    throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception)
+                } else {
+                    throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                }
             }
         })
     }
@@ -65,10 +67,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
     fun toObservable() = RxSocialLogin.windows(this)
 
     private fun getUserInfo(authenticationResult: AuthenticationResult) {
-        if (authenticationResult.accessToken == null) {
-            callbackFail(PlatformType.WINDOWS)
-            return
-        }
+        if (authenticationResult.accessToken == null) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val requestUrl = "https://graph.microsoft.com/v1.0/me"
 
@@ -81,7 +80,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        callbackFail(PlatformType.WINDOWS)
+                        throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error)
                     }
                 }
 
@@ -90,11 +89,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
 
     private fun parseUserInfo(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
-
-        if (jsonObject == null) {
-            callbackFail(PlatformType.WINDOWS)
-            return
-        }
+                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val item = LoginResultItem().apply {
             this.id = jsonObject.getJSONString("id")

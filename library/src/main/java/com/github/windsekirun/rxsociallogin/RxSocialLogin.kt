@@ -49,7 +49,11 @@ object RxSocialLogin {
     private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin> = WeakHashMap()
     private var application: Application? by weak(null)
 
-    private const val NOT_HAVE_CONFIG = "Config object is missing."
+    const val EXCEPTION_FAILED_RESULT = "Failed to get results."
+    const val EXCEPTION_MAIN_THREAD = "Expected to be called on the main thread but was "
+    const val EXCEPTION_USER_CANCELLED = "User has cancelled the job."
+    const val EXCEPTION_FOURSQUARE_INTENT = "The device doesn't have Foursquare applicaiton"
+    private const val EXCEPTION_CONFIG_MISSING = "Config object is missing."
 
     /**
      * Initialize 'RxSocialLogin' in Java.
@@ -98,7 +102,8 @@ object RxSocialLogin {
      */
     @JvmStatic
     fun login(platformType: PlatformType) {
-        val socialLogin = moduleMap[platformType] ?: throw LoginFailedException(NOT_HAVE_CONFIG)
+        val socialLogin = moduleMap[platformType]
+                ?: throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
         socialLogin.login()
     }
 
@@ -165,7 +170,7 @@ object RxSocialLogin {
 
     internal fun getPlatformConfig(type: PlatformType): SocialConfig {
         if (!configMap.containsKey(type)) {
-            throw LoginFailedException(String.format("No config is available :: Platform -> ${type.name}"))
+            throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
         }
 
         return configMap[type]!!

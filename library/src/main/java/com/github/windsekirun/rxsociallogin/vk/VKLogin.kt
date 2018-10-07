@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.vk.sdk.VKAccessToken
@@ -20,7 +21,8 @@ class VKLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         !VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
             override fun onError(error: VKError?) {
-                callbackFail(PlatformType.VK)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, Exception(error?.errorMessage
+                        ?: ""))
             }
 
             override fun onResult(res: VKAccessToken?) {
@@ -47,14 +49,14 @@ class VKLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity
         request.executeWithListener(object : VKRequest.VKRequestListener() {
             override fun attemptFailed(request: VKRequest?, attemptNumber: Int, totalAttempts: Int) {
                 super.attemptFailed(request, attemptNumber, totalAttempts)
-                callbackFail(PlatformType.VK)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
             }
 
             override fun onComplete(response: VKResponse?) {
                 super.onComplete(response)
 
                 if (response == null) {
-                    callbackFail(PlatformType.VK)
+                    throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
                 } else {
                     parseResponse(response, token)
                 }
@@ -62,17 +64,15 @@ class VKLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity
 
             override fun onError(error: VKError?) {
                 super.onError(error)
-                callbackFail(PlatformType.VK)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, Exception(error?.errorMessage
+                        ?: ""))
             }
         })
     }
 
     private fun parseResponse(response: VKResponse, token: VKAccessToken?) {
         val jsonObject = response.json
-        if (jsonObject == null) {
-            callbackFail(PlatformType.VK)
-            return
-        }
+                ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
         val myObject = jsonObject.getJSONArray("response").getJSONObject(0)
         val id = myObject.getJSONString("id")

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.linecorp.linesdk.LineApiResponseCode
@@ -38,10 +39,7 @@ class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activi
             LineApiResponseCode.SUCCESS -> {
                 val accessToken = result.lineCredential?.accessToken?.accessToken
                 val lineProfile = result.lineProfile
-                if (lineProfile == null) {
-                    callbackFail(PlatformType.LINE)
-                    return
-                }
+                        ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
                 val item = LoginResultItem().apply {
                     this.platform = PlatformType.LINE
@@ -54,7 +52,7 @@ class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activi
                 callbackItem(item)
             }
 
-            else -> callbackFail(PlatformType.LINE)
+            else -> throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, Exception(result.errorData.message))
         }
     }
 

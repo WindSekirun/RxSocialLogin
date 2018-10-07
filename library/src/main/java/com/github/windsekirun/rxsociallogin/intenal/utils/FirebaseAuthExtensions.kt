@@ -1,6 +1,8 @@
 package com.github.windsekirun.rxsociallogin.intenal.utils
 
 import android.app.Activity
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.firebase.auth.AuthCredential
@@ -9,9 +11,7 @@ import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Observable
 
 internal fun handleSignInResult(user: FirebaseUser?, platformType: PlatformType): LoginResultItem {
-    if (user == null) {
-        return LoginResultItem.createFail(platformType)
-    }
+    if (user == null) throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
     return LoginResultItem().apply {
         name = user.displayName ?: ""
@@ -33,7 +33,7 @@ internal fun FirebaseAuth.signInWithCredential(credential: AuthCredential, activ
                         val user = this.currentUser
                         emitter.onNext(handleSignInResult(user, platformType))
                     } else {
-                        emitter.onNext(LoginResultItem.createFail(platformType))
+                        emitter.onError(it.exception!!)
                     }
                 }
     }

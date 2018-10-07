@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.twitter.sdk.android.core.*
@@ -29,7 +30,7 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
             }
 
             override fun failure(exception: TwitterException) {
-                callbackFail(PlatformType.TWITTER)
+                throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
             }
         })
     }
@@ -39,15 +40,10 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
                 .enqueue(object : Callback<User>() {
                     override fun success(result: Result<User>?) {
                         if (result == null) {
-                            callbackFail(PlatformType.TWITTER)
-                            return
+                            throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
                         }
 
-                        val user = result.data
-                        if (user == null) {
-                            callbackFail(PlatformType.TWITTER)
-                            return
-                        }
+                        val user = result.data ?: throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
 
                         val item = LoginResultItem().apply {
                             this.id = user.idStr
@@ -63,7 +59,11 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
                     }
 
                     override fun failure(exception: TwitterException?) {
-                        callbackFail(PlatformType.TWITTER)
+                        if (exception != null) {
+                            throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception)
+                        } else {
+                            throw LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT)
+                        }
                     }
 
                 })
