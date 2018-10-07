@@ -11,119 +11,106 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthConfig
 import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
+import com.github.windsekirun.rxsociallogin.line.LineConfig
+import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
+import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 
-/**
- * RxSocialLogin
- * Class: ConfigDSL
- * Created by Pyxis on 10/7/18.
- *
- * Description:
- */
 fun Application.initSocialLogin(setup: ConfigDSLBuilder.() -> Unit) {
     val builder = ConfigDSLBuilder(this)
     builder.setup()
     builder.build()
 }
 
-interface BuilderFunction {
-    fun invoke(builder: ConfigDSLBuilder)
+fun Application.initSocialLoginJava(setup: ConfigBuilder.() -> Unit) {
+    val builder = ConfigBuilder(this)
+    builder.setup()
+    builder.build()
 }
 
-class ConfigDSLBuilder(val application: Application) {
-    private val typeMap: MutableMap<PlatformType, SocialConfig> = mutableMapOf()
+interface BuilderFunction {
+    fun invoke(builder: ConfigBuilder)
+}
 
-    /**
-     * Initialize DisqusLogin
-     */
+open class BaseConfigDSLBuilder(val application: Application) {
+    internal val typeMap: MutableMap<PlatformType, SocialConfig> = mutableMapOf()
+
+    fun foursquare(clientId: String, clientSecret: String) {
+        typeMap[PlatformType.FOURSQUARE] = FoursquareConfig.apply(clientId, clientSecret)
+    }
+
+    fun line(channelId: String) {
+        typeMap[PlatformType.LINE] = LineConfig.apply(channelId)
+    }
+
+    fun naver(authClientId: String, authClientSecret: String, clientName: String) {
+        typeMap[PlatformType.NAVER] = NaverConfig.apply(authClientId, authClientSecret, clientName)
+    }
+
+    internal fun build() {
+        RxSocialLogin.initializeInternal(application, typeMap)
+    }
+}
+
+class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(application) {
+
     fun disqus(clientId: String, clientSecret: String, redirectUri: String,
                setup: (OAuthConfig.() -> Unit)? = null) {
         typeMap[PlatformType.DISQUS] = OAuthConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 
-    /**
-     * Initialize DisqusLogin
-     * Additional methods for compatibility with Java
-     */
+    fun facebook(applicationId: String, setup: (FacebookConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.FACEBOOK] = FacebookConfig.apply(applicationId, invoke(setup))
+    }
+
+    fun github(clientId: String, clientSecret: String, setup: (GithubConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.GITHUB] = GithubConfig.apply(clientId, clientSecret, invoke(setup))
+    }
+
+    fun google(clientTokenId: String, setup: (GoogleConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, invoke(setup))
+    }
+
+    fun kakao(setup: (KakaoConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.KAKAO] = KakaoConfig.apply(invoke(setup))
+    }
+
+    fun linkedin(clientId: String, clientSecret: String, redirectUri: String,
+                 setup: (LinkedinConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.LINKEDIN] = LinkedinConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+}
+
+class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application) {
+
     @JvmOverloads
     fun disqus(clientId: String, clientSecret: String, redirectUri: String,
                setup: ConfigFunction<OAuthConfig>? = null) {
         typeMap[PlatformType.DISQUS] = OAuthConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
-    /**
-     * Initialize FacebookLogin
-     */
-    fun facebook(applicationId: String, setup: (FacebookConfig.() -> Unit)? = null) {
-        typeMap[PlatformType.FACEBOOK] = FacebookConfig.apply(applicationId, invoke(setup))
-    }
-
-    /**
-     * Initialize FacebookLogin
-     * Additional methods for compatibility with Java
-     */
     @JvmOverloads
     fun facebook(applicationId: String, setup: ConfigFunction<FacebookConfig>? = null) {
         typeMap[PlatformType.FACEBOOK] = FacebookConfig.apply(applicationId, setup)
     }
 
-    /**
-     * Initialize FoursquareLogin
-     */
-    fun foursquare(clientId: String, clientSecret: String) {
-        typeMap[PlatformType.FOURSQUARE] = FoursquareConfig.apply(clientId, clientSecret)
-    }
-
-    /**
-     * Initialize GithubLogin
-     */
-    fun github(clientId: String, clientSecret: String,
-               setup: (GithubConfig.() -> Unit)? = null) {
-        typeMap[PlatformType.GITHUB] = GithubConfig.apply(clientId, clientSecret, invoke(setup))
-    }
-
-    /**
-     * Initialize GithubLogin
-     * Additional methods for compatibility with Java
-     */
     @JvmOverloads
-    fun github(clientId: String, clientSecret: String,
-               setup: ConfigFunction<GithubConfig>? = null) {
+    fun github(clientId: String, clientSecret: String, setup: ConfigFunction<GithubConfig>? = null) {
         typeMap[PlatformType.GITHUB] = GithubConfig.apply(clientId, clientSecret, setup)
     }
 
-    /**
-     * Initialize GoogleLogin
-     */
-    fun google(clientTokenId: String, setup: (GoogleConfig.() -> Unit)? = null) {
-        typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, invoke(setup))
-    }
-
-    /**
-     * Initialize GoogleLogin
-     * Additional methods for compatibility with Java
-     */
     @JvmOverloads
     fun google(clientTokenId: String, setup: ConfigFunction<GoogleConfig>? = null) {
         typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, setup)
     }
 
-    /**
-     * Initialize KakaoLogin
-     */
-    fun kakao(setup: (KakaoConfig.() -> Unit)? = null) {
-        typeMap[PlatformType.KAKAO] = KakaoConfig.apply(invoke(setup))
-    }
-
-    /**
-     * Initialize KakaoLogin
-     * Additional methods for compatibility with Java
-     */
     @JvmOverloads
     fun kakao(setup: ConfigFunction<KakaoConfig>? = null) {
         typeMap[PlatformType.KAKAO] = KakaoConfig.apply(setup)
     }
 
-    internal fun build() {
-        RxSocialLogin.initializeInternal(application, typeMap)
+    @JvmOverloads
+    fun linkedin(clientId: String, clientSecret: String, redirectUri: String,
+                 setup: ConfigFunction<LinkedinConfig>? = null) {
+        typeMap[PlatformType.LINKEDIN] = LinkedinConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 }

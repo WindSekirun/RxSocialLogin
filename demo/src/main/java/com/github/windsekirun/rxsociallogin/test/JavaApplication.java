@@ -21,19 +21,19 @@ public class JavaApplication extends Application {
     public void onCreate() {
         super.onCreate();
         RxSocialLogin.initSocialLogin(this, builder -> {
-            builder.facebook(getString(R.string.facebook_api_key), config -> {
-                config.setRequireEmail(true);
-                config.setRequireFriends(true);
-                config.setBehaviorOnCancel(true);
-                config.setImageEnum(FacebookConfig.FacebookImageEnum.Large);
-            });
-
             builder.disqus(getString(R.string.disqus_api_key),
                     getString(R.string.disqus_api_secret),
                     getString(R.string.disqus_redirect_uri),
                     config -> {
                         config.setActivityTitle("Login to Disqus");
                     });
+
+            builder.facebook(getString(R.string.facebook_api_key), config -> {
+                config.setRequireEmail(true);
+                config.setRequireFriends(true);
+                config.setBehaviorOnCancel(true);
+                config.setImageEnum(FacebookConfig.FacebookImageEnum.Large);
+            });
 
             builder.foursquare(getString(R.string.foursquare_api_key), getString(R.string.foursquare_api_secret));
 
@@ -53,6 +53,20 @@ public class JavaApplication extends Application {
                 config.setRequireEmail(true);
                 config.setRequireGender(true);
             });
+
+            builder.line(getString(R.string.line_api_channel));
+
+            builder.linkedin(getString(R.string.linkedin_api_key),
+                    getString(R.string.linkedin_api_secret),
+                    getString(R.string.linkedin_redirect_uri),
+                    config -> {
+                        config.setRequireEmail(true);
+                        config.setActivityTitle("Login to Linkedin");
+                    });
+
+            builder.naver(getString(R.string.naver_api_id),
+                    getString(R.string.naver_api_secret),
+                    getString(R.string.app_name));
         });
     }
 }

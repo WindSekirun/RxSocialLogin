@@ -57,7 +57,7 @@ object RxSocialLogin {
      */
     @JvmStatic
     fun initSocialLogin(application: Application, callback: BuilderFunction) {
-        application.initSocialLogin {
+        application.initSocialLoginJava {
             callback.invoke(this)
         }
     }

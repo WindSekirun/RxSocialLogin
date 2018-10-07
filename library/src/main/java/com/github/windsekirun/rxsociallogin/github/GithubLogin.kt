@@ -6,15 +6,15 @@ import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.utils.signInWithCredential
-import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
+import com.github.windsekirun.rxsociallogin.intenal.utils.signInWithCredential
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -101,8 +101,8 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     private fun tryLogin() {
         var authUrl = "${OAuthConstants.GITHUB_URL}?client_id=${config.clientId}"
 
-        if (config.scopeList.isNotEmpty()) {
-            val scope = config.scopeList.joinToString(",")
+        if (config.scopeConfig.isNotEmpty()) {
+            val scope = config.scopeConfig.joinToString(",")
             authUrl += scope
         }
 

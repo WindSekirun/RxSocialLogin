@@ -49,6 +49,19 @@ class MainApplication : Application() {
                 requireEmail = true
                 requireGender = true
             }
+
+            line(getString(R.string.line_api_channel))
+
+            linkedin(getString(R.string.linkedin_api_key),
+                    getString(R.string.linkedin_api_secret),
+                    getString(R.string.linkedin_redirect_uri)) {
+                requireEmail = true
+                activityTitle = "Login to LinkedIn"
+            }
+
+            naver(getString(R.string.naver_api_id),
+                    getString(R.string.naver_api_secret),
+                    getString(R.string.app_name))
         }
     }
 }
