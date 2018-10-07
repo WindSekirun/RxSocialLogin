@@ -18,9 +18,10 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
+import java.util.ArrayList
 
 class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
-    private var mSessionCallback: SessionCallback? = null
+    private var sessionCallback: SessionCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         checkSession()
@@ -29,11 +30,11 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
 
     override fun login() {
         checkSession()
-        mSessionCallback = SessionCallback()
+        sessionCallback = SessionCallback()
 
         val session = Session.getCurrentSession()
 
-        session.addCallback(mSessionCallback)
+        session.addCallback(sessionCallback)
         if (!session.checkAndImplicitOpen()) {
             session.open(AuthType.KAKAO_LOGIN_ALL, activity)
         }
@@ -43,8 +44,8 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         super.onDestroy()
         checkSession()
 
-        if (mSessionCallback != null) {
-            Session.getCurrentSession().removeCallback(mSessionCallback)
+        if (sessionCallback != null) {
+            Session.getCurrentSession().removeCallback(sessionCallback)
         }
     }
 
@@ -85,7 +86,17 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
     private fun requestMe() {
         val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
 
-        UserManagement.getInstance().me(config.requestOptions, object : MeV2ResponseCallback() {
+        val requestOptions = ArrayList<String>()
+        requestOptions.add("properties.nickname")
+        requestOptions.add("properties.profile_image")
+        requestOptions.add("properties.thumbnail_image")
+
+        if (config.requireEmail) requestOptions.add("kakao_account.email")
+        if (config.requireAgeRange) requestOptions.add("kakao_account.age_range")
+        if (config.requireBirthday) requestOptions.add("kakao_account.birthday")
+        if (config.requireGender) requestOptions.add("kakao_account.gender")
+
+        UserManagement.getInstance().me(requestOptions, object : MeV2ResponseCallback() {
             override fun onSessionClosed(errorResult: ErrorResult) {
                 callbackFail(PlatformType.KAKAO)
             }

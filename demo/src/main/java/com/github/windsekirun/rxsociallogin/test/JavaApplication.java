@@ -40,9 +40,19 @@ public class JavaApplication extends Application {
             builder.github(getString(R.string.github_api_key),
                     getString(R.string.github_api_secret), config -> {
                         config.setScopeConfig(new ArrayList<>());
+                        config.setActivityTitle("Login to Github");
                     });
 
+            builder.google(getString(R.string.google_api_key), config -> {
+                config.setRequireEmail(true);
+            });
 
+            builder.kakao(config -> {
+                config.setRequireAgeRange(true);
+                config.setRequireBirthday(true);
+                config.setRequireEmail(true);
+                config.setRequireGender(true);
+            });
         });
     }
 }

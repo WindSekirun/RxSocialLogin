@@ -1,26 +1,20 @@
 package com.github.windsekirun.rxsociallogin.google
 
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
+class GoogleConfig : SocialConfig() {
+    var requireEmail: Boolean = false
+    var clientTokenId: String = ""
 
-class GoogleConfig private constructor(val requireEmail: Boolean, val clientTokenId: String) : SocialConfig() {
+    companion object {
+        internal fun apply(clientTokenId: String, setup: ConfigFunction<GoogleConfig>? = null): GoogleConfig {
+            val config = GoogleConfig().apply {
+                this.clientTokenId = clientTokenId
+            }
 
-    class Builder {
-        private var requireEmail = false
-        private var clientTokenId = ""
-
-        fun setRequireEmail(): Builder {
-            requireEmail = true
-            return this
-        }
-
-        fun setClientTokenId(clientTokenId: String): Builder {
-            this.clientTokenId = clientTokenId
-            return this
-        }
-
-        fun build(): GoogleConfig {
-            return GoogleConfig(requireEmail, clientTokenId)
+            setup?.invoke(config)
+            return config
         }
     }
 }

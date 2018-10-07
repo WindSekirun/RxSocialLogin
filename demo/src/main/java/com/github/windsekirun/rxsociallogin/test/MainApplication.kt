@@ -36,6 +36,18 @@ class MainApplication : Application() {
 
             github(getString(R.string.github_api_key), getString(R.string.github_api_secret)) {
                 scopeConfig = arrayListOf()
+                activityTitle = "Login to Github"
+            }
+
+            google(getString(R.string.google_api_key)) {
+                requireEmail = true
+            }
+
+            kakao {
+                requireAgeRange = true
+                requireBirthday = true
+                requireEmail = true
+                requireGender = true
             }
         }
     }

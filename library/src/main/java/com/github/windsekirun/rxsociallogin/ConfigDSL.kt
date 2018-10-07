@@ -4,11 +4,13 @@ import android.app.Application
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareConfig
 import com.github.windsekirun.rxsociallogin.github.GithubConfig
+import com.github.windsekirun.rxsociallogin.google.GoogleConfig
 import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.impl.invoke
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthConfig
+import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 
 /**
  * RxSocialLogin
@@ -87,6 +89,38 @@ class ConfigDSLBuilder(val application: Application) {
     fun github(clientId: String, clientSecret: String,
                setup: ConfigFunction<GithubConfig>? = null) {
         typeMap[PlatformType.GITHUB] = GithubConfig.apply(clientId, clientSecret, setup)
+    }
+
+    /**
+     * Initialize GoogleLogin
+     */
+    fun google(clientTokenId: String, setup: (GoogleConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, invoke(setup))
+    }
+
+    /**
+     * Initialize GoogleLogin
+     * Additional methods for compatibility with Java
+     */
+    @JvmOverloads
+    fun google(clientTokenId: String, setup: ConfigFunction<GoogleConfig>? = null) {
+        typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, setup)
+    }
+
+    /**
+     * Initialize KakaoLogin
+     */
+    fun kakao(setup: (KakaoConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.KAKAO] = KakaoConfig.apply(invoke(setup))
+    }
+
+    /**
+     * Initialize KakaoLogin
+     * Additional methods for compatibility with Java
+     */
+    @JvmOverloads
+    fun kakao(setup: ConfigFunction<KakaoConfig>? = null) {
+        typeMap[PlatformType.KAKAO] = KakaoConfig.apply(setup)
     }
 
     internal fun build() {
