@@ -62,6 +62,19 @@ class MainApplication : Application() {
             naver(getString(R.string.naver_api_id),
                     getString(R.string.naver_api_secret),
                     getString(R.string.app_name))
+
+            twitch(getString(R.string.twitch_api_key),
+                    getString(R.string.twitch_api_secret),
+                    getString(R.string.twitch_redirect_uri)) {
+                requireEmail = true
+                activityTitle = "Login to Twitch"
+            }
+
+            twitter(getString(R.string.twitter_api_id), getString(R.string.twitter_api_secret))
+
+            vk {
+                requireEmail = true
+            }
         }
     }
 }

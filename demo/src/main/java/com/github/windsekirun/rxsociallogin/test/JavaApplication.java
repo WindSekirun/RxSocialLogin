@@ -67,6 +67,20 @@ public class JavaApplication extends Application {
             builder.naver(getString(R.string.naver_api_id),
                     getString(R.string.naver_api_secret),
                     getString(R.string.app_name));
+
+            builder.twitch(getString(R.string.twitch_api_key),
+                    getString(R.string.twitch_api_secret),
+                    getString(R.string.twitch_redirect_uri),
+                    config -> {
+                        config.setRequireEmail(true);
+                        config.setActivityTitle("Login to Twitch");
+                    });
+
+            builder.twitter(getString(R.string.twitter_api_id), getString(R.string.twitter_api_secret));
+
+            builder.vk(config -> {
+                config.setRequireEmail(true);
+            });
         });
     }
 }

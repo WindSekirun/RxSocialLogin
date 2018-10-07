@@ -14,6 +14,9 @@ import com.github.windsekirun.rxsociallogin.kakao.KakaoConfig
 import com.github.windsekirun.rxsociallogin.line.LineConfig
 import com.github.windsekirun.rxsociallogin.linkedin.LinkedinConfig
 import com.github.windsekirun.rxsociallogin.naver.NaverConfig
+import com.github.windsekirun.rxsociallogin.twitch.TwitchConfig
+import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
+import com.github.windsekirun.rxsociallogin.vk.VKConfig
 
 fun Application.initSocialLogin(setup: ConfigDSLBuilder.() -> Unit) {
     val builder = ConfigDSLBuilder(this)
@@ -44,6 +47,10 @@ open class BaseConfigDSLBuilder(val application: Application) {
 
     fun naver(authClientId: String, authClientSecret: String, clientName: String) {
         typeMap[PlatformType.NAVER] = NaverConfig.apply(authClientId, authClientSecret, clientName)
+    }
+
+    fun twitter(consumerKey: String, consumerSecret: String) {
+        typeMap[PlatformType.TWITTER] = TwitterConfig.apply(consumerKey, consumerSecret)
     }
 
     internal fun build() {
@@ -77,6 +84,15 @@ class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(applicat
     fun linkedin(clientId: String, clientSecret: String, redirectUri: String,
                  setup: (LinkedinConfig.() -> Unit)? = null) {
         typeMap[PlatformType.LINKEDIN] = LinkedinConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun twitch(clientId: String, clientSecret: String, redirectUri: String,
+               setup: (TwitchConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.TWITCH] = TwitchConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun vk(setup: (VKConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.VK] = VKConfig.apply(invoke(setup))
     }
 }
 
@@ -112,5 +128,16 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
     fun linkedin(clientId: String, clientSecret: String, redirectUri: String,
                  setup: ConfigFunction<LinkedinConfig>? = null) {
         typeMap[PlatformType.LINKEDIN] = LinkedinConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun twitch(clientId: String, clientSecret: String, redirectUri: String,
+               setup: ConfigFunction<TwitchConfig>? = null) {
+        typeMap[PlatformType.TWITCH] = TwitchConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun vk(setup: ConfigFunction<VKConfig>? = null) {
+        typeMap[PlatformType.VK] = VKConfig.apply(setup)
     }
 }

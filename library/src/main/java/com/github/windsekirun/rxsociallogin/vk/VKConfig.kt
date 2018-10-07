@@ -1,20 +1,16 @@
 package com.github.windsekirun.rxsociallogin.vk
 
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
-class VKConfig(val requireEmail: Boolean) : SocialConfig() {
+class VKConfig() : SocialConfig() {
+    var requireEmail: Boolean = false
 
-    class Builder {
-        private var isRequireEmail = false
-
-        fun setRequireEmail(): Builder {
-            isRequireEmail = true
-            return this
-        }
-
-
-        fun build(): VKConfig {
-            return VKConfig(isRequireEmail)
+    companion object {
+        internal fun apply(setup: ConfigFunction<VKConfig>? = null): VKConfig {
+            val config = VKConfig()
+            setup?.invoke(config)
+            return config
         }
     }
 }
