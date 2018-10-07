@@ -68,47 +68,47 @@ open class BaseConfigDSLBuilder(val application: Application) {
 class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(application) {
 
     fun disqus(clientId: String, clientSecret: String, redirectUri: String,
-               setup: (DisqusConfig.() -> Unit)? = {}) {
+               setup: DisqusConfig.() -> Unit = {}) {
         typeMap[PlatformType.DISQUS] = DisqusConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 
-    fun facebook(applicationId: String, setup: (FacebookConfig.() -> Unit)? = {}) {
+    fun facebook(applicationId: String, setup: FacebookConfig.() -> Unit = {}) {
         typeMap[PlatformType.FACEBOOK] = FacebookConfig.apply(applicationId, invoke(setup))
     }
 
-    fun github(clientId: String, clientSecret: String, setup: (GithubConfig.() -> Unit)? = {}) {
+    fun github(clientId: String, clientSecret: String, setup: GithubConfig.() -> Unit = {}) {
         typeMap[PlatformType.GITHUB] = GithubConfig.apply(clientId, clientSecret, invoke(setup))
     }
 
-    fun google(clientTokenId: String, setup: (GoogleConfig.() -> Unit)? = {}) {
+    fun google(clientTokenId: String, setup: GoogleConfig.() -> Unit = {}) {
         typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, invoke(setup))
     }
 
-    fun kakao(setup: (KakaoConfig.() -> Unit)? = {}) {
+    fun kakao(setup: KakaoConfig.() -> Unit = {}) {
         typeMap[PlatformType.KAKAO] = KakaoConfig.apply(invoke(setup))
     }
 
     fun linkedin(clientId: String, clientSecret: String, redirectUri: String,
-                 setup: (LinkedinConfig.() -> Unit)? = {}) {
+                 setup: LinkedinConfig.() -> Unit = {}) {
         typeMap[PlatformType.LINKEDIN] = LinkedinConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 
     fun twitch(clientId: String, clientSecret: String, redirectUri: String,
-               setup: (TwitchConfig.() -> Unit)? = {}) {
+               setup: TwitchConfig.() -> Unit = {}) {
         typeMap[PlatformType.TWITCH] = TwitchConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 
-    fun vk(setup: (VKConfig.() -> Unit)? = {}) {
+    fun vk(setup: VKConfig.() -> Unit = {}) {
         typeMap[PlatformType.VK] = VKConfig.apply(invoke(setup))
     }
 
     fun wordpress(clientId: String, clientSecret: String, redirectUri: String,
-                  setup: (WordpressConfig.() -> Unit)? = {}) {
+                  setup: WordpressConfig.() -> Unit = {}) {
         typeMap[PlatformType.WORDPRESS] = WordpressConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 
     fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
-              setup: (YahooConfig.() -> Unit)? = {}) {
+              setup: YahooConfig.() -> Unit = {}) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 }
@@ -117,62 +117,60 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
 
     @JvmOverloads
     fun disqus(clientId: String, clientSecret: String, redirectUri: String,
-               setup: ConfigFunction<DisqusConfig>? = EmptyFunction()) {
+               setup: ConfigFunction<DisqusConfig> = EmptyFunction()) {
         typeMap[PlatformType.DISQUS] = DisqusConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     @JvmOverloads
-    fun facebook(applicationId: String, setup: ConfigFunction<FacebookConfig>? = EmptyFunction()) {
+    fun facebook(applicationId: String, setup: ConfigFunction<FacebookConfig> = EmptyFunction()) {
         typeMap[PlatformType.FACEBOOK] = FacebookConfig.apply(applicationId, setup)
     }
 
     @JvmOverloads
-    fun github(clientId: String, clientSecret: String, setup: ConfigFunction<GithubConfig>? = EmptyFunction()) {
+    fun github(clientId: String, clientSecret: String, setup: ConfigFunction<GithubConfig> = EmptyFunction()) {
         typeMap[PlatformType.GITHUB] = GithubConfig.apply(clientId, clientSecret, setup)
     }
 
     @JvmOverloads
-    fun google(clientTokenId: String, setup: ConfigFunction<GoogleConfig>? = EmptyFunction()) {
+    fun google(clientTokenId: String, setup: ConfigFunction<GoogleConfig> = EmptyFunction()) {
         typeMap[PlatformType.GOOGLE] = GoogleConfig.apply(clientTokenId, setup)
     }
 
     @JvmOverloads
-    fun kakao(setup: ConfigFunction<KakaoConfig>? = EmptyFunction()) {
+    fun kakao(setup: ConfigFunction<KakaoConfig> = EmptyFunction()) {
         typeMap[PlatformType.KAKAO] = KakaoConfig.apply(setup)
     }
 
     @JvmOverloads
     fun linkedin(clientId: String, clientSecret: String, redirectUri: String,
-                 setup: ConfigFunction<LinkedinConfig>? = EmptyFunction()) {
+                 setup: ConfigFunction<LinkedinConfig> = EmptyFunction()) {
         typeMap[PlatformType.LINKEDIN] = LinkedinConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     @JvmOverloads
     fun twitch(clientId: String, clientSecret: String, redirectUri: String,
-               setup: ConfigFunction<TwitchConfig>? = EmptyFunction()) {
+               setup: ConfigFunction<TwitchConfig> = EmptyFunction()) {
         typeMap[PlatformType.TWITCH] = TwitchConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     @JvmOverloads
-    fun vk(setup: ConfigFunction<VKConfig>? = EmptyFunction()) {
+    fun vk(setup: ConfigFunction<VKConfig> = EmptyFunction()) {
         typeMap[PlatformType.VK] = VKConfig.apply(setup)
     }
 
     @JvmOverloads
     fun wordpress(clientId: String, clientSecret: String, redirectUri: String,
-                  setup: ConfigFunction<WordpressConfig>? = EmptyFunction()) {
+                  setup: ConfigFunction<WordpressConfig> = EmptyFunction()) {
         typeMap[PlatformType.WORDPRESS] = WordpressConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     @JvmOverloads
     fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
-              setup: ConfigFunction<YahooConfig>? = EmptyFunction()) {
+              setup: ConfigFunction<YahooConfig> = EmptyFunction()) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     internal class EmptyFunction<T>: ConfigFunction<T> {
-        override fun invoke(config: T) {
-
-        }
+        override fun invoke(config: T) {}
     }
 }
