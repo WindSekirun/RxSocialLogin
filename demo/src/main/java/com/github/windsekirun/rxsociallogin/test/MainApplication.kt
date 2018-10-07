@@ -75,6 +75,20 @@ class MainApplication : Application() {
             vk {
                 requireEmail = true
             }
+
+            windows(getString(R.string.windows_api_key))
+
+            wordpress(getString(R.string.wordpress_api_key),
+                    getString(R.string.wordpress_api_secret),
+                    getString(R.string.wordpress_redirect_uri)) {
+                activityTitle = "Login to Wordpress"
+            }
+
+            yahoo(getString(R.string.yahoo_api_key),
+                    getString(R.string.yahoo_api_secret),
+                    getString(R.string.yahoo_redirect_uri)) {
+                activityTitle = "Login to Yahoo"
+            }
         }
     }
 }

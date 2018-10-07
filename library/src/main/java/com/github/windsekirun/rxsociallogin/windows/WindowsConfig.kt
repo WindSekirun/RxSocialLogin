@@ -1,19 +1,19 @@
 package com.github.windsekirun.rxsociallogin.windows
 
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
-class WindowsConfig(val clientId: String) : SocialConfig() {
+class WindowsConfig : SocialConfig() {
+    var clientId: String = ""
 
-    class Builder {
-        private var clientId: String = ""
+    companion object {
+        internal fun apply(clientId: String, setup: ConfigFunction<WindowsConfig>? = null): WindowsConfig {
+            val config = WindowsConfig().apply {
+                this.clientId = clientId
+            }
 
-        fun setClientId(clientId: String): Builder {
-            this.clientId = clientId
-            return this
-        }
-
-        fun build(): WindowsConfig {
-            return WindowsConfig(clientId)
+            setup?.invoke(config)
+            return config
         }
     }
 }

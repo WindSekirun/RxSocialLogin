@@ -24,9 +24,7 @@ public class JavaApplication extends Application {
             builder.disqus(getString(R.string.disqus_api_key),
                     getString(R.string.disqus_api_secret),
                     getString(R.string.disqus_redirect_uri),
-                    config -> {
-                        config.setActivityTitle("Login to Disqus");
-                    });
+                    config -> config.setActivityTitle("Login to Disqus"));
 
             builder.facebook(getString(R.string.facebook_api_key), config -> {
                 config.setRequireEmail(true);
@@ -43,9 +41,7 @@ public class JavaApplication extends Application {
                         config.setActivityTitle("Login to Github");
                     });
 
-            builder.google(getString(R.string.google_api_key), config -> {
-                config.setRequireEmail(true);
-            });
+            builder.google(getString(R.string.google_api_key), config -> config.setRequireEmail(true));
 
             builder.kakao(config -> {
                 config.setRequireAgeRange(true);
@@ -78,9 +74,19 @@ public class JavaApplication extends Application {
 
             builder.twitter(getString(R.string.twitter_api_id), getString(R.string.twitter_api_secret));
 
-            builder.vk(config -> {
-                config.setRequireEmail(true);
-            });
+            builder.vk(config -> config.setRequireEmail(true));
+
+            builder.windows(getString(R.string.windows_api_key));
+
+            builder.wordpress(getString(R.string.wordpress_api_key),
+                    getString(R.string.wordpress_api_secret),
+                    getString(R.string.wordpress_redirect_uri),
+                    config -> config.setActivityTitle("Login to Wordpress"));
+
+            builder.yahoo(getString(R.string.yahoo_api_key),
+                    getString(R.string.yahoo_api_secret),
+                    getString(R.string.yahoo_redirect_uri),
+                    config -> config.setActivityTitle("Login to Yahoo"));
         });
     }
 }

@@ -3,4 +3,6 @@
     <string name="disqus_redirect_uri">http://www.example.com/oauth_redirect</string>
     <string name="linkedin_redirect_uri">http://example.com/oauth/callback</string>
     <string name="twitch_redirect_uri">http://example.com/oauth/callback</string>
+    <string name="wordpress_redirect_uri">http://example.com/oauth/callback</string>
+    <string name="yahoo_redirect_uri">http://example.com</string>
 </resources>

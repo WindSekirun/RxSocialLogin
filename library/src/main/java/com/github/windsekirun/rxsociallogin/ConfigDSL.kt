@@ -17,6 +17,7 @@ import com.github.windsekirun.rxsociallogin.naver.NaverConfig
 import com.github.windsekirun.rxsociallogin.twitch.TwitchConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.github.windsekirun.rxsociallogin.vk.VKConfig
+import com.github.windsekirun.rxsociallogin.windows.WindowsConfig
 
 fun Application.initSocialLogin(setup: ConfigDSLBuilder.() -> Unit) {
     val builder = ConfigDSLBuilder(this)
@@ -51,6 +52,10 @@ open class BaseConfigDSLBuilder(val application: Application) {
 
     fun twitter(consumerKey: String, consumerSecret: String) {
         typeMap[PlatformType.TWITTER] = TwitterConfig.apply(consumerKey, consumerSecret)
+    }
+
+    fun windows(clientId: String) {
+        typeMap[PlatformType.WINDOWS] = WindowsConfig.apply(clientId)
     }
 
     internal fun build() {
@@ -93,6 +98,16 @@ class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(applicat
 
     fun vk(setup: (VKConfig.() -> Unit)? = null) {
         typeMap[PlatformType.VK] = VKConfig.apply(invoke(setup))
+    }
+
+    fun wordpress(clientId: String, clientSecret: String, redirectUri: String,
+                  setup: (OAuthConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.WORDPRESS] = OAuthConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
+                  setup: (OAuthConfig.() -> Unit)? = null) {
+        typeMap[PlatformType.YAHOO] = OAuthConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 }
 
@@ -139,5 +154,17 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
     @JvmOverloads
     fun vk(setup: ConfigFunction<VKConfig>? = null) {
         typeMap[PlatformType.VK] = VKConfig.apply(setup)
+    }
+
+    @JvmOverloads
+    fun wordpress(clientId: String, clientSecret: String, redirectUri: String,
+                  setup: ConfigFunction<OAuthConfig>? = null) {
+        typeMap[PlatformType.WORDPRESS] = OAuthConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
+                  setup: ConfigFunction<OAuthConfig>? = null) {
+        typeMap[PlatformType.YAHOO] = OAuthConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 }
