@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RxSocialLoginTest</string>
+    <string name="disqus_redirect_uri">http://www.example.com/oauth_redirect</string>
 </resources>

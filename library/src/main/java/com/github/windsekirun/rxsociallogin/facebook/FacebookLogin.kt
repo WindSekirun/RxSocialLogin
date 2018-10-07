@@ -25,8 +25,10 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
 
     override fun login() {
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
+        if (config.requireEmail) config.requestOptions.add("email")
+        if (config.requireFriends) config.requestOptions.add("user_friends")
 
-        if (config.isRequireWritePermissions) {
+        if (config.requireWritePermissions) {
             LoginManager.getInstance().logInWithPublishPermissions(activity!!, config.requestOptions)
         } else {
             LoginManager.getInstance().logInWithReadPermissions(activity!!, config.requestOptions)
@@ -38,7 +40,7 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
             }
 
             override fun onCancel() {
-                if (config.isBehaviorOnCancel) {
+                if (config.behaviorOnCancel) {
                     getUserInfo()
                 } else {
                     callbackFail(PlatformType.FACEBOOK)

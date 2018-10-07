@@ -1,3 +1,6 @@
+@file:JvmName("RxSocialLogin")
+@file:JvmMultifileClass
+
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
@@ -27,6 +30,7 @@ import com.github.windsekirun.rxsociallogin.naver.NaverLogin
 import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
 import com.github.windsekirun.rxsociallogin.twitter.TwitterConfig
 import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
+import com.github.windsekirun.rxsociallogin.twitter.TwitterSDKConfig
 import com.github.windsekirun.rxsociallogin.vk.VKLogin
 import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
 import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
@@ -41,13 +45,22 @@ import io.reactivex.Observable
 import java.util.*
 
 object RxSocialLogin {
-    private var availableTypeMap: MutableMap<PlatformType, SocialConfig> = HashMap()
-    private var application: Application? by weak(null)
-    private val alreadyInitializedList = ArrayList<PlatformType>()
+    private var configMap: MutableMap<PlatformType, SocialConfig> = HashMap()
     private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin> = WeakHashMap()
+    private var application: Application? by weak(null)
 
-    private const val NOT_HAVE_APPLICATION = "Context object is missing."
     private const val NOT_HAVE_CONFIG = "Config object is missing."
+
+    /**
+     * Initialize 'RxSocialLogin' in Java.
+     * In Kotlin, use [Application.initSocialLogin] instead.
+     */
+    @JvmStatic
+    fun initSocialLogin(application: Application, callback: BuilderFunction) {
+        application.initSocialLogin {
+            callback.invoke(this)
+        }
+    }
 
     /**
      * Initialize 'Social module object' in once by Configs on Application class
@@ -56,7 +69,7 @@ object RxSocialLogin {
      */
     @JvmStatic
     fun initialize(fragmentActivity: FragmentActivity) {
-        val map = availableTypeMap.map {
+        val map = configMap.map {
             it.key to when (it.key) {
                 KAKAO -> KakaoLogin(fragmentActivity)
                 GOOGLE -> GoogleLogin(fragmentActivity)
@@ -135,56 +148,27 @@ object RxSocialLogin {
         moduleMap.putAll(newMap)
     }
 
-    /**
-     * Initialize RxSocialLogin
-     * @param application Application
-     */
-    @JvmStatic
-    fun init(application: Application) {
+    internal fun initializeInternal(application: Application, map: Map<PlatformType, SocialConfig>) {
         this.application = application
-        clear()
-    }
-
-    /**
-     * add SocialConfig to use
-     *
-     * @param platformType   [PlatformType] object
-     * @param socialConfig [SocialConfig] object
-     */
-    @JvmStatic
-    fun addType(platformType: PlatformType, socialConfig: SocialConfig) {
-        if (application == null) {
-            throw LoginFailedException(NOT_HAVE_APPLICATION)
-        }
-
-        availableTypeMap[platformType] = socialConfig
-        initPlatform()
-    }
-
-    internal fun getPlatformConfig(type: PlatformType): SocialConfig {
-        if (!availableTypeMap.containsKey(type)) {
-            throw LoginFailedException(String.format("No config is available :: Platform -> ${type.name}"))
-        }
-
-        return availableTypeMap[type]!!
-    }
-
-    private fun initPlatform() {
-        for ((key, value) in availableTypeMap) {
-            if (alreadyInitializedList.contains(key)) {
-                continue
-            }
-
-            alreadyInitializedList.add(key)
-            when (key) {
+        configMap.putAll(map)
+        configMap.forEach {
+            when (it.key) {
                 KAKAO -> initKakao()
-                TWITTER -> initTwitter(value as TwitterConfig)
-                FACEBOOK -> initFacebook(value as FacebookConfig)
+                TWITTER -> initTwitter(it.value as TwitterConfig)
+                FACEBOOK -> initFacebook(it.value as FacebookConfig)
                 VK -> initVK()
                 else -> {
                 }
             }
         }
+    }
+
+    internal fun getPlatformConfig(type: PlatformType): SocialConfig {
+        if (!configMap.containsKey(type)) {
+            throw LoginFailedException(String.format("No config is available :: Platform -> ${type.name}"))
+        }
+
+        return configMap[type]!!
     }
 
     private fun initKakao() {
@@ -196,7 +180,7 @@ object RxSocialLogin {
     }
 
     private fun initTwitter(config: TwitterConfig) {
-        val twitterConfig = com.twitter.sdk.android.core.TwitterConfig.Builder(application!!)
+        val twitterConfig = TwitterSDKConfig(application!!)
                 .twitterAuthConfig(TwitterAuthConfig(config.consumerKey, config.consumerSecret))
                 .build()
 
@@ -214,11 +198,6 @@ object RxSocialLogin {
 
         vkAccessTokenTracker.startTracking()
         VKSdk.initialize(application)
-    }
-
-    private fun clear() {
-        availableTypeMap.clear()
-        alreadyInitializedList.clear()
     }
 
     @CheckResult

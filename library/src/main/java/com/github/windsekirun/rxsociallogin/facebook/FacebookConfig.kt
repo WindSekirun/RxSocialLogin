@@ -1,67 +1,34 @@
 package com.github.windsekirun.rxsociallogin.facebook
 
-import android.text.TextUtils
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import java.util.*
 
-class FacebookConfig(var requestOptions: ArrayList<String>?, var isRequireWritePermissions: Boolean,
-                     val isBehaviorOnCancel: Boolean, var applicationId: String?) : SocialConfig() {
-    val imageEnum = FacebookImageEnum.Large
+class FacebookConfig : SocialConfig() {
+    var imageEnum = FacebookImageEnum.Large
+    var requestOptions: ArrayList<String> = arrayListOf()
+    var requireWritePermissions: Boolean = false
+    var behaviorOnCancel: Boolean = false
+    var applicationId: String? = ""
+    var requireEmail: Boolean = false
+    var requireFriends: Boolean = false
 
-    class Builder {
-        private var isRequireEmail = false
-        private var isRequireFriends = false
-        private var requireWritePermissions = false
-        private var behaviorOnCancel = false
-        private var applicationId: String? = null
-        private var imageEnum = FacebookImageEnum.Large
+    enum class FacebookImageEnum(val fieldName: String) {
+        Small("picture.type(small)"),
+        Normal("picture.type(normal)"),
+        Album("picture.type(album)"),
+        Large("picture.type(large)"),
+        Square("picture.type(square)")
+    }
 
-        fun setRequireEmail(): Builder {
-            isRequireEmail = true
-            return this
-        }
-
-        fun setRequireWritePermission(): Builder {
-            requireWritePermissions = true
-            return this
-        }
-
-        fun setApplicationId(applicationId: String): Builder {
-            this.applicationId = applicationId
-            return this
-        }
-
-        fun setRequireFriends(): Builder {
-            isRequireFriends = true
-            return this
-        }
-
-        fun setBehaviorOnCancel(): Builder {
-            this.behaviorOnCancel = true
-            return this
-        }
-
-        fun setPictureSize(imageEnum: FacebookImageEnum): Builder {
-            this.imageEnum = imageEnum
-            return this
-        }
-
-        fun build(): FacebookConfig {
-            if (TextUtils.isEmpty(applicationId)) {
-                throw IllegalArgumentException("applicationId is empty.")
+    companion object {
+        internal fun apply(applicationId: String, setup: ConfigFunction<FacebookConfig>? = null): FacebookConfig {
+            val config = FacebookConfig().apply {
+                this.applicationId = applicationId
             }
 
-            val requestOptions = ArrayList<String>()
-            if (isRequireEmail) {
-                requestOptions.add("email")
-            }
-
-            if (isRequireFriends) {
-                requestOptions.add("user_friends")
-            }
-
-            requestOptions.add("public_profile")
-            return FacebookConfig(requestOptions, requireWritePermissions, behaviorOnCancel, applicationId)
+            setup?.invoke(config)
+            return config
         }
     }
 }

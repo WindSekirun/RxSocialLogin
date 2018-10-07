@@ -1,43 +1,22 @@
 package com.github.windsekirun.rxsociallogin.github
 
-import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
+import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthConfig
 
-class GithubConfig(val clientId: String, val clientSecret: String, val scopeList: ArrayList<String>,
-                  val activityTitle: String) : SocialConfig() {
+class GithubConfig : OAuthConfig() {
+    var scopeConfig: ArrayList<String> = arrayListOf()
 
-    class Builder {
-        private var clientId: String = ""
-        private var clientSecret: String = ""
-        private var scopeList: ArrayList<String> = arrayListOf()
-        private var activityTitle: String = "Login to Github"
+    companion object {
+        internal fun apply(clientId: String, clientSecret: String,
+                           setup: ConfigFunction<GithubConfig>? = null): GithubConfig {
+            val config = GithubConfig().apply {
+                this.clientId = clientId
+                this.clientSecret = clientSecret
+            }
 
-        fun setClientId(clientId: String): Builder {
-            this.clientId = clientId
-            return this
-        }
+            setup?.invoke(config)
 
-        fun setClientSecret(clientSecret: String): Builder {
-            this.clientSecret = clientSecret
-            return this
-        }
-
-        fun addScope(vararg items: String): Builder {
-            this.scopeList.addAll(items.toList())
-            return this
-        }
-
-        fun setScopeList(scopeList: ArrayList<String>): Builder {
-            this.scopeList = scopeList
-            return this
-        }
-
-        fun setActivityTitle(activityTitle: String): Builder {
-            this.activityTitle = activityTitle
-            return this
-        }
-
-        fun build(): GithubConfig {
-            return GithubConfig(clientId, clientSecret, scopeList, activityTitle)
+            return config
         }
     }
 }
