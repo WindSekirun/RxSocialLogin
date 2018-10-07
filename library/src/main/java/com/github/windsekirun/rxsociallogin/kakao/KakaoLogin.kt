@@ -3,7 +3,9 @@ package com.github.windsekirun.rxsociallogin.kakao
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import android.util.Log
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.kakao.auth.AuthType
@@ -17,7 +19,7 @@ import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 
-class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private var mSessionCallback: SessionCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -26,7 +28,6 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     }
 
     override fun login() {
-        addWeakMap(PlatformType.KAKAO, this)
         checkSession()
         mSessionCallback = SessionCallback()
 

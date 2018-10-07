@@ -5,25 +5,28 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
-import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
+import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class TwitchLogin constructor (activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: TwitchConfig by lazy { getPlatformConfig(PlatformType.TWITCH) as TwitchConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.TWITCH_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
+            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.TWITCH_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
             callbackFail(PlatformType.TWITCH)
@@ -31,9 +34,26 @@ class TwitchLogin @JvmOverloads constructor (activity: FragmentActivity? = null)
     }
 
     override fun login() {
-        addWeakMap(PlatformType.TWITCH, this)
-        val intent = Intent(activity, TwitchOAuthActivity::class.java)
-        activity?.startActivityForResult(intent, OAuthConstants.TWITCH_REQUEST_CODE)
+        val state = randomString(22)
+
+        var authUrl = "${OAuthConstants.TWITCH_URL}?client_id=${config.clientId}&" +
+                "response_type=code&redirect_uri=${config.redirectUri}&state=$state&scope=user:edit"
+
+        if (config.requireEmail) {
+            authUrl += "+user:read:email"
+        }
+
+        val title = config.activityTitle
+        val oauthUrl = OAuthConstants.TWITCH_OAUTH
+        val parameters = listOf(
+                "redirect_uri" to config.redirectUri,
+                "client_id" to config.clientId,
+                "client_secret" to config.clientSecret,
+                "grant_type" to "authorization_code")
+        val map = hashMapOf(*parameters.toTypedArray())
+
+        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.TWITCH_REQUEST_CODE,
+                PlatformType.TWITCH, authUrl, title, oauthUrl, map)
     }
 
     override fun logout(clearToken: Boolean) {

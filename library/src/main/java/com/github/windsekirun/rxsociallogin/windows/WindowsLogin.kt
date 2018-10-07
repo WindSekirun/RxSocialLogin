@@ -3,7 +3,9 @@ package com.github.windsekirun.rxsociallogin.windows
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -17,7 +19,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
-class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: WindowsConfig by lazy { getPlatformConfig(PlatformType.WINDOWS) as WindowsConfig }
     private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity!!.applicationContext, config.clientId) }
 
@@ -28,7 +30,6 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
     }
 
     override fun login() {
-        addWeakMap(PlatformType.WINDOWS, this)
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {

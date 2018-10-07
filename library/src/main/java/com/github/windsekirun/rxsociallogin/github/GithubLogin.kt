@@ -5,14 +5,16 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
-import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
-import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
+import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GithubAuthProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,13 +22,13 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val auth = FirebaseAuth.getInstance()
     private val config: GithubConfig by lazy { getPlatformConfig(PlatformType.GITHUB) as GithubConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.GITHUB_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
+            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.GITHUB_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
             callbackFail(PlatformType.GITHUB)
@@ -34,14 +36,11 @@ class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     }
 
     override fun login() {
-        addWeakMap(PlatformType.GITHUB, this)
-
         val accessToken = AccessTokenProvider.githubAccessToken
         if (accessToken.isNotEmpty()) {
             checkAccessTokenAvailable(accessToken)
         } else {
-            val intent = Intent(activity, GithubOAuthActivity::class.java)
-            activity?.startActivityForResult(intent, OAuthConstants.GITHUB_REQUEST_CODE)
+            tryLogin()
         }
     }
 
@@ -92,12 +91,29 @@ class GithubLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
                     if (error == null && result.component1() != null) {
                         getUserInfo(accessToken)
                     } else {
-                        val intent = Intent(activity, GithubOAuthActivity::class.java)
-                        activity?.startActivityForResult(intent, OAuthConstants.GITHUB_REQUEST_CODE)
+                        tryLogin()
                     }
                 }
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun tryLogin() {
+        var authUrl = "${OAuthConstants.GITHUB_URL}?client_id=${config.clientId}"
+
+        if (config.scopeList.isNotEmpty()) {
+            val scope = config.scopeList.joinToString(",")
+            authUrl += scope
+        }
+
+        val title = config.activityTitle
+        val oauthUrl = OAuthConstants.GITHUB_OAUTH
+        val parameters = listOf("client_id" to config.clientId,
+                "client_secret" to config.clientSecret)
+        val map = hashMapOf(*parameters.toTypedArray())
+
+        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.GITHUB_REQUEST_CODE, PlatformType.GITHUB,
+                authUrl, title, oauthUrl, map)
     }
 
     private fun getUserInfo(accessToken: String) {

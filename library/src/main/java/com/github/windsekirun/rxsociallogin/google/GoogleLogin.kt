@@ -2,7 +2,9 @@ package com.github.windsekirun.rxsociallogin.google
 
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.android.gms.auth.api.Auth
@@ -14,7 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val googleApiClient: GoogleApiClient by lazy {
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(config.clientTokenId)
@@ -47,7 +49,6 @@ class GoogleLogin @JvmOverloads constructor(activity: FragmentActivity? = null) 
     }
 
     override fun login() {
-        addWeakMap(PlatformType.GOOGLE, this)
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
         activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
