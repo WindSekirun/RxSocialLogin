@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.intenal.fuel
+package com.github.windsekirun.rxsociallogin.intenal.utils
 
 import com.github.kittinunf.fuel.core.Deserializable
 import com.github.kittinunf.fuel.core.FuelError

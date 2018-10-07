@@ -99,6 +99,16 @@ class MainActivity : AppCompatActivity() {
 
         RxSocialLogin.initialize(this)
 
+        RxSocialLogin.result()
+                .subscribe({
+                    txtResult.text = it.toString()
+                    txtResult.setTextColor(Color.BLACK)
+                    txtPlatform.text = it.platform.name
+                }, {
+                    Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
+                    txtResult.text = "Login Failed"
+                    txtResult.setTextColor(Color.RED)
+                }).addTo(compositeDisposable)
     }
 
     override fun onDestroy() {
@@ -112,15 +122,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeEvent() {
-        RxSocialLogin.result()
-                .subscribe({
-                    txtResult.text = it.toString()
-                    txtResult.setTextColor(Color.BLACK)
-                    txtPlatform.text = it.platform.name
-                }, {
-                    Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
-                    txtResult.text = "Login Failed"
-                    txtResult.setTextColor(Color.RED)
-                }).addTo(compositeDisposable)
+
     }
 }

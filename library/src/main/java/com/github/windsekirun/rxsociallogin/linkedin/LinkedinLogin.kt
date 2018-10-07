@@ -9,10 +9,10 @@ import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
+import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

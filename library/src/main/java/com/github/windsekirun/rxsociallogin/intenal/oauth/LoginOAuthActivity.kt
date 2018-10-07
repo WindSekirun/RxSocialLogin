@@ -11,8 +11,9 @@ import android.view.MenuItem
 import android.webkit.WebView
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.R
-import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.utils.getCode
 import com.github.windsekirun.rxsociallogin.intenal.webview.EnhanceWebView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

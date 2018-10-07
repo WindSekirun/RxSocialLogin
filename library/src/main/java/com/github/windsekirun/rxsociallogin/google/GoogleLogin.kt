@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
-import com.github.windsekirun.rxsociallogin.intenal.firebase.signInWithCredential
+import com.github.windsekirun.rxsociallogin.intenal.utils.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
