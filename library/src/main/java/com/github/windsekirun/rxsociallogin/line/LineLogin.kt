@@ -3,20 +3,21 @@ package com.github.windsekirun.rxsociallogin.line
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.linecorp.linesdk.LineApiResponseCode
 import com.linecorp.linesdk.auth.LineLoginApi
 
-class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE) onResultLineLogin(data)
     }
 
     override fun login() {
-        addWeakMap(PlatformType.LINE, this)
         val lineConfig = getPlatformConfig(PlatformType.LINE) as LineConfig
         val loginIntent = LineLoginApi.getLoginIntent(activity as Context,
                 lineConfig.channelId ?: "")

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import android.util.Base64
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
@@ -12,7 +13,7 @@ import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : BaseSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {
@@ -24,7 +25,6 @@ class YahooLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     }
 
     override fun login() {
-        addWeakMap(PlatformType.YAHOO, this)
         val intent = Intent(activity, YahooOAuthActivity::class.java)
         activity?.startActivityForResult(intent, OAuthConstants.YAHOO_REQUEST_CODE)
     }
