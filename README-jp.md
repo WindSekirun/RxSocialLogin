@@ -21,7 +21,7 @@ These instructions are available in their respective languages.
 * 結果の配信方法が'Listener'の代わりに'RxJava'を経由するように変更されました。
 * Javaで書かれた元と比較して、改良されたバージョンはKotlinでのみ書かれています。
 * サポートされている元の6プラットフォームと比較して、改良されたバージョンは15プラットフォームをサポートしています。
-* Provide *Type-Safe builder* with Kotlin DSL
+* Kotlinに作成された*Type-Safe builder*を提供しています。
 * すべてのメソッドとコードが書き直されました。
 * Kotlinで書かれているが、Javaと互換性があるように作成しました。
 
@@ -78,22 +78,20 @@ RxJavaはアクティブなライブラリです。新しい拡張機能を有�
 
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
-#### Migrate from 1.0.0
+#### 1.0.0での移行
 
-1.1.0 has **MASSIVE** breaking changes you should know about that. 
+1.1.0は1.0.0に比べて理解すべき大きな変化があります。以下は、その変化点です。
 
-The following are major changes.
+- JavaのビルダーからDSLビルダーへの移行
+- RxSocialLoginのインスタンスの管理
+- onActivityResultイベント共通化
+- 結果を購読方法を変更する
 
-- Migrate to Java Builder to DSL Builder
-- Initialize in RxSocialLogin as once
-- Call onActivityResult as once
-- Migrate receive result with RxSocialLogin.result()
-
-[Release Notes are here](https://github.com/WindSekirun/RxSocialLogin/pull/26)
+[Release Notesは,ここで見ることができます](https://github.com/WindSekirun/RxSocialLogin/pull/26)
 
 ## 簡単な5ステップの使用方法
 
-First, Initialize the module using `ConfigDSLBuilder`. `ConfigDSLBuilder` allows you to configure settings for each platform. 
+まず、`ConfigDSLBuilder`を使用してモジュールを初期化します。`ConfigDSLBuilder`は、プラットフォームに合わせて設定を構成することができるように提供しています。
 
 ```kotlin
 initSocialLogin {
@@ -105,15 +103,15 @@ initSocialLogin {
 }
 ```
 
-Inside `initSocialLogin` block, you can **use methods which have platform name** such as facebook and google. All parameters except `setup` will necessary information to use SocialLogin feature.
+`initSocialLogin`ブロック内でfacebook、googleのような**プラットフォーム名を持つメソッドを使用することができます。**` setup`パラメータを除いた残りのパラメータは、ソーシャルログイン機能を使用するために必要な情報です。
 
-`setup` parameter is function that **provide generate platform config object**(ex, FacebookConfig) and apply additional options such as `behaviorOnCancel`, `imageEnum`. It can be optional, but not nullable parameters.
+`setup`パラメータは、生成されたConfigオブジェクト（例えば、FacebookConfig）を提供し、` behaviorOnCancel`、`imageEnum`などの追加オプションを提供する関数です。メソッドに提供しなくても、nullに提供することはできません。
 
-Although `ConfigDSLBuilder` is *Kotlin Type-Safe builders*, but **it has compatitable with Java language**. we provide `ConfigFunction` with same feature with original `setup` higher-order function.
+たとえ`ConfigDSLBuilder`が*Kotlin Type-Safe builders*で構成されても、**はまだJava言語との互換性になります。**オリジナルの` setup`高階関数が提供する機能を`ConfigFunction`というインターフェースで提供します。
 
-You can see full examples of `ConfigDSLBuilder` both in [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) and [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java)
+[Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) と [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java) にされた`ConfigDSLBuilder`の完全な例を見ることができています。
 
-Next, Call `RxSocialLogin.initialize(this)` in `onStart` methods. 
+次に、`onStart`メソッドで` RxSocialLogin.initialize（this）`を呼び出します。
 
 ```kotlin
 override fun onStart() {
@@ -122,9 +120,9 @@ override fun onStart() {
 }
 ```
 
-From 1.0.0, `RxSocialLogin` class will manage instance of Login object, so you don't need to care about initialization. 
+1.1.0から`RxSocialLogin`クラスがログインオブジェクトのインスタンスを管理するため、ログインオブジェクトの初期化を気にする必要はありません。
 
-Next, Call `RxSocialLogin.activityResult(requestCode, resultCode, data)` in `onActivityResult` methods.
+次に、`onActivityResult`メソッドで`RxSocialLogin.activityResult（requestCode、resultCode、data）` を呼び出します。
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent ? ) {
@@ -133,7 +131,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent ? 
 }
 ```
 
-Next, Call `RxSocialLogin.result`  where you want the results. Outside of Activity will be fine.
+次に、結果を得ようとするところえ `RxSocialLogin.result`を呼び出します。アクティビティのほかのクラスにも使用が可能です。
 
 ```kotlin
 RxSocialLogin.result()
@@ -144,7 +142,7 @@ RxSocialLogin.result()
     }).addTo(compositeDisposable)
 ```
 
-Final, Call `RxSocialLogin.login(PlatformType.FACEBOOK)` to start SocialLogin feature.
+最後に、`RxSocialLogin.login（PlatformType.FACEBOOK）`を呼び出して、ソーシャルログイン機能を開始します。
 
 ### 使用にについての説明
 
@@ -177,11 +175,11 @@ RxSocialLogin.result()
 
 #### Targeting below of API 21
 
-Currently(1.1.0), **we support API 16 as minSdkVersion**, but `com.microsoft.identify.client:msal` library support API 21 as minSdkVersion.
+現在（1.1.0）、**minSdkVersionにAPI16をサポートしているが**、`` com.microsoft.identify.client：msal``ライブラリがminSdkVersionにAPI26をサポートしています。
 
-According [issue #263 of AzureAD/microsoft-authentication-library-for-android](https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/263), You can override this library to avoid conflicts of minSdkVersion.
+android](https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/263) によると、ライブラリをオーバーライドすることでminSdkVersionの衝突を回避することができます。
 
-Place this statement in AndroidManifest.xml to solve this conflicts. we hope microsoft solve this problem asap.
+競合を解決するために、次のコードをAndroidManifest.xmlに挿入します。
 
 ```xml
 <uses-sdk tools:overrideLibrary="com.microsoft.identity.msal"/>

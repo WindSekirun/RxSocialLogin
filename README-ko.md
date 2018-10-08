@@ -22,7 +22,7 @@ These instructions are available in their respective languages.
 * 결과 전달 방식이 Listener 가 아닌 RxJava 로 통해 전달되는 것으로 변경되었습니다.
 * 원본이 Java 로 작성된 것에 비해, 개선 버전은 Kotlin 으로만 작성되었습니다.
 * 원본이 6개의 플랫폼을 지원했던 반면, 개선판은 15개의 플랫폼을 제공합니다.
-* Provide *Type-Safe builder* with Kotlin DSL
+* Kotlin으로 작성된 *Type-Safe builder* 를 제공합니다.
 * 모든 메서드와 코드를 재작성 하였습니다.
 * Kotlin 으로 작성되었지만 Java 와 호환되도록 고려되었습니다.
 
@@ -65,7 +65,7 @@ allprojects {
 
 ```groovy
 dependencies {
-	implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.1.0'
     
 	// RxJava
 	implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
@@ -79,22 +79,20 @@ RxJava는 활동이 활발한 라이브러리로, 새로운 개선 사항을 적
 
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
-#### Migrate from 1.0.0
+#### 1.0.0에서의 마이그레이션
 
-1.1.0 has **MASSIVE** breaking changes you should know about that. 
+1.1.0은 1.0.0에 비해 숙지해야 될 큰 변화가 있습니다. 다음은 그 변화점입니다.
 
-The following are major changes.
+- 자바 빌더로부터 DSL 빌더로의 마이그레이션
+- RxSocialLogin의 인스턴스 관리
+- onActivityResult 이벤트 공통화
+- 결과 구독 방법 변경
 
-- Migrate to Java Builder to DSL Builder
-- Initialize in RxSocialLogin as once
-- Call onActivityResult as once
-- Migrate receive result with RxSocialLogin.result()
-
-[Release Notes are here](https://github.com/WindSekirun/RxSocialLogin/pull/26)
+[Release Notes 는 여기에서 볼 수 있습니다.](https://github.com/WindSekirun/RxSocialLogin/pull/26)
 
 ## 아주 쉬운 5단계 사용법
 
-First, Initialize the module using `ConfigDSLBuilder`. `ConfigDSLBuilder` allows you to configure settings for each platform. 
+먼저, `ConfigDSLBuilder`를 사용하여 모듈을 초기화합니다. `ConfigDSLBuilder` 는 각 플랫폼에 맞는 설정을 구성할 수 있도록 제공됩니다.
 
 ```kotlin
 initSocialLogin {
@@ -106,15 +104,15 @@ initSocialLogin {
 }
 ```
 
-Inside `initSocialLogin` block, you can **use methods which have platform name** such as facebook and google. All parameters except `setup` will necessary information to use SocialLogin feature.
+`initSocialLogin` 블록 내에서 facebook, google와 같은 **플랫폼 이름을 가진 메서드를 사용할 수 있습니다.** `setup` 파라미터를 제외한 나머지 파라미터는 소셜 로그인 기능을 사용하기 위해 반드시 필요한 정보입니다.
 
-`setup` parameter is function that **provide generate platform config object**(ex, FacebookConfig) and apply additional options such as `behaviorOnCancel`, `imageEnum`. It can be optional, but not nullable parameters.
+`setup` 파라미터는 생성된 Config 객체(예, FacebookConfig) 를 제공하고, `behaviorOnCancel`, `imageEnum` 등의 추가적인 옵션을 제공하는 함수입니다. 메서드에 제공되지 않을 수 있으나 null로 제공할 수는 없습니다.
 
-Although `ConfigDSLBuilder` is *Kotlin Type-Safe builders*, but **it has compatitable with Java language**. we provide `ConfigFunction` with same feature with original `setup` higher-order function.
+비록 `ConfigDSLBuilder` 가 *Kotlin Type-Safe builders* 로 구성되었어도, **여전히 자바 언어와 호환됩니다.** 원래의 `setup` 고차함수가 제공하는 기능을 `ConfigFunction` 이라는 인터페이스로 제공합니다.
 
-You can see full examples of `ConfigDSLBuilder` both in [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) and [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java)
+[Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) 와 [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java) 로 된 `ConfigDSLBuilder` 의 전체 예제를 볼 수 있습니다.
 
-Next, Call `RxSocialLogin.initialize(this)` in `onStart` methods. 
+다음으로, `onStart` 메서드에서 `RxSocialLogin.initialize(this)` 를 호출합니다.
 
 ```kotlin
 override fun onStart() {
@@ -123,9 +121,9 @@ override fun onStart() {
 }
 ```
 
-From 1.0.0, `RxSocialLogin` class will manage instance of Login object, so you don't need to care about initialization. 
+1.1.0부터 `RxSocialLogin` 클래스가 로그인 객체의 인스턴스를 관리하므로 각 로그인 객체의 초기화를 신경쓸 필요는 없습니다.
 
-Next, Call `RxSocialLogin.activityResult(requestCode, resultCode, data)` in `onActivityResult` methods.
+다음으로, `onActivityResult` 메서드에서 ``RxSocialLogin.activityResult(requestCode, resultCode, data)`` 를 호출합니다.
 
 ```kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent ? ) {
@@ -134,7 +132,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent ? 
 }
 ```
 
-Next, Call `RxSocialLogin.result`  where you want the results. Outside of Activity will be fine.
+다음으로, 결과를 얻고자 하는 곳에 ``RxSocialLogin.result`를 호출합니다. 액티비티 외 클래스에도 사용이 가능합니다.
 
 ```kotlin
 RxSocialLogin.result()
@@ -145,7 +143,7 @@ RxSocialLogin.result()
     }).addTo(compositeDisposable)
 ```
 
-Final, Call `RxSocialLogin.login(PlatformType.FACEBOOK)` to start SocialLogin feature.
+마지막으로, `RxSocialLogin.login(PlatformType.FACEBOOK)` 를 호출하여 소셜로그인 기능을 시작합니다.
 
 ### 사용시의 안내사항
 
@@ -180,13 +178,13 @@ RxSocialLogin.result()
 
 이에 대한 자세한 사항은 [Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling) 문서를 참조하시기 바랍니다.
 
-#### Targeting below of API 21
+#### API 21 미만 지원
 
-Currently(1.1.0), **we support API 16 as minSdkVersion**, but `com.microsoft.identify.client:msal` library support API 21 as minSdkVersion.
+현재(1.1.0), **minSdkVersion 으로 API 16을 지원하고 있으나**, ``com.microsoft.identify.client:msal`` 라이브러리가 minSdkVersion 으로 API 26을 지원하고 있습니다.
 
-According [issue #263 of AzureAD/microsoft-authentication-library-for-android](https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/263), You can override this library to avoid conflicts of minSdkVersion.
+[issue #263 of AzureAD/microsoft-authentication-library-for-android](https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/263) 에 따르면, 해당 라이브러리를 오버라이드 하는 것으로 minSdkVersion에 대한 충돌을 회피할 수 있습니다.
 
-Place this statement in AndroidManifest.xml to solve this conflicts. we hope microsoft solve this problem asap.
+충돌을 해결하기 위하여, 아래 코드를 AndroidManifest.xml에 삽입합니다.
 
 ```xml
 <uses-sdk tools:overrideLibrary="com.microsoft.identity.msal"/>

@@ -121,7 +121,7 @@ override fun onStart() {
 }
 ```
 
-From 1.0.0, `RxSocialLogin` class will manage instance of Login object, so you don't need to care about initialization. 
+From 1.1.0, `RxSocialLogin` class will manage instance of Login object, so you don't need to care about initialization. 
 
 Next, Call `RxSocialLogin.activityResult(requestCode, resultCode, data)` in `onActivityResult` methods.
 
