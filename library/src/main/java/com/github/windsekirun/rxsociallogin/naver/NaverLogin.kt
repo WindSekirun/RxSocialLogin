@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginDefine
 import com.nhn.android.naverlogin.OAuthLoginHandler
@@ -17,7 +20,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val requestUrl = "https://openapi.naver.com/v1/nid/me"
     private val authLogin = OAuthLogin.getInstance()
 
@@ -41,8 +44,6 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
         }
     }
 
-    fun toObservable() = RxSocialLogin.naver(this)
-
     @SuppressLint("HandlerLeak")
     private inner class NaverLoginHandler : OAuthLoginHandler() {
 
@@ -65,7 +66,7 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        callbackFail(PlatformType.NAVER)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -75,9 +76,8 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
     private fun parseUserInfo(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseObject = getJSONObject(jsonObject, "response")
-
         if (responseObject == null) {
-            callbackFail(PlatformType.NAVER)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
 
@@ -94,6 +94,6 @@ class NaverLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

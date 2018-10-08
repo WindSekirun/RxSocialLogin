@@ -6,29 +6,11 @@
 
     <application>
 
-        <activity
-            android:name=".github.GithubOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity android:name=".disqus.DisqusOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
-        <activity
-            android:name=".linkedin.LinkedInOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
-        <activity
-            android:name=".wordpress.WordpressOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
-        <activity
-            android:name=".yahoo.YahooOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
-        <activity
-            android:name=".disqus.DisqusOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
-        <activity
-            android:name=".twitch.TwitchOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity android:name=".intenal.oauth.LoginOAuthActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
         <activity
             android:name="com.vk.sdk.VKServiceActivity"

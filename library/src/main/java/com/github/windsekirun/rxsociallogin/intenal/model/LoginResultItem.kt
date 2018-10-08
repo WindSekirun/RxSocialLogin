@@ -1,7 +1,7 @@
 package com.github.windsekirun.rxsociallogin.intenal.model
 
 class LoginResultItem {
-    var platform: PlatformType = PlatformType.NONE
+    lateinit var platform: PlatformType
     var result = false
     var id = ""
     var name = ""

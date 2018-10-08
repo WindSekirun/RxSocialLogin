@@ -1,24 +1,23 @@
 package com.github.windsekirun.rxsociallogin.twitter
 
-import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.models.User
 
-class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val twitterAuthClient = TwitterAuthClient()
     private val twitterApiClient: TwitterApiClient by lazy { TwitterCore.getInstance().apiClient }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         twitterAuthClient.onActivityResult(requestCode, resultCode, data)
     }
-
-    fun toObservable() = RxSocialLogin.twitter(this)
 
     override fun login() {
         twitterAuthClient.authorize(activity, object : Callback<TwitterSession>() {
@@ -27,7 +26,7 @@ class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
             }
 
             override fun failure(exception: TwitterException) {
-                callbackFail(PlatformType.TWITTER)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception))
             }
         })
     }
@@ -37,13 +36,13 @@ class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
                 .enqueue(object : Callback<User>() {
                     override fun success(result: Result<User>?) {
                         if (result == null) {
-                            callbackFail(PlatformType.TWITTER)
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
                             return
                         }
 
                         val user = result.data
                         if (user == null) {
-                            callbackFail(PlatformType.TWITTER)
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
                             return
                         }
 
@@ -57,11 +56,15 @@ class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
                             this.profilePicture = user.profileImageUrl
                         }
 
-                        callbackItem(item)
+                        callbackAsSuccess(item)
                     }
 
                     override fun failure(exception: TwitterException?) {
-                        callbackFail(PlatformType.TWITTER)
+                        if (exception != null) {
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception))
+                        } else {
+                            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                        }
                     }
 
                 })
@@ -74,6 +77,6 @@ class TwitterLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

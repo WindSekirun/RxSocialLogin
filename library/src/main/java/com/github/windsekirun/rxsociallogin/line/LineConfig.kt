@@ -1,19 +1,20 @@
 package com.github.windsekirun.rxsociallogin.line
 
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 
-class LineConfig private constructor(val channelId: String?) : SocialConfig() {
+class LineConfig : SocialConfig() {
+    var channelId: String = ""
 
-    class Builder {
-        private var channelId: String? = null
+    companion object {
+        internal fun apply(channelId: String, setup: ConfigFunction<LineConfig>? = null): LineConfig {
+            val config = LineConfig().apply {
+                this.channelId = channelId
+            }
 
-        fun setChannelId(channelId: String): Builder {
-            this.channelId = channelId
-            return this
+            setup?.invoke(config)
+            return config
         }
 
-        fun build(): LineConfig {
-            return LineConfig(channelId)
-        }
     }
 }

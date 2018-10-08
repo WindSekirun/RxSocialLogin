@@ -4,29 +4,32 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
-import com.github.windsekirun.rxsociallogin.intenal.oauth.BaseOAuthActivity
-import com.github.windsekirun.rxsociallogin.intenal.oauth.clearCookies
+import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
+import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: WordpressConfig by lazy { getPlatformConfig(PlatformType.WORDPRESS) as WordpressConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(BaseOAuthActivity.RESPONSE_JSON) ?: "{}"
+            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackFail(PlatformType.WORDPRESS)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
         }
     }
 
@@ -35,8 +38,7 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
         if (accessToken.isNotEmpty()) {
             checkAccessTokenAvailable(accessToken)
         } else {
-            val intent = Intent(activity, WordpressOAuthActivity::class.java)
-            activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
+            tryLogin()
         }
     }
 
@@ -46,13 +48,11 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
         AccessTokenProvider.wordpressAccessToken = ""
     }
 
-    fun toObservable() = RxSocialLogin.wordpress(this)
-
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
-            callbackFail(PlatformType.WORDPRESS)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
 
@@ -72,12 +72,28 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
                     if (error == null && result.component1() != null) {
                         getUserInfo(accessToken)
                     } else {
-                        val intent = Intent(activity, WordpressOAuthActivity::class.java)
-                        activity?.startActivityForResult(intent, OAuthConstants.WORDPRESS_REQUEST_CODE)
+                        tryLogin()
                     }
                 }
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun tryLogin() {
+        val authUrl = "${OAuthConstants.WORDPRESS_URL}?client_id=${config.clientId}&" +
+                "redirect_uri=${config.redirectUri}&response_type=code"
+
+        val title = config.activityTitle
+        val oauthUrl = OAuthConstants.WORDPRESS_OAUTH
+        val parameters = listOf(
+                "grant_type" to "authorization_code",
+                "redirect_uri" to config.redirectUri,
+                "client_id" to config.clientId,
+                "client_secret" to config.clientSecret)
+        val map = hashMapOf(*parameters.toTypedArray())
+
+        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.WORDPRESS_REQUEST_CODE,
+                PlatformType.WORDPRESS, authUrl, title, oauthUrl, map)
     }
 
     private fun getUserInfo(accessToken: String) {
@@ -91,7 +107,7 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        callbackFail(PlatformType.WORDPRESS)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -100,9 +116,8 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
 
     private fun parseUserInfo(jsonStr: String?) {
         val response = jsonStr?.createJSONObject()
-
         if (response == null) {
-            callbackFail(PlatformType.WORDPRESS)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
 
@@ -123,6 +138,6 @@ class WordpressLogin @JvmOverloads constructor(activity: FragmentActivity? = nul
             this.platform = PlatformType.WORDPRESS
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

@@ -1,44 +1,23 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
-import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
+import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
+import com.github.windsekirun.rxsociallogin.intenal.oauth.OAuthConfig
 
-class LinkedinConfig(val clientId: String, val clientSecret: String, val activityTitle: String,
-                     val redirectUri: String, val requireEmail: Boolean) : SocialConfig() {
+class LinkedinConfig : OAuthConfig() {
+    var requireEmail: Boolean = false
 
-    class Builder {
-        private var clientId: String = ""
-        private var clientSecret: String = ""
-        private var activityTitle: String = "Login to Linkedin"
-        private var redirectUri: String = "http://www.example.com/auth/linkedin"
-        private var isRequireEmail = false
+    companion object {
+        internal fun apply(clientId: String, clientSecret: String, redirectUri: String,
+                           setup: ConfigFunction<LinkedinConfig>? = null): LinkedinConfig {
+            val config = LinkedinConfig().apply {
+                this.clientId = clientId
+                this.clientSecret = clientSecret
+                this.redirectUri = redirectUri
+            }
 
-        fun setRequireEmail(): Builder {
-            isRequireEmail = true
-            return this
-        }
+            setup?.invoke(config)
 
-        fun setClientId(clientId: String): Builder {
-            this.clientId = clientId
-            return this
-        }
-
-        fun setClientSecret(clientSecret: String): Builder {
-            this.clientSecret = clientSecret
-            return this
-        }
-
-        fun setActivityTitle(activityTitle: String): Builder {
-            this.activityTitle = activityTitle
-            return this
-        }
-
-        fun setRedirectUri(redirectUri: String): Builder {
-            this.redirectUri = redirectUri
-            return this
-        }
-
-        fun build(): LinkedinConfig {
-            return LinkedinConfig(clientId, clientSecret, activityTitle, redirectUri, isRequireEmail)
+            return config
         }
     }
 }

@@ -3,13 +3,16 @@ package com.github.windsekirun.rxsociallogin.line
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.linecorp.linesdk.LineApiResponseCode
 import com.linecorp.linesdk.auth.LineLoginApi
 
-class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE) onResultLineLogin(data)
@@ -26,8 +29,6 @@ class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : 
 
     }
 
-    fun toObservable() = RxSocialLogin.line(this)
-
     private fun onResultLineLogin(data: Intent?) {
         val result = LineLoginApi.getLoginResultFromIntent(data)
         when (result.responseCode) {
@@ -35,7 +36,7 @@ class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : 
                 val accessToken = result.lineCredential?.accessToken?.accessToken
                 val lineProfile = result.lineProfile
                 if (lineProfile == null) {
-                    callbackFail(PlatformType.LINE)
+                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
                     return
                 }
 
@@ -48,10 +49,10 @@ class LineLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : 
                     this.profilePicture = lineProfile.pictureUrl?.path ?: ""
                 }
 
-                callbackItem(item)
+                callbackAsSuccess(item)
             }
 
-            else -> callbackFail(PlatformType.LINE)
+            else -> callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, Exception(result.errorData.message)))
         }
     }
 

@@ -2,8 +2,10 @@ package com.github.windsekirun.rxsociallogin.kakao
 
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
-import android.util.Log
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.kakao.auth.AuthType
@@ -16,9 +18,10 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
+import java.util.*
 
-class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
-    private var mSessionCallback: SessionCallback? = null
+class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+    private var sessionCallback: SessionCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         checkSession()
@@ -27,11 +30,11 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
 
     override fun login() {
         checkSession()
-        mSessionCallback = SessionCallback()
+        sessionCallback = SessionCallback()
 
         val session = Session.getCurrentSession()
 
-        session.addCallback(mSessionCallback)
+        session.addCallback(sessionCallback)
         if (!session.checkAndImplicitOpen()) {
             session.open(AuthType.KAKAO_LOGIN_ALL, activity)
         }
@@ -41,8 +44,8 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
         super.onDestroy()
         checkSession()
 
-        if (mSessionCallback != null) {
-            Session.getCurrentSession().removeCallback(mSessionCallback)
+        if (sessionCallback != null) {
+            Session.getCurrentSession().removeCallback(sessionCallback)
         }
     }
 
@@ -53,8 +56,6 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
             Session.getCurrentSession().close()
         }
     }
-
-    fun toObservable() = RxSocialLogin.kakao(this)
 
     private fun checkSession() {
         try {
@@ -71,19 +72,30 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
         }
 
         override fun onSessionOpenFailed(exception: KakaoException?) {
-            val message = exception?.message ?: ""
-            Log.d("SessionCallback", "OpenFailed:: $message")
-
-            callbackFail(PlatformType.KAKAO)
+            if (exception != null) {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception))
+            } else {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            }
         }
     }
 
     private fun requestMe() {
         val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
 
-        UserManagement.getInstance().me(config.requestOptions, object : MeV2ResponseCallback() {
+        val requestOptions = ArrayList<String>()
+        requestOptions.add("properties.nickname")
+        requestOptions.add("properties.profile_image")
+        requestOptions.add("properties.thumbnail_image")
+
+        if (config.requireEmail) requestOptions.add("kakao_account.email")
+        if (config.requireAgeRange) requestOptions.add("kakao_account.age_range")
+        if (config.requireBirthday) requestOptions.add("kakao_account.birthday")
+        if (config.requireGender) requestOptions.add("kakao_account.gender")
+
+        UserManagement.getInstance().me(requestOptions, object : MeV2ResponseCallback() {
             override fun onSessionClosed(errorResult: ErrorResult) {
-                callbackFail(PlatformType.KAKAO)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             }
 
             override fun onSuccess(result: MeV2Response) {
@@ -132,7 +144,7 @@ class KakaoLogin @JvmOverloads constructor(activity: FragmentActivity? = null) :
                     this.platform = PlatformType.KAKAO
                 }
 
-                callbackItem(item)
+                callbackAsSuccess(item)
             }
         })
     }

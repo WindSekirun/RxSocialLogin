@@ -71,9 +71,12 @@ dependencies {
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0' // optional
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1' // optional
-    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1' // optional
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    // optional
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    // optional
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
+    // optional
     // library
     implementation project(path: ':library')
     // google
@@ -91,7 +94,7 @@ dependencies {
         // exclude group: 'com.google.code.gson'
     }
     // foursquare
-    implementation ('com.foursquare:foursquare-android-oauth:1.0.3') {
+    implementation('com.foursquare:foursquare-android-oauth:1.0.3') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support'
         exclude group: 'com.google.android'

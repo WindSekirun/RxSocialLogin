@@ -3,10 +3,13 @@ package com.github.windsekirun.rxsociallogin.windows
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.AuthenticationResult
 import com.microsoft.identity.client.MsalException
@@ -17,7 +20,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
-class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: WindowsConfig by lazy { getPlatformConfig(PlatformType.WINDOWS) as WindowsConfig }
     private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity!!.applicationContext, config.clientId) }
 
@@ -31,18 +34,23 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
         clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {
-                    callbackFail(PlatformType.WINDOWS)
+                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
                     return
                 }
+
                 getUserInfo(authenticationResult)
             }
 
             override fun onCancel() {
-                callbackFail(PlatformType.WINDOWS)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
 
             override fun onError(exception: MsalException?) {
-                callbackFail(PlatformType.WINDOWS)
+                if (exception != null) {
+                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, exception))
+                } else {
+                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                }
             }
         })
     }
@@ -58,11 +66,9 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
         }
     }
 
-    fun toObservable() = RxSocialLogin.windows(this)
-
     private fun getUserInfo(authenticationResult: AuthenticationResult) {
         if (authenticationResult.accessToken == null) {
-            callbackFail(PlatformType.WINDOWS)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
 
@@ -77,7 +83,7 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
                     if (error == null && result.component1() != null) {
                         parseUserInfo(result.component1())
                     } else {
-                        callbackFail(PlatformType.WINDOWS)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -86,9 +92,8 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
 
     private fun parseUserInfo(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
-
         if (jsonObject == null) {
-            callbackFail(PlatformType.WINDOWS)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
 
@@ -100,6 +105,6 @@ class WindowsLogin @JvmOverloads constructor(activity: FragmentActivity? = null)
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 }

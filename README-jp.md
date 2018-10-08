@@ -9,9 +9,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-JP.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 このAndroidライブラリは、[RxJava2](https://github.com/ReactiveX/RxJava)、[Kotlin](http://kotlinlang.org/)、[Firebase 認証](https://firebase.google.com/docs/auth/)を搭載した15プラットフォームのソーシャルログインを提供するライブラリです。
@@ -21,6 +21,7 @@ These instructions are available in their respective languages.
 * 結果の配信方法が'Listener'の代わりに'RxJava'を経由するように変更されました。
 * Javaで書かれた元と比較して、改良されたバージョンはKotlinでのみ書かれています。
 * サポートされている元の6プラットフォームと比較して、改良されたバージョンは15プラットフォームをサポートしています。
+* Kotlinに作成された*Type-Safe builder*を提供しています。
 * すべてのメソッドとコードが書き直されました。
 * Kotlinで書かれているが、Javaと互換性があるように作成しました。
 
@@ -63,7 +64,7 @@ allprojects {
 
 ```groovy
 dependencies {
-	implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.1.0'
     
 	// RxJava
 	implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
@@ -77,77 +78,73 @@ RxJavaはアクティブなライブラリです。新しい拡張機能を有�
 
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
 
+#### 1.0.0での移行
+
+1.1.0は1.0.0に比べて理解すべき大きな変化があります。以下は、その変化点です。
+
+- JavaのビルダーからDSLビルダーへの移行
+- RxSocialLoginのインスタンスの管理
+- onActivityResultイベント共通化
+- 結果を購読方法を変更する
+
+[Release Notesは,ここで見ることができます](https://github.com/WindSekirun/RxSocialLogin/pull/26)
+
 ## 簡単な5ステップの使用方法
-まず、`Application`クラスの`RxSocialLogin.init（this）`でモジュールを初期化し、プラットフォームごとにConfigオブジェクトを宣言します。Configオブジェクトは、プラットフォームを使用するために必要な情報です。プラットフォームの設定情報については、上記の「サポートされているプラットフォーム」セクションのプラットフォームをクリックして、wikiを参照してください。
 
-`RxSocialLogin.init（this）`は一度だけ呼び出される必要があることに注意してください。
-
-```kotlin
-RxSocialLogin.init(this)
-
-val facebookConfig = FacebookConfig.Builder()
-	.setApplicationId(getString(R.string.facebook_api_key))
-	.setRequireEmail()
-	.setBehaviorOnCancel()
-	.build()
-
-RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
-```
-
-次に、グローバル変数として使用するコードで使用する'Platform + Login'という名前のクラスのインスタンスを作成してください。ここでは**ソーシャルモジュール変数**と仮定します。
+まず、`ConfigDSLBuilder`を使用してモジュールを初期化します。`ConfigDSLBuilder`は、プラットフォームに合わせて設定を構成することができるように提供しています。
 
 ```kotlin
-private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
-```
-
-次に、ActivityのonActivityResultで、対応するソーシャルモジュール変数の `onActivityResult`メソッドを呼び出してください。
-
-```kotlin
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-	super.onActivityResult(requestCode, resultCode, data)
-	facebookLogin.onActivityResult(requestCode, resultCode, data)
+initSocialLogin {
+    facebook(getString(R.string.facebook_api_key)) {
+        behaviorOnCancel = true
+        requireWritePermissions = false
+        imageEnum = FacebookConfig.FacebookImageEnum.Large
+    }
 }
 ```
 
-次に、`RxSocialLogin`クラス対応するソーシャルモジュール変数を渡すことによって、`Observable`を得ることができます。
+`initSocialLogin`ブロック内でfacebook、googleのような**プラットフォーム名を持つメソッドを使用することができます。**` setup`パラメータを除いた残りのパラメータは、ソーシャルログイン機能を使用するために必要な情報です。
+
+`setup`パラメータは、生成されたConfigオブジェクト（例えば、FacebookConfig）を提供し、` behaviorOnCancel`、`imageEnum`などの追加オプションを提供する関数です。メソッドに提供しなくても、nullに提供することはできません。
+
+たとえ`ConfigDSLBuilder`が*Kotlin Type-Safe builders*で構成されても、**はまだJava言語との互換性になります。**オリジナルの` setup`高階関数が提供する機能を`ConfigFunction`というインターフェースで提供します。
+
+[Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) と [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java) にされた`ConfigDSLBuilder`の完全な例を見ることができています。
+
+次に、`onStart`メソッドで` RxSocialLogin.initialize（this）`を呼び出します。
 
 ```kotlin
-RxSocialLogin.facebook(facebookLogin)
-	.subscribe(data -> {
-		// TODO: do job with LoginResultItem
-	}, error -> {
-		// TODO: Error on login()
-	});
+override fun onStart() {
+    super.onStart()
+    RxSocialLogin.initialize(this)
+}
 ```
 
-最後に、ソーシャル・ログインを開始する時、ソーシャル・モジュール変数の `login`メソッドを呼び出してソーシャル・ログインを開始します。
+1.1.0から`RxSocialLogin`クラスがログインオブジェクトのインスタンスを管理するため、ログインオブジェクトの初期化を気にする必要はありません。
+
+次に、`onActivityResult`メソッドで`RxSocialLogin.activityResult（requestCode、resultCode、data）` を呼び出します。
 
 ```kotlin
-facebookLogin.login()
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent ? ) {
+    super.onActivityResult(requestCode, resultCode, data)
+    RxSocialLogin.activityResult(requestCode, resultCode, data)
+}
 ```
 
-#### [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) で使う
-自然な使用のために [JakeWharton/RxBinding](https://github.com/JakeWharton/RxBinding) と共に使用することができます。 しかし、我々はこのアプローチが主要な方法ではないことを知っています。
+次に、結果を得ようとするところえ `RxSocialLogin.result`を呼び出します。アクティビティのほかのクラスにも使用が可能です。
 
 ```kotlin
-btnFacebook.clicks()
-	.doOnNext { facebookLogin.login() }
-	.flatMap { facebookLogin.toObservable() }
-	.subscribe(consumer, error)
-	.addTo(compositeDisposable)
+RxSocialLogin.result()
+    .subscribe({ item -> 
+
+    }, { throwable ->
+
+    }).addTo(compositeDisposable)
 ```
+
+最後に、`RxSocialLogin.login（PlatformType.FACEBOOK）`を呼び出して、ソーシャルログイン機能を開始します。
 
 ### 使用にについての説明
-
-#### ソーシャルモジュール変数の問題。
-現在、2つのタイプのコンストラクタがあります。
-
-* FacebookLogin() - デフォルトコンストラクタ
-* FacebookLogin(activity: FragmentActivity) - セカンダリコンストラクタ
-
-セカンダリコンストラクタを使用する場合は、セカンダリコンストラクタで提供される `FragmentActivity`オブジェクトを使用します。 それ以外の場合は、 `FragmentActivity`オブジェクトを使用して内部的にキャッシュします。
-
-しかし、デフォルトコンストラクタとして生成されたときにエラーを投げるモジュールがあるかもしれないので、可能であれば、いつでも `FragmentActivity`オブジェクトをセカンダリコンストラクタに渡す方が良いと思います。
 
 #### Apply to Proguard
 [サンプルアプリケーションのProguardルール](https://github.com/WindSekirun/RxSocialLogin/blob/master/demo/proguard-rules.pro) を参照してください。
@@ -158,7 +155,7 @@ btnFacebook.clicks()
 言い換えれば、以下のケースは処理されず、即座に `LoginFailedException`として扱われます。
 
 ```kotlin
-RxSocialLogin.facebook(facebookLogin)
+RxSocialLogin.result()
 		.subscribeOn(Schedulers.io())
 		.observeOn(AndroidSchedulers.mainThread())
 		...
@@ -175,6 +172,18 @@ RxSocialLogin.facebook(facebookLogin)
 1.0.0以降では、この問題を解決するために `LoginFailedException`が` IllegalStateException`を継承するように変更されました。 したがって、それ以降のバージョンでは発生しません。
 
 詳細については、[Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling)を参照してください。
+
+#### Targeting below of API 21
+
+現在（1.1.0）、**minSdkVersionにAPI16をサポートしているが**、`` com.microsoft.identify.client：msal``ライブラリがminSdkVersionにAPI26をサポートしています。
+
+android](https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/263) によると、ライブラリをオーバーライドすることでminSdkVersionの衝突を回避することができます。
+
+競合を解決するために、次のコードをAndroidManifest.xmlに挿入します。
+
+```xml
+<uses-sdk tools:overrideLibrary="com.microsoft.identity.msal"/>
+```
 
 ## 著者&貢献者
 * 著者: [@WindSekirun](https://github.com/windsekirun), E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)

@@ -4,15 +4,18 @@ import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.foursquare.android.nativeoauth.FoursquareOAuth
 import com.github.kittinunf.fuel.httpGet
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.intenal.fuel.toResultObservable
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
-class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val config: FoursquareConfig by lazy { getPlatformConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -23,14 +26,14 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
                         config.clientSecret, codeResponse.code)
                 activity!!.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
             } else {
-                callbackFail(PlatformType.FOURSQUARE)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
         } else if (requestCode == EXCHANGE_REQUEST_CODE) {
             val tokenResponse = FoursquareOAuth.getTokenFromResult(resultCode, data)
             if (tokenResponse.accessToken != null && !tokenResponse.accessToken.isEmpty()) {
                 getUserInfo(tokenResponse.accessToken)
             } else {
-                callbackFail(PlatformType.FOURSQUARE)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
         }
     }
@@ -40,11 +43,9 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
         if (intent.resolveActivity(activity!!.packageManager) != null) {
             activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
         } else {
-            callbackFail(PlatformType.FOURSQUARE)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FOURSQUARE_INTENT))
         }
     }
-
-    fun toObservable() = RxSocialLogin.foursquare(this)
 
     private fun getUserInfo(token: String) {
         val requestUrl = "https://api.foursquare.com/v2/users/self?oauth_token=$token" +
@@ -59,7 +60,7 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
                     if (error == null && result.component1() != null) {
                         parseUserJson(result.component1())
                     } else {
-                        callbackFail(PlatformType.FOURSQUARE)
+                        callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
                 }
 
@@ -68,22 +69,20 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
 
     private fun parseUserJson(jsonStr: String?) {
         val jsonObject = jsonStr?.createJSONObject()
-
         if (jsonObject == null) {
-            callbackFail(PlatformType.FOURSQUARE)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
 
         val response = jsonObject.getJSONObject("response")
         val user = response?.getJSONObject("user")
-
         if (user == null) {
-            callbackFail(PlatformType.FOURSQUARE)
+            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             return
         }
+
         val photo = user.getJSONObject("photo")
         val contact = user.getJSONObject("contact")
-
         val profilePicture = photo.getJSONString("prefix") +
                 photo.getJSONString("suffix").replace("/", "")
         val email = contact.getJSONString("email")
@@ -101,7 +100,7 @@ class FoursquareLogin @JvmOverloads constructor(activity: FragmentActivity? = nu
             this.result = true
         }
 
-        callbackItem(item)
+        callbackAsSuccess(item)
     }
 
     companion object {

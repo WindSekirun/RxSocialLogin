@@ -1,159 +1,104 @@
 package com.github.windsekirun.rxsociallogin.test
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
-import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
-import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
-import com.github.windsekirun.rxsociallogin.github.GithubLogin
-import com.github.windsekirun.rxsociallogin.google.GoogleLogin
-import com.github.windsekirun.rxsociallogin.kakao.KakaoLogin
-import com.github.windsekirun.rxsociallogin.line.LineLogin
-import com.github.windsekirun.rxsociallogin.linkedin.LinkedinLogin
-import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.naver.NaverLogin
-import com.github.windsekirun.rxsociallogin.twitch.TwitchLogin
-import com.github.windsekirun.rxsociallogin.twitter.TwitterLogin
-import com.github.windsekirun.rxsociallogin.vk.VKLogin
-import com.github.windsekirun.rxsociallogin.windows.WindowsLogin
-import com.github.windsekirun.rxsociallogin.wordpress.WordpressLogin
-import com.github.windsekirun.rxsociallogin.yahoo.YahooLogin
-import com.jakewharton.rxbinding2.view.clicks
+import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
 
 class MainActivity : AppCompatActivity() {
-    private val kakaoLogin: KakaoLogin by lazy { KakaoLogin() }
-    private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
-    private val naverLogin: NaverLogin by lazy { NaverLogin(this) }
-    private val lineLogin: LineLogin by lazy { LineLogin() }
-    private val twitterLogin: TwitterLogin by lazy { TwitterLogin() }
-    private val googleLogin: GoogleLogin by lazy { GoogleLogin() }
-    private val githubLogin: GithubLogin by lazy { GithubLogin() }
-    private val linkedinLogin: LinkedinLogin by lazy { LinkedinLogin() }
-    private val wordpressLogin: WordpressLogin by lazy { WordpressLogin() }
-    private val yahooLogin: YahooLogin by lazy { YahooLogin() }
-    private val vkLogin: VKLogin by lazy { VKLogin() }
-    private val windowsLogin: WindowsLogin by lazy { WindowsLogin() }
-    private val disqusLogin: DisqusLogin by lazy { DisqusLogin() }
-    private val foursquareLogin: FoursquareLogin by lazy { FoursquareLogin() }
-    private val twitchLogin: TwitchLogin by lazy { TwitchLogin() }
     private val compositeDisposable = CompositeDisposable()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
-        val consumer = Consumer<LoginResultItem> {
-            txtResult.text = it.toString()
-            txtResult.setTextColor(Color.BLACK)
-            txtPlatform.text = it.platform.name
+        btnDisqus.setOnClickListener {
+            RxSocialLogin.login(PlatformType.DISQUS)
         }
 
-        val error = Consumer<Throwable> {
-            Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
-            txtResult.text = "Login Failed"
-            txtResult.setTextColor(Color.RED)
+        btnFacebook.setOnClickListener {
+            RxSocialLogin.login(PlatformType.FACEBOOK)
         }
 
-        btnDisqus.clicks()
-                .doOnNext { disqusLogin.login() }
-                .flatMap { disqusLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnFoursquare.setOnClickListener {
+            RxSocialLogin.login(PlatformType.FOURSQUARE)
+        }
 
-        btnFacebook.clicks()
-                .doOnNext { facebookLogin.login() }
-                .flatMap { facebookLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnGithub.setOnClickListener {
+            RxSocialLogin.login(PlatformType.GITHUB)
+        }
 
-        btnFoursquare.clicks()
-                .doOnNext { foursquareLogin.login() }
-                .flatMap { foursquareLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnGoogle.setOnClickListener {
+            RxSocialLogin.login(PlatformType.GOOGLE)
+        }
 
-        btnGithub.clicks()
-                .doOnNext { githubLogin.login() }
-                .flatMap { githubLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnKakao.setOnClickListener {
+            RxSocialLogin.login(PlatformType.KAKAO)
+        }
 
-        btnGoogle.clicks()
-                .doOnNext { googleLogin.login() }
-                .flatMap { googleLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnLine.setOnClickListener {
+            RxSocialLogin.login(PlatformType.LINE)
+        }
 
-        btnKakao.clicks()
-                .doOnNext { kakaoLogin.login() }
-                .flatMap { kakaoLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnLinkedin.setOnClickListener {
+            RxSocialLogin.login(PlatformType.LINKEDIN)
+        }
 
-        btnLine.clicks()
-                .doOnNext { lineLogin.login() }
-                .flatMap { lineLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnNaver.setOnClickListener {
+            RxSocialLogin.login(PlatformType.NAVER)
+        }
 
-        btnLinkedin.clicks()
-                .doOnNext { linkedinLogin.login() }
-                .flatMap { linkedinLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnTwitch.setOnClickListener {
+            RxSocialLogin.login(PlatformType.TWITCH)
+        }
 
-        btnNaver.clicks()
-                .doOnNext { naverLogin.login() }
-                .flatMap { naverLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnTwitter.setOnClickListener {
+            RxSocialLogin.login(PlatformType.TWITTER)
+        }
 
-        btnTwitch.clicks()
-                .doOnNext { twitchLogin.login() }
-                .flatMap { twitchLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnVK.setOnClickListener {
+            RxSocialLogin.login(PlatformType.VK)
+        }
 
-        btnTwitter.clicks()
-                .doOnNext { twitterLogin.login() }
-                .flatMap { twitterLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnWordpress.setOnClickListener {
+            RxSocialLogin.login(PlatformType.WORDPRESS)
+        }
 
-        btnVK.clicks()
-                .doOnNext { vkLogin.login() }
-                .flatMap { vkLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnWindows.setOnClickListener {
+            RxSocialLogin.login(PlatformType.WINDOWS)
+        }
 
-        btnWindows.clicks()
-                .doOnNext { windowsLogin.login() }
-                .flatMap { windowsLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        btnYahoo.setOnClickListener {
+            RxSocialLogin.login(PlatformType.YAHOO)
+        }
 
-        btnWordpress.clicks()
-                .doOnNext { wordpressLogin.login() }
-                .flatMap { wordpressLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+        RxSocialLogin.result()
+                .subscribe({
+                    txtResult.text = it.toString()
+                    txtResult.setTextColor(Color.BLACK)
+                    txtPlatform.text = it.platform.name
+                }, {
+                    Log.d(MainActivity::class.java.simpleName, "onError: ${it.message}")
+                    txtResult.text = "Login Failed - ${it.message}"
+                    txtResult.setTextColor(Color.RED)
+                }).addTo(compositeDisposable)
+    }
 
-        btnYahoo.clicks()
-                .doOnNext { yahooLogin.login() }
-                .flatMap { yahooLogin.toObservable() }
-                .subscribe(consumer, error)
-                .addTo(compositeDisposable)
+    override fun onStart() {
+        super.onStart()
+        RxSocialLogin.initialize(this)
     }
 
     override fun onDestroy() {
@@ -163,20 +108,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        kakaoLogin.onActivityResult(requestCode, resultCode, data)
-        facebookLogin.onActivityResult(requestCode, resultCode, data)
-        naverLogin.onActivityResult(requestCode, resultCode, data)
-        lineLogin.onActivityResult(requestCode, resultCode, data)
-        twitterLogin.onActivityResult(requestCode, resultCode, data)
-        googleLogin.onActivityResult(requestCode, resultCode, data)
-        githubLogin.onActivityResult(requestCode, resultCode, data)
-        linkedinLogin.onActivityResult(requestCode, resultCode, data)
-        wordpressLogin.onActivityResult(requestCode, resultCode, data)
-        yahooLogin.onActivityResult(requestCode, resultCode, data)
-        vkLogin.onActivityResult(requestCode, resultCode, data)
-        windowsLogin.onActivityResult(requestCode, resultCode, data)
-        disqusLogin.onActivityResult(requestCode, resultCode, data)
-        foursquareLogin.onActivityResult(requestCode, resultCode, data)
-        twitchLogin.onActivityResult(requestCode, resultCode, data)
+        RxSocialLogin.activityResult(requestCode, resultCode, data)
     }
 }

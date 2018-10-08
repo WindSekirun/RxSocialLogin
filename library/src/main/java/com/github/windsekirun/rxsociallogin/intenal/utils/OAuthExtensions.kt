@@ -1,4 +1,4 @@
-package com.github.windsekirun.rxsociallogin.intenal.oauth
+package com.github.windsekirun.rxsociallogin.intenal.utils
 
 import android.os.Build
 import android.webkit.CookieManager
@@ -13,8 +13,8 @@ fun clearCookies() {
 }
 
 fun String.getCode(): String {
-    val githubCode = this.substring(this.lastIndexOf("?code") + 1)
-    val tokenCode = githubCode.split("=")
+    val codeParameter = this.substring(this.lastIndexOf("?code") + 1)
+    val tokenCode = codeParameter.split("=")
     val tokenFetchedIds = tokenCode[1]
     val cleanToken = tokenFetchedIds.split("&")
 

@@ -6,13 +6,17 @@ import android.support.v4.app.FragmentActivity
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class FacebookLogin @JvmOverloads constructor (activity: FragmentActivity? = null) : RxSocialLogin(activity) {
+class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private val callbackManager: CallbackManager = CallbackManager.Factory.create()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -23,8 +27,10 @@ class FacebookLogin @JvmOverloads constructor (activity: FragmentActivity? = nul
 
     override fun login() {
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
+        if (config.requireEmail) config.requestOptions.add("email")
+        if (config.requireFriends) config.requestOptions.add("user_friends")
 
-        if (config.isRequireWritePermissions) {
+        if (config.requireWritePermissions) {
             LoginManager.getInstance().logInWithPublishPermissions(activity!!, config.requestOptions)
         } else {
             LoginManager.getInstance().logInWithReadPermissions(activity!!, config.requestOptions)
@@ -36,15 +42,16 @@ class FacebookLogin @JvmOverloads constructor (activity: FragmentActivity? = nul
             }
 
             override fun onCancel() {
-                if (config.isBehaviorOnCancel) {
+                if (config.behaviorOnCancel) {
                     getUserInfo()
                 } else {
-                    callbackFail(PlatformType.FACEBOOK)
+                    callbackAsFail(LoginFailedException("$EXCEPTION_USER_CANCELLED If you prevent this error," +
+                            "set 'behaviorOnCancel` in FacebookConfig object."))
                 }
             }
 
             override fun onError(error: FacebookException) {
-                callbackFail(PlatformType.FACEBOOK)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
             }
         })
     }
@@ -53,14 +60,12 @@ class FacebookLogin @JvmOverloads constructor (activity: FragmentActivity? = nul
         LoginManager.getInstance().logOut()
     }
 
-    fun toObservable() = RxSocialLogin.facebook(this)
-
     private fun getUserInfo() {
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
             if (obj == null) {
-                callbackFail(PlatformType.FACEBOOK)
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
                 return@GraphJSONObjectCallback
             }
 
@@ -78,7 +83,7 @@ class FacebookLogin @JvmOverloads constructor (activity: FragmentActivity? = nul
                 this.result = true
             }
 
-            callbackItem(item)
+            callbackAsSuccess(item)
         }
 
         var originField = "id, name, email, gender, birthday, first_name, "
