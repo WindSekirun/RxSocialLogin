@@ -79,12 +79,16 @@ RxJava is an active library, and you should always keep the latest version for n
 
 #### Migrate from 1.0.0
 
-1.1.0 has **MASSIVE** breaking changes you should know about that. Click on the name of each category.
+1.1.0 has **MASSIVE** breaking changes you should know about that. 
 
-* [Migrate to Java Builder to DSL Builder](), compatitable with Kotlin and Java.
-* [Initialize in RxSocialLogin as once]()
-* [Call onActivityResult as once]()
-* [Migrate receive result]()
+The following are major changes.
+
+* Migrate to Java Builder to DSL Builder
+* Initialize in RxSocialLogin as once
+* Call onActivityResult as once
+* Migrate receive result with RxSocialLogin.result()
+
+[Release Notes are here](https://github.com/WindSekirun/RxSocialLogin/pull/26)
 
 ## Very easy 5-step usage
 
