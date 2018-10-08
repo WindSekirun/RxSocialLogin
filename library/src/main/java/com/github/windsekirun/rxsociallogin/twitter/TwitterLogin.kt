@@ -19,10 +19,6 @@ class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
         twitterAuthClient.onActivityResult(requestCode, resultCode, data)
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.twitter(this)
-
     override fun login() {
         twitterAuthClient.authorize(activity, object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {

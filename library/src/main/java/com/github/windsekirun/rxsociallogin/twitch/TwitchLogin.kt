@@ -7,7 +7,6 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
-import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
@@ -77,10 +76,6 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             compositeDisposable.add(disposable)
         }
     }
-
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.twitch(this)
 
     private fun analyzeResult(jsonStr: String) {
         val accessTokenObject = jsonStr.createJSONObject()

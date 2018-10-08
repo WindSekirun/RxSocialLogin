@@ -48,10 +48,6 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
         AccessTokenProvider.wordpressAccessToken = ""
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.wordpress(this)
-
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""

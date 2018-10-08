@@ -7,7 +7,6 @@ import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
-import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
@@ -66,10 +65,6 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             compositeDisposable.add(disposable)
         }
     }
-
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.github(this)
 
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()

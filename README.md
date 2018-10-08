@@ -21,6 +21,7 @@ This library is an improved version of [@WindSekirun](https://github.com/windsek
 * The result delivery method has been changed to be passed through RxJava instead of the Listener.
 * Compared to the original written in Java, the improved version is written in Kotlin only.
 * Compared to the original supported 6 platforms, the improved version is support 15 platforms.
+* Provide *Type-Safe builder* with Kotlin DSL
 * All methods and code have been rewritten.
 * All code that are written in Kotlin but considered to be Java compatible.
 
@@ -99,7 +100,48 @@ initSocialLogin {
 }
 ```
 
-Inside `initSocialLogin` block, you can use methods which have platform name such as facebook and google. 
+Inside `initSocialLogin` block, you can **use methods which have platform name** such as facebook and google. All parameters except `setup` will necessary information to use SocialLogin feature.
+
+`setup` parameter is function that **provide generate platform config object**(ex, FacebookConfig) and apply additional options such as `behaviorOnCancel`, `imageEnum`. It can be optional, but not nullable parameters.
+
+Although `ConfigDSLBuilder` is *Kotlin Type-Safe builders*, but **it has compatitable with Java language**. we provide `ConfigFunction` with same feature with original `setup` higher-order function.
+
+You can see full examples of `ConfigDSLBuilder` both in [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) and [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java)
+
+Next, Call `RxSocialLogin.initialize(this)` in `onStart` methods. 
+
+```kotlin
+override fun onStart() {
+    super.onStart()
+    RxSocialLogin.initialize(this)
+}
+```
+
+From 1.0.0, `RxSocialLogin` class will manage instance of Login object, so you don't need to care about initialization. 
+
+Next, Call `RxSocialLogin.activityResult(requestCode, resultCode, data)` in `onActivityResult` methods.
+
+```kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent ? ) {
+    super.onActivityResult(requestCode, resultCode, data)
+    RxSocialLogin.activityResult(requestCode, resultCode, data)
+}
+```
+
+Next, Call `RxSocialLogin.result`  where you want the results. Outside of Activity will be fine.
+
+```kotlin
+RxSocialLogin.result()
+    .subscribe({ item -> 
+
+    }, { throwable ->
+
+    }).addTo(compositeDisposable)
+```
+
+Final, Call `RxSocialLogin.login(PlatformType.FACEBOOK)` to start SocialLogin feature.
+
+## Instructions for use
 
 #### Apply to Proguard
 
@@ -112,7 +154,7 @@ Everything should work within the main thread. If library use a network inside t
 In other words, the following cases are not processed and are treated as `LoginFailedException` immediately.
 
 ```kotlin
-RxSocialLogin.facebook(facebookLogin)
+RxSocialLogin.result()
 		.subscribeOn(Schedulers.io())
 		.observeOn(AndroidSchedulers.mainThread())
 		...
@@ -131,6 +173,18 @@ Based on 0.5.0 [UndeliverableException](http://reactivex.io/RxJava/javadoc/io/re
 In 1.0.0 and later, `LoginFailedException` has been changed to inherit` IllegalStateException` to prevent this problem. Therefore, it is not intended to occur in later versions.
 
 See [Error handling](https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling) for more details.
+
+#### Targeting below of API 21
+
+Currently(1.1.0), **we support API 16 as minSdkVersion**, but `com.microsoft.identify.client:msal` library support API 21 as minSdkVersion.
+
+According [issue #263 of AzureAD/microsoft-authentication-library-for-android](https://github.com/AzureAD/microsoft-authentication-library-for-android/issues/263), You can override this library to avoid conflicts of minSdkVersion.
+
+Place this statement in AndroidManifest.xml to solve this conflicts. we hope microsoft solve this problem asap.
+
+```xml
+<uses-sdk tools:overrideLibrary="com.microsoft.identity.msal"/>
+```
 
 ## Author & Contributor
 

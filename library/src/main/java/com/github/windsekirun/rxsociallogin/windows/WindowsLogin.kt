@@ -66,10 +66,6 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
         }
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.windows(this)
-
     private fun getUserInfo(authenticationResult: AuthenticationResult) {
         if (authenticationResult.accessToken == null) {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))

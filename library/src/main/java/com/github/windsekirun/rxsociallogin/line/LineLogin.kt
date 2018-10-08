@@ -29,10 +29,6 @@ class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activi
 
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.line(this)
-
     private fun onResultLineLogin(data: Intent?) {
         val result = LineLoginApi.getLoginResultFromIntent(data)
         when (result.responseCode) {

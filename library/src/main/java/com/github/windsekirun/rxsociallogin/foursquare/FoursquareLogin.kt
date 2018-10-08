@@ -47,10 +47,6 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
         }
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.foursquare(this)
-
     private fun getUserInfo(token: String) {
         val requestUrl = "https://api.foursquare.com/v2/users/self?oauth_token=$token" +
                 "&v=${System.currentTimeMillis().asDateString("yyyyMMdd")}"

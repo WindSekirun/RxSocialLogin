@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import com.facebook.*
-import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
@@ -60,10 +59,6 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
     override fun logout(clearToken: Boolean) {
         LoginManager.getInstance().logOut()
     }
-
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.facebook(this)
 
     private fun getUserInfo() {
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig

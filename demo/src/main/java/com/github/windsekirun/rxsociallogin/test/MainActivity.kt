@@ -25,81 +25,64 @@ class MainActivity : AppCompatActivity() {
         Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
         btnDisqus.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.DISQUS)
         }
 
         btnFacebook.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.FACEBOOK)
         }
 
         btnFoursquare.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.FOURSQUARE)
         }
 
         btnGithub.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.GITHUB)
         }
 
         btnGoogle.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.GOOGLE)
         }
 
         btnKakao.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.KAKAO)
         }
 
         btnLine.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.LINE)
         }
 
         btnLinkedin.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.LINKEDIN)
         }
 
         btnNaver.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.NAVER)
         }
 
         btnTwitch.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.TWITCH)
         }
 
         btnTwitter.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.TWITTER)
         }
 
         btnVK.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.VK)
         }
 
         btnWordpress.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.WORDPRESS)
         }
 
         btnWindows.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.WINDOWS)
         }
 
         btnYahoo.setOnClickListener {
-            observeEvent()
             RxSocialLogin.login(PlatformType.YAHOO)
         }
-
-        RxSocialLogin.initialize(this)
 
         RxSocialLogin.result()
                 .subscribe({
@@ -113,6 +96,11 @@ class MainActivity : AppCompatActivity() {
                 }).addTo(compositeDisposable)
     }
 
+    override fun onStart() {
+        super.onStart()
+        RxSocialLogin.initialize(this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
@@ -121,9 +109,5 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         RxSocialLogin.activityResult(requestCode, resultCode, data)
-    }
-
-    private fun observeEvent() {
-
     }
 }

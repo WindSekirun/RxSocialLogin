@@ -40,10 +40,6 @@ class VKLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity
         VKSdk.login(activity as Activity, *scopeList.toTypedArray())
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.vk(this)
-
     private fun getUserInfo(token: VKAccessToken?) {
         val request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "nickname,screen_name,bdate,city,photo_max"))
         request.executeWithListener(object : VKRequest.VKRequestListener() {

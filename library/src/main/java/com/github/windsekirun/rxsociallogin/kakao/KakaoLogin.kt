@@ -57,10 +57,6 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         }
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.kakao(this)
-
     private fun checkSession() {
         try {
             Session.getCurrentSession().checkAndImplicitOpen()

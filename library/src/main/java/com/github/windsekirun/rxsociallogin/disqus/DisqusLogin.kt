@@ -54,10 +54,6 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
         clearCookies()
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.disqus(this)
-
     private fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()
 

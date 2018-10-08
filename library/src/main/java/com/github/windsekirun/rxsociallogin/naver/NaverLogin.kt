@@ -44,10 +44,6 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         }
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.naver(this)
-
     @SuppressLint("HandlerLeak")
     private inner class NaverLoginHandler : OAuthLoginHandler() {
 

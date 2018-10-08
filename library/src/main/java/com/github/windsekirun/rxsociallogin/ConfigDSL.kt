@@ -170,7 +170,7 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
-    internal class EmptyFunction<T>: ConfigFunction<T> {
+    internal class EmptyFunction<T> : ConfigFunction<T> {
         override fun invoke(config: T) {}
     }
 }

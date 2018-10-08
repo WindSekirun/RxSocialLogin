@@ -49,10 +49,6 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
                 PlatformType.YAHOO, authUrl, title, oauthUrl, map, basicToken)
     }
 
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.yahoo(this)
-
     private fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val idToken = jsonObject?.getJSONString("id_token") ?: ""

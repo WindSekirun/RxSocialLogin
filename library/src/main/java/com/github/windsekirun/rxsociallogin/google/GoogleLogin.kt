@@ -3,7 +3,6 @@ package com.github.windsekirun.rxsociallogin.google
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
@@ -60,10 +59,6 @@ class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
     override fun logout(clearToken: Boolean) {
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
     }
-
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("use RxSocialLogin.result instead")
-    fun toObservable() = RxSocialLogin.google(this)
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
