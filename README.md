@@ -8,7 +8,7 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
 * [한국어](README-ko.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
 * [日本語](README-jp.md) - Latest update: 2018-09-30, [@WindSekirun](https://github.com/windsekirun)
 
@@ -63,7 +63,7 @@ Add the following dependencies to the `build.gradle` of the module you want to u
 
 ```groovy
 dependencies {
-	implementation 'com.github.WindSekirun:RxSocialLogin:1.0.0'
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.1.0'
     
 	// RxJava
 	implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
@@ -74,71 +74,32 @@ dependencies {
 RxJava is an active library, and you should always keep the latest version for new enhancements to take effect. Therefore, we recommend that you add RxJava to the bottom of the dependency.
 
 * RxAndroid: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxandroid%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxandroid.svg'></a>
-
 * RxJava: <a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.reactivex.rxjava2%22%20a%3A%22rxjava%22'><img src='http://img.shields.io/maven-central/v/io.reactivex.rxjava2/rxjava.svg'></a>
+
+#### Migrate from 1.0.0
+
+1.1.0 has **MASSIVE** breaking changes you should know about that. Click on the name of each category.
+
+* [Migrate to Java Builder to DSL Builder](), compatitable with Kotlin and Java.
+* [Initialize in RxSocialLogin as once]()
+* [Call onActivityResult as once]()
+* [Migrate receive result]()
 
 ## Very easy 5-step usage
 
-First, initialize the moduel by `RxSocialLogin.init(this)` in `Application` class and declare Config object for each platform. There Config object is necessary information to using platform, For config information for each platform, please click on each platform in the "Supported Platforms" section above to see the wiki. 
-
-Note that `RxSocialLogin.init (this)` only needs to be called once.
+First, Initialize the module using `ConfigDSLBuilder`. `ConfigDSLBuilder` allows you to configure settings for each platform. 
 
 ```kotlin
-RxSocialLogin.init(this)
-
-val facebookConfig = FacebookConfig.Builder()
-	.setApplicationId(getString(R.string.facebook_api_key))
-	.setRequireEmail()
-	.setBehaviorOnCancel()
-	.build()
-
-RxSocialLogin.addType(PlatformType.FACEBOOK, facebookConfig)
-```
-
-Then create an instance of the class named Platform + Login to use in the code you want to use as a global variable (defined here as **social module variable**).
-
-```kotlin
-private val facebookLogin: FacebookLogin by lazy { FacebookLogin() }
-```
-
-Then, in the onActivityResult of the activity, call the `onActivityResult` method of the corresponding social module variable.
-
-```kotlin
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-	super.onActivityResult(requestCode, resultCode, data)
-	facebookLogin.onActivityResult(requestCode, resultCode, data)
+initSocialLogin {
+    facebook(getString(R.string.facebook_api_key)) {
+        behaviorOnCancel = true
+        requireWritePermissions = false
+        imageEnum = FacebookConfig.FacebookImageEnum.Large
+    }
 }
 ```
 
-Next, we pass `Observable` to each platform method of the` RxSocialLogin` class by passing the variable of the corresponding social module.
-
-```kotlin
-RxSocialLogin.facebook(facebookLogin)
-	.subscribe(data -> {
-		// TODO: do job with LoginResultItem
-	}, error -> {
-		// TODO: Error on login()
-	});
-```
-
-Finally, you start a social login by calling the `login` method of the social module variable where you want to start the social login (when the user requests a social login).
-
-```kotlin
-facebookLogin.login()
-```
-
-### Instructions for use
-
-#### Social module variable matters.
-
-There are currently two types of constructors.
-
-* FacebookLogin() - Primary constructors.
-* FacebookLogin(activity: FragmentActivity) - Secondary constructors.
-
-If you use Secondary constructors, use the `FragmentActivity` object provided in the Seconday constructor. Otherwise, use the `FragmentActivity` object to cache internally.
-
-However, there may be a module that throw an error when it is created as the default constructor, so it is better to pass a `FragmentActivity` object through the Secondary constructor whenever possible.
+Inside `initSocialLogin` block, you can use methods which have platform name such as facebook and google. 
 
 #### Apply to Proguard
 
