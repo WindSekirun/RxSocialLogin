@@ -9,9 +9,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 このAndroidライブラリは、[RxJava2](https://github.com/ReactiveX/RxJava)、[Kotlin](http://kotlinlang.org/)、[Firebase 認証](https://firebase.google.com/docs/auth/)を搭載した15プラットフォームのソーシャルログインを提供するライブラリです。
@@ -91,16 +91,24 @@ RxJavaはアクティブなライブラリです。新しい拡張機能を有�
 
 ## 簡単な5ステップの使用方法
 
-まず、`ConfigDSLBuilder`を使用してモジュールを初期化します。`ConfigDSLBuilder`は、プラットフォームに合わせて設定を構成することができるように提供しています。
+まず、 `Application`クラスの` ConfigDSLBuilder`を使ってモジュールを初期化します。`ConfigDSLBuilder`は、プラットフォームに合わせて設定を構成することができるように提供しています。
 
 ```kotlin
-initSocialLogin {
-    facebook(getString(R.string.facebook_api_key)) {
-        behaviorOnCancel = true
-        requireWritePermissions = false
-        imageEnum = FacebookConfig.FacebookImageEnum.Large
+class MainApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        initSocialLogin {
+            facebook(getString(R.string.facebook_api_key)) {
+                behaviorOnCancel = true
+                requireWritePermissions = false
+                imageEnum = FacebookConfig.FacebookImageEnum.Large
+            }
+        }
     }
 }
+
 ```
 
 `initSocialLogin`ブロック内でfacebook、googleのような**プラットフォーム名を持つメソッドを使用することができます。**` setup`パラメータを除いた残りのパラメータは、ソーシャルログイン機能を使用するために必要な情報です。
@@ -111,7 +119,7 @@ initSocialLogin {
 
 [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) と [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java) にされた`ConfigDSLBuilder`の完全な例を見ることができています。
 
-次に、`onStart`メソッドで` RxSocialLogin.initialize（this）`を呼び出します。
+次に、 `Activity`クラスの `onStart` メソッドで `RxSocialLogin.initialize(this)`を呼び出します。
 
 ```kotlin
 override fun onStart() {

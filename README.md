@@ -8,9 +8,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-10-08, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 
@@ -92,16 +92,24 @@ The following are major changes.
 
 ## Very easy 5-step usage
 
-First, Initialize the module using `ConfigDSLBuilder`. `ConfigDSLBuilder` allows you to configure settings for each platform. 
+First, Initialize the module using `ConfigDSLBuilder` in `Application` class. `ConfigDSLBuilder` allows you to configure settings for each platform. 
 
 ```kotlin
-initSocialLogin {
-    facebook(getString(R.string.facebook_api_key)) {
-        behaviorOnCancel = true
-        requireWritePermissions = false
-        imageEnum = FacebookConfig.FacebookImageEnum.Large
+class MainApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        initSocialLogin {
+            facebook(getString(R.string.facebook_api_key)) {
+                behaviorOnCancel = true
+                requireWritePermissions = false
+                imageEnum = FacebookConfig.FacebookImageEnum.Large
+            }
+        }
     }
 }
+
 ```
 
 Inside `initSocialLogin` block, you can **use methods which have platform name** such as facebook and google. All parameters except `setup` will necessary information to use SocialLogin feature.
@@ -112,7 +120,7 @@ Although `ConfigDSLBuilder` is *Kotlin Type-Safe builders*, but **it has compati
 
 You can see full examples of `ConfigDSLBuilder` both in [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) and [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java)
 
-Next, Call `RxSocialLogin.initialize(this)` in `onStart` methods. 
+Next, Call `RxSocialLogin.initialize(this)` in `onStart` methods in `Activity` class.
 
 ```kotlin
 override fun onStart() {
