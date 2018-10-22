@@ -11,7 +11,6 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
-import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
+//        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
         btnDisqus.setOnClickListener {
             RxSocialLogin.login(PlatformType.DISQUS)
@@ -84,7 +83,9 @@ class MainActivity : AppCompatActivity() {
             RxSocialLogin.login(PlatformType.YAHOO)
         }
 
-        RxSocialLogin.result()
+        RxSocialLogin.initialize(this)
+
+        RxSocialLogin.result(this)
                 .subscribe({
                     txtResult.text = it.toString()
                     txtResult.setTextColor(Color.BLACK)
@@ -94,11 +95,6 @@ class MainActivity : AppCompatActivity() {
                     txtResult.text = "Login Failed - ${it.message}"
                     txtResult.setTextColor(Color.RED)
                 }).addTo(compositeDisposable)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        RxSocialLogin.initialize(this)
     }
 
     override fun onDestroy() {

@@ -3,10 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -45,7 +45,6 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:1.15.0'
     implementation 'com.github.kittinunf.fuel:fuel-android:1.15.0'
     implementation 'com.github.kittinunf.fuel:fuel-rxjava:1.15.0'
-
     // KAKAO
     implementation 'com.kakao.sdk:usermgmt:1.11.1'
     // Facebook SD
@@ -58,8 +57,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:15.0.0'
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     // RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     // VK
     implementation 'com.vk:androidsdk:1.6.9'
@@ -69,11 +68,11 @@ dependencies {
         // libraries or GSON in its dependencies
         // uncomment below
 
-         exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
         // exclude group: 'com.google.code.gson'
     }
     // foursquare
-    implementation ('com.foursquare:foursquare-android-oauth:1.0.3') {
+    implementation('com.foursquare:foursquare-android-oauth:1.0.3') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support'
         exclude group: 'com.google.android'
