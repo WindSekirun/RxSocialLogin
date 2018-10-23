@@ -9,9 +9,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
 
 ## 소개
 
@@ -120,11 +120,12 @@ class MainApplication : Application() {
 
 [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) 와 [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java) 로 된 `ConfigDSLBuilder` 의 전체 예제를 볼 수 있습니다.
 
-다음으로, `Activity` 의 `onStart` 메서드에서 `RxSocialLogin.initialize(this)` 를 호출합니다.
+다음으로, `Activity` 의 `onCreate` 메서드에서 `RxSocialLogin.result`를 호출하기 전에 `RxSocialLogin.initialize(this)`를 호출합니다. 
 
 ```kotlin
-override fun onStart() {
-    super.onStart()
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    ...
     RxSocialLogin.initialize(this)
 }
 ```

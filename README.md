@@ -8,9 +8,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 
@@ -120,11 +120,12 @@ Although `ConfigDSLBuilder` is *Kotlin Type-Safe builders*, but **it has compati
 
 You can see full examples of `ConfigDSLBuilder` both in [Kotlin](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/MainApplication.kt) and [Java](https://github.com/WindSekirun/RxSocialLogin/blob/1.1-dev/demo/src/main/java/com/github/windsekirun/rxsociallogin/test/JavaApplication.java)
 
-Next, Call `RxSocialLogin.initialize(this)` in `onStart` methods in `Activity` class.
+Next, Call `RxSocialLogin.initialize(this)` in `onCreate` methods in `Activity` class before execute `RxSocialLogin.result` methods. 
 
 ```kotlin
-override fun onStart() {
-    super.onStart()
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    ...
     RxSocialLogin.initialize(this)
 }
 ```

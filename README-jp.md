@@ -9,9 +9,9 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
-* [한국어](README-ko.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
-* [日本語](README-jp.md) - Latest update: 2018-10-10, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
+* [한국어](README-ko.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
+* [日本語](README-jp.md) - Latest update: 2018-10-23, [@WindSekirun](https://github.com/windsekirun)
 
 ## Introduction
 このAndroidライブラリは、[RxJava2](https://github.com/ReactiveX/RxJava)、[Kotlin](http://kotlinlang.org/)、[Firebase 認証](https://firebase.google.com/docs/auth/)を搭載した15プラットフォームのソーシャルログインを提供するライブラリです。
@@ -124,6 +124,16 @@ class MainApplication : Application() {
 ```kotlin
 override fun onStart() {
     super.onStart()
+    RxSocialLogin.initialize(this)
+}
+```
+
+次に、 `Activity`クラスの `onCreate` メソッドで `RxSocialLogin.result`を呼び出す前に、`RxSocialLogin.initialize(this)`を呼び出します。
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    ...
     RxSocialLogin.initialize(this)
 }
 ```
