@@ -101,9 +101,9 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             override fun onSuccess(result: MeV2Response) {
                 // default value
                 val id = result.id.toString()
-                val nickname = result.nickname
-                val profilePicture = result.profileImagePath
-                val thumbnailPicture = result.thumbnailImagePath
+                val nickname = result.nickname ?: ""
+                val profilePicture = result.profileImagePath ?: ""
+                val thumbnailPicture = result.thumbnailImagePath ?: "'"
 
                 // optional value
                 var email = ""
