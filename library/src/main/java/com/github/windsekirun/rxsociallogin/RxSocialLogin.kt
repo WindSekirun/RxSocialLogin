@@ -108,6 +108,14 @@ object RxSocialLogin {
         socialLogin.login()
     }
 
+    @JvmStatic
+    @JvmOverloads
+    fun logout(platformType: PlatformType, clearToken: Boolean = false) {
+        val socialLogin = moduleMap[platformType]
+                ?: throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
+        socialLogin.logout(clearToken)
+    }
+
     /**
      * Receive [FragmentActivity.onActivityResult] event to handle result of platform process
      */
