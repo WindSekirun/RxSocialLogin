@@ -51,12 +51,12 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             if (success) {
                 val accessToken = authLogin.getAccessToken(activity)
                 val authHeader = "Bearer $accessToken"
-                requestProfile(authHeader)
+                requestProfile(authHeader, accessToken)
             }
         }
     }
 
-    private fun requestProfile(authHeader: String) {
+    private fun requestProfile(authHeader: String, accessToken: String) {
         val disposable = requestUrl.httpGet()
                 .header("Authorization" to authHeader)
                 .toResultObservable()
@@ -64,7 +64,7 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserInfo(result.component1())
+                        parseUserInfo(result.component1(), accessToken)
                     } else {
                         callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
@@ -73,7 +73,7 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserInfo(jsonStr: String?) {
+    private fun parseUserInfo(jsonStr: String?, accessToken: String) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseObject = getJSONObject(jsonObject, "response")
         if (responseObject == null) {
@@ -90,6 +90,7 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
             this.age = responseObject.getJSONString("age")
             this.birthday = responseObject.getJSONString("birthday")
             this.profilePicture = responseObject.getJSONString("profile_image")
+            this.accessToken = accessToken
             this.platform = PlatformType.NAVER
             this.result = true
         }

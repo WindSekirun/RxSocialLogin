@@ -118,7 +118,8 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
         val credential = GithubAuthProvider.getCredential(accessToken)
         val disposable = auth.signInWithCredential(credential, activity, PlatformType.GITHUB)
                 .subscribe({
-                    callbackAsSuccess(it)
+                    val data = it.apply { this.accessToken = accessToken }
+                    callbackAsSuccess(data)
                 }, {
                     callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT, it))
                 })

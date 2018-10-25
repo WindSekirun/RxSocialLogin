@@ -81,7 +81,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserInfo(result.component1())
+                        parseUserInfo(result.component1(), authenticationResult.accessToken)
                     } else {
                         callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
@@ -90,7 +90,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserInfo(jsonStr: String?) {
+    private fun parseUserInfo(jsonStr: String?, accessToken: String) {
         val jsonObject = jsonStr?.createJSONObject()
         if (jsonObject == null) {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
@@ -101,6 +101,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin(act
             this.id = jsonObject.getJSONString("id")
             this.name = jsonObject.getJSONString("displayName")
             this.email = jsonObject.getJSONString("userPrincipalName")
+            this.accessToken = accessToken
             this.platform = PlatformType.WINDOWS
             this.result = true
         }

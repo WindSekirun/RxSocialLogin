@@ -13,6 +13,7 @@ import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.google.gson.Gson
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
@@ -79,6 +80,7 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                 this.gender = obj.getJSONString("gender")
                 this.firstName = obj.getJSONString("first_name")
                 this.profilePicture = profilePicture
+                this.accessToken = Gson().toJson(AccessToken.getCurrentAccessToken()) ?: "{}"
                 this.platform = PlatformType.FACEBOOK
                 this.result = true
             }
