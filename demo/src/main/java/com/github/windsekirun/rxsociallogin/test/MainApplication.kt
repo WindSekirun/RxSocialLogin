@@ -44,10 +44,10 @@ class MainApplication : Application() {
             }
 
             kakao {
-                requireAgeRange = true
+//                requireAgeRange = true
                 requireBirthday = true
-                requireEmail = true
-                requireGender = true
+//                requireEmail = true
+//                requireGender = true
             }
 
             line(getString(R.string.line_api_channel))
@@ -63,20 +63,20 @@ class MainApplication : Application() {
                     getString(R.string.naver_api_secret),
                     getString(R.string.app_name))
 
-            twitch(getString(R.string.twitch_api_key),
-                    getString(R.string.twitch_api_secret),
-                    getString(R.string.twitch_redirect_uri)) {
-                requireEmail = true
-                activityTitle = "Login to Twitch"
-            }
+//            twitch(getString(R.string.twitch_api_key),
+//                    getString(R.string.twitch_api_secret),
+//                    getString(R.string.twitch_redirect_uri)) {
+//                requireEmail = true
+//                activityTitle = "Login to Twitch"
+//            }
 
             twitter(getString(R.string.twitter_api_id), getString(R.string.twitter_api_secret))
 
-            vk {
-                requireEmail = true
-            }
+//            vk {
+//                requireEmail = true
+//            }
 
-            windows(getString(R.string.windows_api_key))
+//            windows(getString(R.string.windows_api_key))
 
             wordpress(getString(R.string.wordpress_api_key),
                     getString(R.string.wordpress_api_secret),
