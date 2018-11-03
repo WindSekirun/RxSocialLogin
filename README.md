@@ -14,7 +14,7 @@ These instructions are available in their respective languages.
 
 ## Introduction
 
-This Android library is a library that provides social login for 15 platforms powered by [RxJava2](https://github.com/ReactiveX/RxJava), [Kotlin](http://kotlinlang.org/) and [Firebase Authentication](https://firebase.google.com/docs/auth/).
+An Android Library that provides social login for 15 platforms within by [RxJava2](https://github.com/ReactiveX/RxJava), [Kotlin](http://kotlinlang.org/) and [Firebase Authentication](https://firebase.google.com/docs/auth/).
 
 This library is an improved version of [@WindSekirun](https://github.com/windsekirun) 's [SocialLogin](https://github.com/WindSekirun/SocialLogin) library. It has the following differences.
 
