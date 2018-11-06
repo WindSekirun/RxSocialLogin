@@ -52,6 +52,8 @@ class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
                 val accessToken = authLogin.getAccessToken(activity)
                 val authHeader = "Bearer $accessToken"
                 requestProfile(authHeader)
+            } else {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
             }
         }
     }
