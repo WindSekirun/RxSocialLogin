@@ -114,20 +114,20 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
                 val userAccount = result.kakaoAccount
 
                 if (userAccount != null && userAccount.hasEmail() == OptionalBoolean.TRUE) {
-                    email = userAccount.email
-                    isEmailVerified = userAccount.isEmailVerified == OptionalBoolean.TRUE
+                    email = userAccount.email ?: ""
+                    isEmailVerified = userAccount.isEmailVerified ?: OptionalBoolean.FALSE == OptionalBoolean.TRUE
                 }
 
                 if (userAccount != null && userAccount.hasAgeRange() == OptionalBoolean.TRUE) {
-                    ageRange = userAccount.ageRange!!.value
+                    ageRange = userAccount.ageRange?.value ?: ""
                 }
 
                 if (userAccount != null && userAccount.hasGender() == OptionalBoolean.TRUE) {
-                    gender = userAccount.gender!!.value
+                    gender = userAccount.gender?.value ?: ""
                 }
 
                 if (userAccount != null && userAccount.hasBirthday() == OptionalBoolean.TRUE) {
-                    birthday = userAccount.birthday
+                    birthday = userAccount.birthday ?: ""
                 }
 
                 val item = LoginResultItem().apply {

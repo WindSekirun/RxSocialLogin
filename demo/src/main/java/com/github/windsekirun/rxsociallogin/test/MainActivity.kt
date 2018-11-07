@@ -11,6 +11,7 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
+import pyxis.uzuki.live.richutilskt.utils.getKeyHash
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
+        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
 
         btnDisqus.setOnClickListener {
             RxSocialLogin.login(PlatformType.DISQUS)
