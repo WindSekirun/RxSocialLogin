@@ -8,6 +8,7 @@ import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.utils.isPackageInstalled
 import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.KakaoSDK
@@ -23,9 +24,37 @@ import java.util.*
 class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
     private var sessionCallback: SessionCallback? = null
 
+    companion object {
+        const val EXTRA_ERROR_DESCRIPTION = "com.kakao.sdk.talk.error.description"
+        const val EXTRA_ERROR_TYPE = "com.kakao.sdk.talk.error.type"
+        const val PACKAGE_KAKAO_TALK = "com.kakao.talk"
+        const val PACKAGE_KAKAO_STORY = "com.kakao.story"
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         checkSession()
-        Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+
+        // issue #38 Check 'NotSupportError' on KakaoLogin
+        if (activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
+                activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
+            // if either KakaoTalk or KakaoStory is installed, so we can use TalkAuthService, StoryAuthService
+            if (data != null && data.extras != null) {
+                val bundle = data.extras!!
+                val errorType = bundle.getString(EXTRA_ERROR_TYPE)
+                val errorDes = bundle.getString(EXTRA_ERROR_DESCRIPTION)
+
+                if (errorType != null && errorDes != null) {
+                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT + " $errorDes"))
+                } else {
+                    Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+                }
+            } else {
+                Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+            }
+        } else {
+            // if neither KakaoTalk and KakaoStory isn't installed, we just pass handleActivityResult
+            Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun login() {
