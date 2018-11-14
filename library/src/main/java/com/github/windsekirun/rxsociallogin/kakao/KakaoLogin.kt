@@ -65,7 +65,9 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
 
         session.addCallback(sessionCallback)
         if (!session.checkAndImplicitOpen()) {
-            session.open(AuthType.KAKAO_LOGIN_ALL, activity)
+            val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
+
+            session.open(config.authType, activity)
         }
     }
 
