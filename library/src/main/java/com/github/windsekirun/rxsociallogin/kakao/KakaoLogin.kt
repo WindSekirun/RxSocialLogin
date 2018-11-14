@@ -34,27 +34,29 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         checkSession()
 
-        // issue #38 Check 'NotSupportError' on KakaoLogin
-        if (activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
-                activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
-            // if either KakaoTalk or KakaoStory is installed, so we can use TalkAuthService, StoryAuthService
-            if (data != null && data.extras != null) {
-                val bundle = data.extras!!
-                val errorType = bundle.getString(EXTRA_ERROR_TYPE)
-                val errorDes = bundle.getString(EXTRA_ERROR_DESCRIPTION)
+//        // issue #38 Check 'NotSupportError' on KakaoLogin
+//        if (activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
+//                activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
+//            // if either KakaoTalk or KakaoStory is installed, so we can use TalkAuthService, StoryAuthService
+//            if (data != null && data.extras != null) {
+//                val bundle = data.extras!!
+//                val errorType = bundle.getString(EXTRA_ERROR_TYPE)
+//                val errorDes = bundle.getString(EXTRA_ERROR_DESCRIPTION)
+//
+//                if (errorType != null && errorDes != null) {
+//                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT + " $errorDes"))
+//                } else {
+//                    Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+//                }
+//            } else {
+//                Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+//            }
+//        } else {
+//            // if neither KakaoTalk and KakaoStory isn't installed, we just pass handleActivityResult
+//            Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
+//        }
 
-                if (errorType != null && errorDes != null) {
-                    callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT + " $errorDes"))
-                } else {
-                    Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
-                }
-            } else {
-                Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
-            }
-        } else {
-            // if neither KakaoTalk and KakaoStory isn't installed, we just pass handleActivityResult
-            Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
-        }
+        Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)
     }
 
     override fun login() {
