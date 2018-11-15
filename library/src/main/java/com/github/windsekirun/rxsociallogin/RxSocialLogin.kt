@@ -168,6 +168,30 @@ object RxSocialLogin {
         moduleMap.putAll(newMap)
     }
 
+    /**
+     * get [SocialConfig] object with given [PlatformType]
+     */
+    @JvmStatic
+    fun getPlatformConfig(type: PlatformType): SocialConfig {
+        if (!configMap.containsKey(type)) {
+            throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
+        }
+
+        return configMap[type]!!
+    }
+
+    /**
+     * set [SocialConfig] object with given [PlatformType]
+     * Additional settings for platforms not created through the Application class are not allowed.
+     */
+    fun setPlatformConfig(type: PlatformType, config: SocialConfig) {
+        if (!configMap.containsKey(type)) {
+            throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
+        }
+
+        configMap[type] = config;
+    }
+
     internal fun initializeInternal(application: Application, map: Map<PlatformType, SocialConfig>) {
         this.application = application
         configMap.putAll(map)
@@ -181,14 +205,6 @@ object RxSocialLogin {
                 }
             }
         }
-    }
-
-    internal fun getPlatformConfig(type: PlatformType): SocialConfig {
-        if (!configMap.containsKey(type)) {
-            throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
-        }
-
-        return configMap[type]!!
     }
 
     private fun initKakao() {
