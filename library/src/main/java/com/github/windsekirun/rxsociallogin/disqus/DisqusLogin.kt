@@ -78,7 +78,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserJson(result.component1())
+                        parseUserJson(result.component1(), accessToken)
                     } else {
                         callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
@@ -87,7 +87,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserJson(jsonStr: String?) {
+    private fun parseUserJson(jsonStr: String?, accessToken: String) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseObject = jsonObject?.getJSONObject("response")
         if (responseObject == null) {
@@ -104,6 +104,7 @@ class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             this.email = responseObject.getJSONString("email")
             this.nickname = responseObject.getJSONString("username")
             this.profilePicture = profilePicture
+            this.accessToken = accessToken
             this.platform = PlatformType.DISQUS
             this.result = true
         }

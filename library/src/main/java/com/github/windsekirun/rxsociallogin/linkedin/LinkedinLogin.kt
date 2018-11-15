@@ -83,7 +83,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserInfo(result.component1())
+                        parseUserInfo(result.component1(), accessToken)
                     } else {
                         callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
@@ -92,7 +92,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserInfo(jsonStr: String?) {
+    private fun parseUserInfo(jsonStr: String?, accessToken: String) {
         val response = jsonStr?.createJSONObject()
         if (response == null) {
             callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))
@@ -115,7 +115,7 @@ class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
             this.name = formattedName
             this.email = emailAddress
             this.profilePicture = pictureUrl ?: ""
-
+            this.accessToken = accessToken
             this.result = true
             this.platform = PlatformType.LINKEDIN
         }

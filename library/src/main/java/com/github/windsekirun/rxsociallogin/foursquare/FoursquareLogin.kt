@@ -58,7 +58,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserJson(result.component1())
+                        parseUserJson(result.component1(), token)
                     } else {
                         callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
@@ -67,7 +67,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserJson(jsonStr: String?) {
+    private fun parseUserJson(jsonStr: String?, accessToken: String) {
         val jsonObject = jsonStr?.createJSONObject()
         if (jsonObject == null) {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
@@ -96,6 +96,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
             this.birthday = (user.getJSONInt("birthday").toLong() * 1000).asDateString("yyyy-MM-dd")
             this.profilePicture = profilePicture
             this.email = email
+            this.accessToken = accessToken
             this.platform = PlatformType.FOURSQUARE
             this.result = true
         }

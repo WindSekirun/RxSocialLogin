@@ -105,7 +105,7 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserInfo(result.component1())
+                        parseUserInfo(result.component1(), accessToken)
                     } else {
                         callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT, error))
                     }
@@ -114,7 +114,7 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserInfo(jsonStr: String?) {
+    private fun parseUserInfo(jsonStr: String?, accessToken: String) {
         val response = jsonStr?.createJSONObject()
         if (response == null) {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
@@ -133,7 +133,7 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseSocialLogin(a
             this.email = email
             this.profilePicture = profilePicture
             this.emailVerified = emailVerified
-
+            this.accessToken = accessToken
             this.result = true
             this.platform = PlatformType.WORDPRESS
         }

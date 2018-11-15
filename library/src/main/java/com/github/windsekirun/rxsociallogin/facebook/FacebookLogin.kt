@@ -13,6 +13,7 @@ import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.google.gson.Gson
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
@@ -63,6 +64,8 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
     private fun getUserInfo() {
         val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
 
+        val accessToken = AccessToken.getCurrentAccessToken()
+
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
             if (obj == null) {
                 callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
@@ -79,6 +82,7 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
                 this.gender = obj.getJSONString("gender")
                 this.firstName = obj.getJSONString("first_name")
                 this.profilePicture = profilePicture
+                this.accessToken = accessToken.toJSONObject().toString()
                 this.platform = PlatformType.FACEBOOK
                 this.result = true
             }
@@ -89,7 +93,7 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
         var originField = "id, name, email, gender, birthday, first_name, "
         originField += config.imageEnum.fieldName
 
-        val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), callback)
+        val request = GraphRequest.newMeRequest(accessToken, callback)
         val parameters = Bundle()
         parameters.putString("fields", originField)
         request.parameters = parameters

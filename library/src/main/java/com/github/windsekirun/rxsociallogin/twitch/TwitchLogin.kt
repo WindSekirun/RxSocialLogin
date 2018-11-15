@@ -102,7 +102,7 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result, error ->
                     if (error == null && result.component1() != null) {
-                        parseUserInfo(result.component1())
+                        parseUserInfo(result.component1(), accessToken)
                     } else {
                         callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT, error))
                     }
@@ -111,7 +111,7 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
         compositeDisposable.add(disposable)
     }
 
-    private fun parseUserInfo(jsonStr: String?) {
+    private fun parseUserInfo(jsonStr: String?, accessToken: String) {
         val jsonObject = jsonStr?.createJSONObject()
         val responseArray = jsonObject?.getJSONArray("data")
         if (responseArray == null) {
@@ -131,6 +131,7 @@ class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
             this.name = responseObject.getJSONString("display_name")
             this.email = responseObject.getJSONString("email", "")
             this.profilePicture = responseObject.getJSONString("profile_image_url", "")
+            this.accessToken = accessToken
         }
 
         callbackAsSuccess(item)
