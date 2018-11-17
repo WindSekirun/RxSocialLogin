@@ -8,7 +8,7 @@
 
 These instructions are available in their respective languages.
 
-* [English](README.md) - Latest update: 2018-10-25, [@WindSekirun](https://github.com/windsekirun)
+* [English](README.md) - Latest update: 2018-11-18, [@WindSekirun](https://github.com/windsekirun)
 * [한국어](README-ko.md) - Latest update: 2018-10-25, [@WindSekirun](https://github.com/windsekirun)
 * [日本語](README-jp.md) - Latest update: 2018-10-25, [@WindSekirun](https://github.com/windsekirun)
 
@@ -65,6 +65,8 @@ Add the following dependencies to the `build.gradle` of the module you want to u
 ```groovy
 dependencies {
 	implementation 'com.github.WindSekirun:RxSocialLogin:1.2.0'
+	// androidx
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.2.0-androidx'
     
 	// RxJava
 	implementation 'io.reactivex.rxjava2:rxandroid:lastest-version'
