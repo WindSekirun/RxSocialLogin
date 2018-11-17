@@ -39,7 +39,7 @@ class MainApplication : Application() {
                 activityTitle = "Login to Github"
             }
 
-            google("") {
+            google(getString(R.string.google_api_key)) {
                 requireEmail = true
             }
 
