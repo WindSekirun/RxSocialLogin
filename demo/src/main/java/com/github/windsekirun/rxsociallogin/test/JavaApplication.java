@@ -41,7 +41,7 @@ public class JavaApplication extends Application {
                         config.setActivityTitle("Login to Github");
                     });
 
-            builder.google(getString(R.string.google_api_key), config -> config.setRequireEmail(true));
+            builder.google("", config -> config.setRequireEmail(true));
 
             builder.kakao(config -> {
                 config.setRequireAgeRange(true);

@@ -2,7 +2,7 @@ package com.github.windsekirun.rxsociallogin.github
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
@@ -24,7 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class GithubLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class GithubLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
     private val auth = FirebaseAuth.getInstance()
     private val config: GithubConfig by lazy { getPlatformConfig(PlatformType.GITHUB) as GithubConfig }
 

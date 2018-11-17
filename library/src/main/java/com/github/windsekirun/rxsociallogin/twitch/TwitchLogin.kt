@@ -2,7 +2,7 @@ package com.github.windsekirun.rxsociallogin.twitch
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
@@ -23,7 +23,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class TwitchLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class TwitchLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
     private val config: TwitchConfig by lazy { getPlatformConfig(PlatformType.TWITCH) as TwitchConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
