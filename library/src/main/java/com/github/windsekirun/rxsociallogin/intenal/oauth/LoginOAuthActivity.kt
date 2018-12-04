@@ -75,10 +75,8 @@ class LoginOAuthActivity : AppCompatActivity() {
         title = intent.extras.getString(EXTRA_TITLE)
         authorizationValue = intent.extras.getString(EXTRA_AUTHORIZATION_VALUE)
 
-        webView.setWebViewHandler(object : EnhanceWebView.EnhanceWebViewHandler {
-            override fun onPageFinished(view: WebView, url: String) {}
-
-            override fun shouldOverrideUrlLoading(view: WebView, url: String, uri: Uri, scheme: String, host: String, parameters: Map<String, String>?): Boolean {
+        webView.webViewHandler = object : EnhanceWebView.EnhanceWebViewHandler {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String, uri: Uri, scheme: String?, host: String?, parameters: Map<String, String>?): Boolean {
                 try {
                     if (!url.contains("?code=")) return false
                     requestOAuthToken(url.getCode())
@@ -88,11 +86,13 @@ class LoginOAuthActivity : AppCompatActivity() {
 
                 return false
             }
-        })
+
+            override fun onPageFinished(view: WebView, url: String) {}
+        }
 
         webView.enableGoBack = true
         webView.enableFormUpload(this)
-        webView.url = authUrl
+        webView.setUrl(authUrl)
 
         supportActionBar?.let {
             it.title = this.title

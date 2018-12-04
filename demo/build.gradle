@@ -39,6 +39,7 @@ android {
         resValue "string", "foursquare_api_secret", properties.getProperty("default.foursquare.secret", "")
         resValue "string", "twitch_api_key", properties.getProperty("default.twitch.api", "")
         resValue "string", "twitch_api_secret", properties.getProperty("default.twitch.secret", "")
+//        resValue "string", "google_api_key", properties.getProperty("default.google.token", "")/
         multiDexEnabled true
     }
 
@@ -99,6 +100,8 @@ dependencies {
         exclude group: 'com.android.support'
         exclude group: 'com.google.android'
     }
+
+    implementation 'com.google.android.material:material:1.0.0-beta01'
 }
 
 apply plugin: 'com.google.gms.google-services'
