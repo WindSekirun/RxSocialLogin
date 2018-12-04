@@ -2,7 +2,7 @@ package com.github.windsekirun.rxsociallogin.yahoo
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import android.util.Base64
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
@@ -15,7 +15,7 @@ import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class YahooLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class YahooLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
     private val config: YahooConfig by lazy { RxSocialLogin.getPlatformConfig(PlatformType.YAHOO) as YahooConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

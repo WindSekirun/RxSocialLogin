@@ -1,7 +1,7 @@
 package com.github.windsekirun.rxsociallogin.kakao
 
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
@@ -20,7 +20,7 @@ import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 import java.util.*
 
-class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
     private var sessionCallback: SessionCallback? = null
 
     companion object {
