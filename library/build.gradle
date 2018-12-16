@@ -82,6 +82,10 @@ dependencies {
     implementation 'com.chibatching.kotpref:initializer:2.6.0'
     // guava
     implementation 'com.google.guava:guava:22.0-android'
+    // Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
+    implementation group: 'android.arch.lifecycle', name: 'common-java8', version: '1.1.1'
 }
 
 task sourcesJar(type: Jar) {

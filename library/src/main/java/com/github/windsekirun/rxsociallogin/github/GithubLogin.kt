@@ -3,6 +3,8 @@ package com.github.windsekirun.rxsociallogin.github
 import android.app.Activity
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin

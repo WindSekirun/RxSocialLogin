@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.utils.weak
@@ -29,6 +30,18 @@ abstract class BaseSocialLogin constructor(childActivity: androidx.fragment.app.
     abstract fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     abstract fun login()
+
+    open fun addLifecycleEvent(lifecycle: Lifecycle) {
+
+    }
+
+    open fun removeLifecycleEvent(lifecycle: Lifecycle) {
+
+    }
+
+    open fun onPauseEvent() {
+
+    }
 
     open fun onDestroy() {
         compositeDisposable.clear()

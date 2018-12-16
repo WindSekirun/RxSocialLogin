@@ -79,7 +79,8 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
     // optional
     // library
-    implementation project(path: ':library')
+//    implementation project(path: ':library')
+    implementation 'com.github.WindSekirun:RxSocialLogin:1.2.0-androidx'
     // google
     implementation 'com.google.firebase:firebase-auth:15.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
