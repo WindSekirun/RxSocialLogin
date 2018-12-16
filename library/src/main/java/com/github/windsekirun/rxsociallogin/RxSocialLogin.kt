@@ -4,6 +4,7 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
+import android.arch.lifecycle.Lifecycle
 import android.content.Intent
 import android.support.annotation.CheckResult
 import android.support.v4.app.FragmentActivity
@@ -179,6 +180,30 @@ object RxSocialLogin {
 
         return configMap[type]!!
     }
+
+    @JvmStatic
+    fun addLifecycleEvent(lifecycle: Lifecycle) {
+        moduleMap.values.forEach {
+            it?.addLifecycleEvent(lifecycle)
+        }
+    }
+
+    @JvmStatic
+    fun removeLifecycleEvent(lifecycle: Lifecycle) {
+        moduleMap.values.forEach {
+            it?.removeLifecycleEvent(lifecycle)
+        }
+    }
+
+    @JvmStatic
+    fun getLoginModule(platformType: PlatformType): BaseSocialLogin? {
+        if (!moduleMap.containsKey(platformType)) {
+            throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
+        }
+
+        return moduleMap[platformType]
+    }
+
 
     /**
      * set [SocialConfig] object with given [PlatformType]

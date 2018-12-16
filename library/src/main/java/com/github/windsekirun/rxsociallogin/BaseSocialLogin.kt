@@ -1,5 +1,6 @@
 package com.github.windsekirun.rxsociallogin
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
@@ -36,6 +37,18 @@ abstract class BaseSocialLogin constructor(childActivity: FragmentActivity) {
 
     @JvmOverloads
     open fun logout(clearToken: Boolean = false) {
+
+    }
+
+    open fun addLifecycleEvent(lifecycle: Lifecycle) {
+
+    }
+
+    open fun removeLifecycleEvent(lifecycle: Lifecycle) {
+
+    }
+
+    open fun onPauseEvent() {
 
     }
 

@@ -1,5 +1,8 @@
 package com.github.windsekirun.rxsociallogin.google
 
+import android.arch.lifecycle.DefaultLifecycleObserver
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
@@ -18,7 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity), DefaultLifecycleObserver {
     private val googleApiClient: GoogleApiClient by lazy {
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(config.clientTokenId)
@@ -58,6 +61,28 @@ class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin(acti
 
     override fun logout(clearToken: Boolean) {
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
+    }
+
+    override fun addLifecycleEvent(lifecycle: Lifecycle) {
+        super.addLifecycleEvent(lifecycle)
+        lifecycle.addObserver(this)
+    }
+
+    override fun removeLifecycleEvent(lifecycle: Lifecycle) {
+        super.removeLifecycleEvent(lifecycle)
+        lifecycle.removeObserver(this)
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        onPauseEvent()
+    }
+
+    override fun onPauseEvent() {
+        super.onPauseEvent()
+        if (googleApiClient.isConnected) {
+            googleApiClient.stopAutoManage(activity!!)
+            googleApiClient.disconnect()
+        }
     }
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {
