@@ -77,7 +77,6 @@ class GoogleLogin constructor(activity: androidx.fragment.app.FragmentActivity) 
     }
 
     override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
         onPauseEvent()
     }
 
