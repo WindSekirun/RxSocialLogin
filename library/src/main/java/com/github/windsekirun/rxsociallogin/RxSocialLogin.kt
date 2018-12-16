@@ -7,6 +7,7 @@ import android.app.Application
 import android.content.Intent
 import androidx.annotation.CheckResult
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import com.facebook.FacebookSdk
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
@@ -178,6 +179,29 @@ object RxSocialLogin {
         }
 
         return configMap[type]!!
+    }
+
+    @JvmStatic
+    fun addLifecycleEvent(lifecycle: Lifecycle) {
+        moduleMap.values.forEach {
+            it?.addLifecycleEvent(lifecycle)
+        }
+    }
+
+    @JvmStatic
+    fun removeLifecycleEvent(lifecycle: Lifecycle) {
+        moduleMap.values.forEach {
+            it?.removeLifecycleEvent(lifecycle)
+        }
+    }
+
+    @JvmStatic
+    fun getLoginModule(platformType: PlatformType): BaseSocialLogin? {
+        if (!moduleMap.containsKey(platformType)) {
+            throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
+        }
+
+        return moduleMap[platformType]
     }
 
     /**
