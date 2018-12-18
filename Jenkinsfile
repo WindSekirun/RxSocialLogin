@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Touch local.properties') {
+    stage('Make Environment') {
       parallel {
         stage('Touch local.properties') {
           steps {
