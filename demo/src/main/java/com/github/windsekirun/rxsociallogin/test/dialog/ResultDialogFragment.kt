@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.fragment.app.FragmentActivity
+import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.test.R
 import com.github.windsekirun.rxsociallogin.test.databinding.ResultDialogFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -24,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class ResultDialogFragment : BottomSheetDialogFragment() {
     private lateinit var binding: ResultDialogFragmentBinding
     val item = ObservableField<LoginResultItem>()
+    val content = ObservableString()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogThemeLight)
@@ -37,6 +40,22 @@ class ResultDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val resultItem = item.get() ?: return
+
+        // constructing properties map and join to single line
+        val resultContent = resultItem.javaClass.declaredFields.map { it.name to it.get(resultItem) }
+                .map {
+                    if (it.second is PlatformType) { // LoginResultItem.platform
+                        it.first to (it.second as PlatformType).name
+                    } else { // other case
+                        it.first to it.second.toString()
+                    }
+                }
+                .filter { it.second.isNotEmpty() }
+                .joinToString(separator = "\n") { "${it.first} -> ${it.second}" }
+
+        content.set(resultContent)
     }
 
     companion object {
