@@ -11,7 +11,7 @@ import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
 import io.reactivex.disposables.Disposables
 
-open class SocialObservable(private val login: BaseSocialLogin) : Observable<LoginResultItem>() {
+open class SocialObservable(private val login: BaseSocialLogin<*>) : Observable<LoginResultItem>() {
 
     override fun subscribeActual(observer: Observer<in LoginResultItem>?) {
         if (observer == null || !checkMainThread(observer)) {
@@ -24,7 +24,7 @@ open class SocialObservable(private val login: BaseSocialLogin) : Observable<Log
         observer.onSubscribe(listener)
     }
 
-    private class Listener(val login: BaseSocialLogin, val observer: Observer<in LoginResultItem>?) :
+    private class Listener(val login: BaseSocialLogin<*>, val observer: Observer<in LoginResultItem>?) :
             MainThreadDisposable(), OnResponseListener {
         override fun onResult(item: LoginResultItem?, error: Throwable?) {
             if (!isDisposed) {

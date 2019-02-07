@@ -18,20 +18,15 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * Description:
  */
-abstract class BaseSocialLogin<T : SocialConfig> constructor(childActivity: FragmentActivity) {
+abstract class BaseSocialLogin<T : SocialConfig> constructor(val activity: FragmentActivity) {
     internal var responseListener: OnResponseListener? = null
 
     abstract fun getPlatformType(): PlatformType
 
     val config: T by lazy { getPlatformConfig(getPlatformType()) as T }
 
-    protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(childActivity.applicationContext) }
+    protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(activity.applicationContext) }
     protected val compositeDisposable = CompositeDisposable()
-    protected var activity: FragmentActivity? by weak(null)
-
-    init {
-        this.activity = childActivity
-    }
 
     abstract fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
