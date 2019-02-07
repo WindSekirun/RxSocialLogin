@@ -19,15 +19,6 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<
     override fun getRequestCode(): Int = OAuthConstants.YAHOO_REQUEST_CODE
     override fun getPlatformType(): PlatformType = PlatformType.YAHOO
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.YAHOO_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
-        }
-    }
-
     override fun login() {
         val nonce = randomString(21)
 

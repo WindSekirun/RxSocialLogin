@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin.base
 
 import android.content.Intent
+import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
@@ -24,7 +25,7 @@ abstract class BaseSocialLogin<T : SocialConfig> constructor(childActivity: Frag
 
     val config: T by lazy { getPlatformConfig(getPlatformType()) as T }
 
-    protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(activity!!.applicationContext) }
+    protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(childActivity.applicationContext) }
     protected val compositeDisposable = CompositeDisposable()
     protected var activity: FragmentActivity? by weak(null)
 

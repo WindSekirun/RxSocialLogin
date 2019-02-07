@@ -34,11 +34,11 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Kakao
         checkSession()
 
         // issue #38 Check 'NotSupportError' on KakaoLogin
-        if (activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
-                activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
+        if (activity.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
+                activity.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
             // if either KakaoTalk or KakaoStory is installed, so we can use TalkAuthService, StoryAuthService
             if (data != null && data.extras != null) {
-                val bundle = data.extras!!
+                val bundle = data.extras ?: return
                 val errorType = bundle.getString(EXTRA_ERROR_TYPE)
                 val errorDes = bundle.getString(EXTRA_ERROR_DESCRIPTION)
 

@@ -32,7 +32,7 @@ class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Win
     }
 
     override fun login() {
-        clientApplication.acquireToken(activity!!, arrayOf("User.Read"), object : AuthenticationCallback {
+        clientApplication.acquireToken(activity, arrayOf("User.Read"), object : AuthenticationCallback {
             override fun onSuccess(authenticationResult: AuthenticationResult?) {
                 if (authenticationResult == null) {
                     callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))

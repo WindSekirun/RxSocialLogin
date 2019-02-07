@@ -1,11 +1,9 @@
 package com.github.windsekirun.rxsociallogin.line
 
-import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -20,8 +18,8 @@ class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin<LineCo
     }
 
     override fun login() {
-        val loginIntent = LineLoginApi.getLoginIntent(activity as Context, config.channelId)
-        activity!!.startActivityForResult(loginIntent, REQUEST_CODE)
+        val loginIntent = LineLoginApi.getLoginIntent(activity, config.channelId)
+        activity.startActivityForResult(loginIntent, REQUEST_CODE)
     }
 
     override fun onDestroy() {

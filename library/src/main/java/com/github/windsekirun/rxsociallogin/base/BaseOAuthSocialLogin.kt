@@ -23,7 +23,12 @@ abstract class BaseOAuthSocialLogin<T : SocialConfig>(activity: FragmentActivity
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == getRequestCode()) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
+            if (data == null) {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                return
+            }
+
+            val jsonStr = data.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
             analyzeResult(jsonStr)
         } else if (requestCode == getRequestCode() && resultCode != Activity.RESULT_OK) {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))

@@ -70,7 +70,12 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Fa
             }
 
             val data = getJSONObject(getJSONObject(obj, "picture"), "data")
-            val profilePicture = data!!.getJSONString("url")
+            if (data == null) {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                return@GraphJSONObjectCallback
+            }
+
+            val profilePicture = data.getJSONString("url")
 
             val item = LoginResultItem().apply {
                 this.id = obj.getJSONString("id")

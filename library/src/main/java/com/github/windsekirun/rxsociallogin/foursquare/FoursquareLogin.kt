@@ -23,7 +23,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin<
             if (codeResponse.code != null && !codeResponse.code.isEmpty()) {
                 val intent = FoursquareOAuth.getTokenExchangeIntent(activity, config.clientId,
                         config.clientSecret, codeResponse.code)
-                activity!!.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
+                activity.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
             } else {
                 callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
@@ -39,8 +39,8 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin<
 
     override fun login() {
         val intent = FoursquareOAuth.getConnectIntent(activity, config.clientId)
-        if (intent.resolveActivity(activity!!.packageManager) != null) {
-            activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
+        if (intent.resolveActivity(activity.packageManager) != null) {
+            activity.startActivityForResult(intent, CONNECT_REQUEST_CODE)
         } else {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FOURSQUARE_INTENT))
         }
