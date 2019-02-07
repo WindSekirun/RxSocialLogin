@@ -10,7 +10,6 @@ import androidx.databinding.ObservableField
 import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.bindadapters.observable.ObservableString
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
-import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.test.R
 import com.github.windsekirun.rxsociallogin.test.databinding.ResultDialogFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -44,21 +43,23 @@ class ResultDialogFragment : BottomSheetDialogFragment() {
         val resultItem = item.get() ?: return
 
         // constructing properties map and join to single line
-        val resultContent = resultItem.javaClass.declaredFields.map { it.name to it.get(resultItem) }
+        val resultContent = resultItem.javaClass.declaredFields
                 .map {
-                    if (it.second is PlatformType) { // LoginResultItem.platform
-                        it.first to (it.second as PlatformType).name
-                    } else { // other case
-                        it.first to it.second.toString()
-                    }
+                    it.isAccessible = true
+                    it.name to it.get(resultItem)
                 }
+                .filter { !excludedFieldName.contains(it.first) }
+                .map { it.first to it.second.toString() }
                 .filter { it.second.isNotEmpty() }
+                .sortedBy { it.first }
                 .joinToString(separator = "\n") { "${it.first} -> ${it.second}" }
 
         content.set(resultContent)
     }
 
     companion object {
+        val excludedFieldName = listOf("Companion", "platform", "result")
+
         fun show(activity: FragmentActivity, item: LoginResultItem): ResultDialogFragment {
             val fragment = ResultDialogFragment().apply {
                 this.item.set(item)

@@ -65,11 +65,6 @@ class MainFragment : Fragment() {
         compositeDisposable.clear()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        RxSocialLogin.activityResult(requestCode, resultCode, data)
-    }
-
     private fun showErrorDialog(throwable: Throwable?) {
         AlertDialog.Builder(requireContext()).apply {
             setMessage("Login failed... ${throwable?.message ?: "Unknown Error"}")

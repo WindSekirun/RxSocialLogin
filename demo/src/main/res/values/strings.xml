@@ -5,4 +5,6 @@
     <string name="twitch_redirect_uri">http://example.com/oauth/callback</string>
     <string name="wordpress_redirect_uri">http://example.com/oauth/callback</string>
     <string name="yahoo_redirect_uri">http://example.com</string>
+
+    <string name="id_format">ID: %s</string>
 </resources>
