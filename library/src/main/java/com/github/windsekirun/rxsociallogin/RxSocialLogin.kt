@@ -8,6 +8,7 @@ import android.content.Intent
 import androidx.annotation.CheckResult
 import androidx.fragment.app.FragmentActivity
 import com.facebook.FacebookSdk
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
@@ -47,7 +48,7 @@ import java.util.*
 
 object RxSocialLogin {
     private var configMap: MutableMap<PlatformType, SocialConfig> = HashMap()
-    private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin> = WeakHashMap()
+    private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin<*>> = WeakHashMap()
     private var application: Application? by weak(null)
 
     const val EXCEPTION_FAILED_RESULT = "Failed to get results."
@@ -74,7 +75,7 @@ object RxSocialLogin {
      * @param fragmentActivity [FragmentActivity] to initialize individual Social module object.
      */
     @JvmStatic
-    fun initialize(fragmentActivity: androidx.fragment.app.FragmentActivity) {
+    fun initialize(fragmentActivity: FragmentActivity) {
         val map = configMap.map {
             it.key to when (it.key) {
                 KAKAO -> KakaoLogin(fragmentActivity)
@@ -134,7 +135,7 @@ object RxSocialLogin {
     @CheckResult
     @JvmStatic
     @JvmOverloads
-    fun result(fragmentActivity: androidx.fragment.app.FragmentActivity? = null): Observable<LoginResultItem> {
+    fun result(fragmentActivity: FragmentActivity? = null): Observable<LoginResultItem> {
         if (moduleMap.isEmpty() && fragmentActivity != null) initialize(fragmentActivity)
         return Observable.merge(moduleMap.values.map { SocialObservable(it) })
     }
@@ -143,7 +144,7 @@ object RxSocialLogin {
      * Observe SocialLogin result by traditional (Listener) way
      */
     @JvmOverloads
-    fun result(callback: (LoginResultItem) -> Unit, fragmentActivity: androidx.fragment.app.FragmentActivity? = null) {
+    fun result(callback: (LoginResultItem) -> Unit, fragmentActivity: FragmentActivity? = null) {
         if (moduleMap.isEmpty() && fragmentActivity != null) initialize(fragmentActivity)
 
         val listener = object : OnResponseListener {
@@ -158,7 +159,7 @@ object RxSocialLogin {
             }
         }
 
-        val newMap = mutableMapOf<PlatformType, BaseSocialLogin>()
+        val newMap = mutableMapOf<PlatformType, BaseSocialLogin<*>>()
 
         moduleMap.forEach {
             val moduleObject = it.value

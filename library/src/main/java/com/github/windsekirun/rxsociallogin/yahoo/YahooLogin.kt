@@ -2,11 +2,11 @@ package com.github.windsekirun.rxsociallogin.yahoo
 
 import android.app.Activity
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
 import android.util.Base64
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -15,8 +15,9 @@ import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class YahooLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: YahooConfig by lazy { RxSocialLogin.getPlatformConfig(PlatformType.YAHOO) as YahooConfig }
+class YahooLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<YahooConfig>(activity) {
+    override fun getRequestCode(): Int = OAuthConstants.YAHOO_REQUEST_CODE
+    override fun getPlatformType(): PlatformType = PlatformType.YAHOO
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.YAHOO_REQUEST_CODE) {
@@ -49,7 +50,7 @@ class YahooLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
                 PlatformType.YAHOO, authUrl, title, oauthUrl, map, basicToken)
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val idToken = jsonObject?.getJSONString("id_token") ?: ""
         val guid = jsonObject?.getJSONString("xoauth_yahoo_guid") ?: ""

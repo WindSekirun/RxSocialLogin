@@ -1,13 +1,10 @@
 package com.github.windsekirun.rxsociallogin.disqus
 
-import android.app.Activity
-import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -20,17 +17,9 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class DisqusLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: DisqusConfig by lazy { getPlatformConfig(PlatformType.DISQUS) as DisqusConfig }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.DISQUS_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.DISQUS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
-        }
-    }
+class DisqusLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<DisqusConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.DISQUS
+    override fun getRequestCode(): Int = OAuthConstants.DISQUS_REQUEST_CODE
 
     override fun login() {
         val authUrl = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
@@ -54,7 +43,7 @@ class DisqusLogin constructor(activity: androidx.fragment.app.FragmentActivity) 
         clearCookies()
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()
 
         if (accessTokenResult == null) {

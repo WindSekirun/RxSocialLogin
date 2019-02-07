@@ -2,7 +2,7 @@ package com.github.windsekirun.rxsociallogin.google
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
@@ -18,7 +18,9 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class GoogleLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
+class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin<GoogleConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.GOOGLE
+
     private val googleApiClient: GoogleApiClient by lazy {
         val builder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(config.clientTokenId)
@@ -29,13 +31,12 @@ class GoogleLogin constructor(activity: androidx.fragment.app.FragmentActivity) 
 
         val googleSignInOptions = builder.build()
 
-        GoogleApiClient.Builder(activity!!)
-                .enableAutoManage(activity) { _ -> }
+        GoogleApiClient.Builder(activity)
+                .enableAutoManage(activity) {  }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
     }
 
-    private val config: GoogleConfig by lazy { getPlatformConfig(PlatformType.GOOGLE) as GoogleConfig }
     private val auth = FirebaseAuth.getInstance()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -53,7 +54,7 @@ class GoogleLogin constructor(activity: androidx.fragment.app.FragmentActivity) 
     override fun login() {
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-        activity?.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
+        activity.startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
     }
 
     override fun logout(clearToken: Boolean) {

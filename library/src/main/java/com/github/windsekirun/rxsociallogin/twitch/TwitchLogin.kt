@@ -1,15 +1,11 @@
 package com.github.windsekirun.rxsociallogin.twitch
 
-import android.app.Activity
-import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -23,17 +19,9 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class TwitchLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: TwitchConfig by lazy { getPlatformConfig(PlatformType.TWITCH) as TwitchConfig }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.TWITCH_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.TWITCH_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED))
-        }
-    }
+class TwitchLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<TwitchConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.TWITCH
+    override fun getRequestCode(): Int = OAuthConstants.TWITCH_REQUEST_CODE
 
     override fun login() {
         val state = randomString(22)
@@ -77,7 +65,7 @@ class TwitchLogin constructor(activity: androidx.fragment.app.FragmentActivity) 
         }
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun analyzeResult(jsonStr: String) {
         val accessTokenObject = jsonStr.createJSONObject()
         if (accessTokenObject == null) {
             callbackAsFail(LoginFailedException(EXCEPTION_FAILED_RESULT))

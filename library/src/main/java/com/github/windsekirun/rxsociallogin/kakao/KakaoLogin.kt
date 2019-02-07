@@ -2,9 +2,8 @@ package com.github.windsekirun.rxsociallogin.kakao
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -20,7 +19,8 @@ import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 import java.util.*
 
-class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
+class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin<KakaoConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.KAKAO
     private var sessionCallback: SessionCallback? = null
 
     companion object {
@@ -64,8 +64,6 @@ class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
 
         session.addCallback(sessionCallback)
         if (!session.checkAndImplicitOpen()) {
-            val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
-
             session.open(config.authType, activity)
         }
     }
@@ -111,8 +109,6 @@ class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
     }
 
     private fun requestMe() {
-        val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
-
         val requestOptions = ArrayList<String>()
         requestOptions.add("properties.nickname")
         requestOptions.add("properties.profile_image")

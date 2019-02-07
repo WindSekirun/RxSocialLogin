@@ -158,7 +158,7 @@ class LoginOAuthActivity : AppCompatActivity() {
         private const val EXTRA_PLATFORM = "bfa7d893-1a67-448d-b8d6-2e84fa0bc167"
         private const val EXTRA_AUTHORIZATION_VALUE = "5ab24c5e-fe4d-47b4-a70d-38a3442908cc"
 
-        internal fun startOAuthActivity(activity: androidx.fragment.app.FragmentActivity?, requestCode: Int, platform: PlatformType,
+        internal fun startOAuthActivity(activity: FragmentActivity?, requestCode: Int, platform: PlatformType,
                                         authUrl: String, title: String, oauthUrl: String,
                                         parameters: java.util.HashMap<String, String>, authorization: String = "") {
             if (activity == null) return

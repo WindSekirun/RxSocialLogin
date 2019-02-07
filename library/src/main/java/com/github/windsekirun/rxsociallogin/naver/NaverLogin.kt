@@ -4,9 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -20,7 +19,8 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class NaverLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
+class NaverLogin constructor(activity: FragmentActivity) : BaseSocialLogin<NaverConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.NAVER
     private val requestUrl = "https://openapi.naver.com/v1/nid/me"
     private val authLogin = OAuthLogin.getInstance()
 
@@ -30,8 +30,6 @@ class NaverLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
 
     override fun login() {
         OAuthLoginDefine.MARKET_LINK_WORKING = false
-
-        val config = getPlatformConfig(PlatformType.NAVER) as NaverConfig
         authLogin.init(activity, config.authClientId, config.authClientSecret, config.clientName)
         authLogin.startOauthLoginActivity(activity, NaverLoginHandler())
     }
@@ -41,20 +39,6 @@ class NaverLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
             OAuthLogin.getInstance().logoutAndDeleteToken(activity)
         } else {
             OAuthLogin.getInstance().logout(activity)
-        }
-    }
-
-    @SuppressLint("HandlerLeak")
-    private inner class NaverLoginHandler : OAuthLoginHandler() {
-
-        override fun run(success: Boolean) {
-            if (success) {
-                val accessToken = authLogin.getAccessToken(activity)
-                val authHeader = "Bearer $accessToken"
-                requestProfile(authHeader, accessToken)
-            } else {
-                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
-            }
         }
     }
 
@@ -99,4 +83,18 @@ class NaverLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
 
         callbackAsSuccess(item)
     }
+
+    @SuppressLint("HandlerLeak")
+    private inner class NaverLoginHandler : OAuthLoginHandler() {
+        override fun run(success: Boolean) {
+            if (success) {
+                val accessToken = authLogin.getAccessToken(activity)
+                val authHeader = "Bearer $accessToken"
+                requestProfile(authHeader, accessToken)
+            } else {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+            }
+        }
+    }
+
 }

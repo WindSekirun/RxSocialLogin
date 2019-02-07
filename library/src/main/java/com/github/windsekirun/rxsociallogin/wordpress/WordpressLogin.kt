@@ -1,13 +1,10 @@
 package com.github.windsekirun.rxsociallogin.wordpress
 
-import android.app.Activity
-import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -21,17 +18,9 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class WordpressLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: WordpressConfig by lazy { getPlatformConfig(PlatformType.WORDPRESS) as WordpressConfig }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.WORDPRESS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
-        }
-    }
+class WordpressLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<WordpressConfig>(activity) {
+    override fun getRequestCode(): Int = OAuthConstants.WORDPRESS_REQUEST_CODE
+    override fun getPlatformType(): PlatformType = PlatformType.WORDPRESS
 
     override fun login() {
         val accessToken = AccessTokenProvider.wordpressAccessToken
@@ -48,7 +37,7 @@ class WordpressLogin constructor(activity: androidx.fragment.app.FragmentActivit
         AccessTokenProvider.wordpressAccessToken = ""
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {

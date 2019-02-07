@@ -3,7 +3,7 @@ package com.github.windsekirun.rxsociallogin.windows
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
@@ -20,9 +20,10 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 
-class WindowsLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: WindowsConfig by lazy { getPlatformConfig(PlatformType.WINDOWS) as WindowsConfig }
-    private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity!!.applicationContext, config.clientId) }
+class WindowsLogin constructor(activity: FragmentActivity) : BaseSocialLogin<WindowsConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.WINDOWS
+
+    private val clientApplication: PublicClientApplication by lazy { PublicClientApplication(activity.applicationContext, config.clientId) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1001) { // found on InteractiveRequest.java

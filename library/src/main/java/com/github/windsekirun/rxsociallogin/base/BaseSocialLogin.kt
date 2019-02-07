@@ -1,9 +1,11 @@
-package com.github.windsekirun.rxsociallogin
+package com.github.windsekirun.rxsociallogin.base
 
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
+import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
+import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
 import com.github.windsekirun.rxsociallogin.intenal.utils.weak
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import io.reactivex.disposables.CompositeDisposable
@@ -15,12 +17,16 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * Description:
  */
-abstract class BaseSocialLogin constructor(childActivity: androidx.fragment.app.FragmentActivity) {
+abstract class BaseSocialLogin<T : SocialConfig> constructor(childActivity: FragmentActivity) {
     internal var responseListener: OnResponseListener? = null
+
+    abstract fun getPlatformType(): PlatformType
+
+    val config: T by lazy { getPlatformConfig(getPlatformType()) as T }
 
     protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(activity!!.applicationContext) }
     protected val compositeDisposable = CompositeDisposable()
-    protected var activity: androidx.fragment.app.FragmentActivity? by weak(null)
+    protected var activity: FragmentActivity? by weak(null)
 
     init {
         this.activity = childActivity

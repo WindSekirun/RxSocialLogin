@@ -1,15 +1,11 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
-import android.app.Activity
-import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -22,17 +18,9 @@ import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class LinkedinLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: LinkedinConfig by lazy { getPlatformConfig(PlatformType.LINKEDIN) as LinkedinConfig }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED))
-        }
-    }
+class LinkedinLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<LinkedinConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.LINKEDIN
+    override fun getRequestCode(): Int = OAuthConstants.LINKEDIN_REQUEST_CODE
 
     override fun login() {
         val state = randomString(22)
@@ -61,7 +49,7 @@ class LinkedinLogin constructor(activity: androidx.fragment.app.FragmentActivity
         clearCookies()
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {
