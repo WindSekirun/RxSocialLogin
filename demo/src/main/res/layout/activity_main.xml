@@ -36,152 +36,12 @@
         app:layout_constraintGuide_end="20dp"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/btnDisqus"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_disqus" />
-
-    <ImageView
-        android:id="@+id/btnFacebook"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnFoursquare"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnDisqus"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_facebook" />
-
-    <ImageView
-        android:id="@+id/btnFoursquare"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnGithub"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnFacebook"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_foursquare" />
-
-    <ImageView
-        android:id="@+id/btnGithub"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnGoogle"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnFoursquare"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_github" />
-
-    <ImageView
-        android:id="@+id/btnGoogle"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toEndOf="@+id/btnGithub"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_google" />
-
-    <ImageView
-        android:id="@+id/btnKakao"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnDisqus"
-        app:layout_constraintTop_toBottomOf="@+id/btnDisqus"
-        app:srcCompat="@drawable/ic_kakao" />
-
-    <ImageView
-        android:id="@+id/btnLine"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnFacebook"
-        app:layout_constraintTop_toBottomOf="@+id/btnFacebook"
-        app:srcCompat="@drawable/ic_line" />
-
-    <ImageView
-        android:id="@+id/btnLinkedin"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnFoursquare"
-        app:layout_constraintTop_toBottomOf="@+id/btnFoursquare"
-        app:srcCompat="@drawable/ic_linkedin" />
-
-    <ImageView
-        android:id="@+id/btnNaver"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnGithub"
-        app:layout_constraintTop_toBottomOf="@+id/btnGithub"
-        app:srcCompat="@drawable/ic_naver" />
-
-    <ImageView
-        android:id="@+id/btnTwitch"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnGoogle"
-        app:layout_constraintTop_toBottomOf="@+id/btnGoogle"
-        app:srcCompat="@drawable/ic_twitch" />
-
-    <ImageView
-        android:id="@+id/btnTwitter"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnKakao"
-        app:layout_constraintTop_toBottomOf="@+id/btnKakao"
-        app:srcCompat="@drawable/ic_twitter" />
-
-    <ImageView
-        android:id="@+id/btnVK"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnLine"
-        app:layout_constraintTop_toBottomOf="@+id/btnLine"
-        app:srcCompat="@drawable/ic_vk" />
-
-    <ImageView
-        android:id="@+id/btnWindows"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnLinkedin"
-        app:layout_constraintTop_toBottomOf="@+id/btnLinkedin"
-        app:srcCompat="@drawable/ic_windows" />
-
-    <ImageView
-        android:id="@+id/btnWordpress"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnNaver"
-        app:layout_constraintTop_toBottomOf="@+id/btnNaver"
-        app:srcCompat="@drawable/ic_wordpress" />
-
-    <ImageView
-        android:id="@+id/btnYahoo"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/btnTwitch"
-        app:layout_constraintTop_toBottomOf="@+id/btnTwitch"
-        app:srcCompat="@drawable/ic_yahoo" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
     <TextView
@@ -194,13 +54,14 @@
         android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/btnYahoo" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"
+        tools:layout_editor_absoluteY="306dp" />
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline"

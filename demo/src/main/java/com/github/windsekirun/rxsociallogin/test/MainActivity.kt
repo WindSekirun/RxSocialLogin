@@ -21,71 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        Log.d(MainActivity::class.java.simpleName, "KeyHash: ${getKeyHash()}")
-
-        btnDisqus.setOnClickListener {
-            RxSocialLogin.login(PlatformType.DISQUS)
-        }
-
-        btnFacebook.setOnClickListener {
-            RxSocialLogin.login(PlatformType.FACEBOOK)
-        }
-
-        btnFoursquare.setOnClickListener {
-            RxSocialLogin.login(PlatformType.FOURSQUARE)
-        }
-
-        btnGithub.setOnClickListener {
-            RxSocialLogin.login(PlatformType.GITHUB)
-        }
-
-        btnGoogle.setOnClickListener {
-            RxSocialLogin.login(PlatformType.GOOGLE)
-        }
-
-        btnKakao.setOnClickListener {
-            RxSocialLogin.login(PlatformType.KAKAO)
-        }
-
-        btnLine.setOnClickListener {
-            RxSocialLogin.login(PlatformType.LINE)
-        }
-
-        btnLinkedin.setOnClickListener {
-            RxSocialLogin.login(PlatformType.LINKEDIN)
-        }
-
-        btnNaver.setOnClickListener {
-            RxSocialLogin.login(PlatformType.NAVER)
-        }
-
-        btnTwitch.setOnClickListener {
-            RxSocialLogin.login(PlatformType.TWITCH)
-        }
-
-        btnTwitter.setOnClickListener {
-            RxSocialLogin.login(PlatformType.TWITTER)
-        }
-
-        btnVK.setOnClickListener {
-            RxSocialLogin.login(PlatformType.VK)
-        }
-
-        btnWordpress.setOnClickListener {
-            RxSocialLogin.login(PlatformType.WORDPRESS)
-        }
-
-        btnWindows.setOnClickListener {
-            RxSocialLogin.login(PlatformType.WINDOWS)
-        }
-
-        btnYahoo.setOnClickListener {
-            RxSocialLogin.login(PlatformType.YAHOO)
-        }
-
         RxSocialLogin.initialize(this)
-
         RxSocialLogin.result(this)
                 .subscribe({
                     txtResult.text = it.toString()
