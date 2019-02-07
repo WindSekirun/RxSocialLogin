@@ -19,6 +19,10 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONBoolean
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class WordpressLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<WordpressConfig>(activity) {
+    override fun getAuthUrl(): String = "${OAuthConstants.WORDPRESS_URL}?client_id=${config.clientId}&" +
+            "redirect_uri=${config.redirectUri}&response_type=code"
+
+    override fun getOAuthUrl(): String = OAuthConstants.WORDPRESS_OAUTH
     override fun getRequestCode(): Int = OAuthConstants.WORDPRESS_REQUEST_CODE
     override fun getPlatformType(): PlatformType = PlatformType.WORDPRESS
 
@@ -66,23 +70,6 @@ class WordpressLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLo
                 }
 
         compositeDisposable.add(disposable)
-    }
-
-    private fun tryLogin() {
-        val authUrl = "${OAuthConstants.WORDPRESS_URL}?client_id=${config.clientId}&" +
-                "redirect_uri=${config.redirectUri}&response_type=code"
-
-        val title = config.activityTitle
-        val oauthUrl = OAuthConstants.WORDPRESS_OAUTH
-        val parameters = listOf(
-                "grant_type" to "authorization_code",
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret)
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.WORDPRESS_REQUEST_CODE,
-                PlatformType.WORDPRESS, authUrl, title, oauthUrl, map)
     }
 
     private fun getUserInfo(accessToken: String) {

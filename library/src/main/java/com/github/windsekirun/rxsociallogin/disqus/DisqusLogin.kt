@@ -8,7 +8,6 @@ import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,25 +17,12 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
 class DisqusLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<DisqusConfig>(activity) {
+    override fun getAuthUrl(): String = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
+            "scope=read&response_type=code&redirect_uri=${config.redirectUri}"
+
+    override fun getOAuthUrl(): String = OAuthConstants.DISQUS_OAUTH
     override fun getPlatformType(): PlatformType = PlatformType.DISQUS
     override fun getRequestCode(): Int = OAuthConstants.DISQUS_REQUEST_CODE
-
-    override fun login() {
-        val authUrl = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
-                "scope=read&response_type=code&redirect_uri=${config.redirectUri}"
-        val oauthUrl = OAuthConstants.DISQUS_OAUTH
-        val parameters = listOf(
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret,
-                "grant_type" to "authorization_code")
-        val title = config.activityTitle
-
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.DISQUS_REQUEST_CODE,
-                PlatformType.DISQUS, authUrl, title, oauthUrl, map)
-    }
 
     override fun logout(clearToken: Boolean) {
         super.logout(clearToken)

@@ -9,8 +9,6 @@ import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
-import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.utils.signInWithCredential
 import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +19,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class GithubLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<GithubConfig>(activity) {
+    override fun getOAuthUrl(): String = OAuthConstants.GITHUB_OAUTH
     override fun getPlatformType(): PlatformType = PlatformType.GITHUB
     override fun getRequestCode(): Int = OAuthConstants.GITHUB_REQUEST_CODE
 
@@ -65,6 +64,17 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin
         getUserInfo(accessToken)
     }
 
+    override fun getAuthUrl(): String {
+        var authUrl = "${OAuthConstants.GITHUB_URL}?client_id=${config.clientId}"
+
+        if (config.scopeConfig.isNotEmpty()) {
+            val scope = config.scopeConfig.joinToString(",")
+            authUrl += scope
+        }
+
+        return authUrl
+    }
+
     private fun checkAccessTokenAvailable(accessToken: String) {
         val requestUrl = "https://api.github.com/applications/${config.clientId}/tokens/$accessToken"
         val disposable = requestUrl.httpGet()
@@ -81,24 +91,6 @@ class GithubLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin
                 }
 
         compositeDisposable.add(disposable)
-    }
-
-    private fun tryLogin() {
-        var authUrl = "${OAuthConstants.GITHUB_URL}?client_id=${config.clientId}"
-
-        if (config.scopeConfig.isNotEmpty()) {
-            val scope = config.scopeConfig.joinToString(",")
-            authUrl += scope
-        }
-
-        val title = config.activityTitle
-        val oauthUrl = OAuthConstants.GITHUB_OAUTH
-        val parameters = listOf("client_id" to config.clientId,
-                "client_secret" to config.clientSecret)
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.GITHUB_REQUEST_CODE, PlatformType.GITHUB,
-                authUrl, title, oauthUrl, map)
     }
 
     private fun getUserInfo(accessToken: String) {

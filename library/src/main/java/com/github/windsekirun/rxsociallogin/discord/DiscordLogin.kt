@@ -20,27 +20,11 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
 class DiscordLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<DiscordConfig>(activity) {
+    override fun getAuthUrl(): String = "${OAuthConstants.DISCORD_URL}?response_type=code&client_id=${config.clientId}" +
+            "&scope=identify%20email&state=${getState()}&redirect_uri=${config.redirectUri}"
     override fun getPlatformType(): PlatformType = PlatformType.DISCORD
     override fun getRequestCode(): Int = OAuthConstants.DISCORD_REQUEST_CODE
-
-    override fun login() {
-        val state = randomString(22)
-        val authUrl = "${OAuthConstants.DISCORD_URL}?response_type=code&client_id=${config.clientId}" +
-                "&scope=identify%20email&state=$state&redirect_uri=${config.redirectUri}"
-        val oauthUrl = OAuthConstants.DISCORD_OAUTH
-        val parameters = listOf(
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret,
-                "grant_type" to "authorization_code",
-                "scope" to "identify email")
-        val title = config.activityTitle
-
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.DISCORD_REQUEST_CODE,
-                PlatformType.DISCORD, authUrl, title, oauthUrl, map)
-    }
+    override fun getOAuthUrl(): String = OAuthConstants.DISCORD_OAUTH
 
     override fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()

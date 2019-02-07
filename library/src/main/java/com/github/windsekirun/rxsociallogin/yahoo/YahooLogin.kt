@@ -1,7 +1,5 @@
 package com.github.windsekirun.rxsociallogin.yahoo
 
-import android.app.Activity
-import android.content.Intent
 import android.util.Base64
 import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.OAuthConstants
@@ -10,35 +8,20 @@ import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
-import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
 class YahooLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<YahooConfig>(activity) {
+    override fun getAuthUrl(): String = "${OAuthConstants.YAHOO_URL}?client_id=${config.clientId}&" +
+            "redirect_uri=${config.redirectUri}&response_type=code&scope=openid%20sdps-r&nonce=${getState()}"
+
+    override fun getOAuthUrl(): String = OAuthConstants.YAHOO_OAUTH
     override fun getRequestCode(): Int = OAuthConstants.YAHOO_REQUEST_CODE
     override fun getPlatformType(): PlatformType = PlatformType.YAHOO
 
-    override fun login() {
-        val nonce = randomString(21)
-
-        val authUrl = "${OAuthConstants.YAHOO_URL}?client_id=${config.clientId}&" +
-                "redirect_uri=${config.redirectUri}&response_type=code&scope=openid%20sdps-r&nonce=$nonce"
-
-        val title = config.activityTitle
-        val oauthUrl = OAuthConstants.YAHOO_OAUTH
-        val parameters = listOf(
-                "grant_type" to "authorization_code",
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret)
-        val map = hashMapOf(*parameters.toTypedArray())
+    override fun getBasicToken(): String {
         val token = "${config.clientId}:${config.clientSecret}"
-        val basicToken = String(Base64.encode(token.toByteArray(), Base64.URL_SAFE))
-                .replace("\n", "")
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.YAHOO_REQUEST_CODE,
-                PlatformType.YAHOO, authUrl, title, oauthUrl, map, basicToken)
+        return String(Base64.encode(token.toByteArray(), Base64.URL_SAFE)).replace("\n", "")
     }
 
     override fun analyzeResult(jsonStr: String) {

@@ -10,8 +10,6 @@ import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedExcepti
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.oauth.AccessTokenProvider
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
-import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -20,30 +18,19 @@ import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
 class TwitchLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<TwitchConfig>(activity) {
+    override fun getOAuthUrl(): String = OAuthConstants.TWITCH_OAUTH
     override fun getPlatformType(): PlatformType = PlatformType.TWITCH
     override fun getRequestCode(): Int = OAuthConstants.TWITCH_REQUEST_CODE
 
-    override fun login() {
-        val state = randomString(22)
-
+    override fun getAuthUrl(): String {
         var authUrl = "${OAuthConstants.TWITCH_URL}?client_id=${config.clientId}&" +
-                "response_type=code&redirect_uri=${config.redirectUri}&state=$state&scope=user:edit"
+                "response_type=code&redirect_uri=${config.redirectUri}&state=${getState()}&scope=user:edit"
 
         if (config.requireEmail) {
             authUrl += "+user:read:email"
         }
 
-        val title = config.activityTitle
-        val oauthUrl = OAuthConstants.TWITCH_OAUTH
-        val parameters = listOf(
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret,
-                "grant_type" to "authorization_code")
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.TWITCH_REQUEST_CODE,
-                PlatformType.TWITCH, authUrl, title, oauthUrl, map)
+        return authUrl
     }
 
     override fun logout(clearToken: Boolean) {
