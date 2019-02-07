@@ -24,4 +24,8 @@ object OAuthConstants {
     const val TWITCH_URL = "https://id.twitch.tv/oauth2/authorize"
     const val TWITCH_OAUTH = "https://id.twitch.tv/oauth2/token"
     const val TWITCH_REQUEST_CODE = 105
+
+    const val DISCORD_URL = "https://discordapp.com/api/oauth2/authorize"
+    const val DISCORD_OAUTH = "https://discordapp.com/api/oauth2/token"
+    const val DISCORD_REQUEST_CODE = 106
 }

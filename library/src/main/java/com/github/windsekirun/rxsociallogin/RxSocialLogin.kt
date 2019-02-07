@@ -8,6 +8,7 @@ import android.content.Intent
 import android.support.annotation.CheckResult
 import android.support.v4.app.FragmentActivity
 import com.facebook.FacebookSdk
+import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
@@ -91,6 +92,7 @@ object RxSocialLogin {
                 FOURSQUARE -> FoursquareLogin(fragmentActivity)
                 TWITCH -> TwitchLogin(fragmentActivity)
                 WINDOWS -> WindowsLogin(fragmentActivity)
+                DISCORD -> DiscordLogin(fragmentActivity)
             }
         }.toMap().toMutableMap()
 
