@@ -32,6 +32,10 @@ import java.util.Arrays
 import java.util.HashMap
 
 class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+    init {
+        init(attrs)
+    }
+
     var url: String = ""
         set(value) {
             field = value
@@ -134,7 +138,7 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
      * @param url     String
      */
     fun loadWebView(webView: WebView?, url: String) {
-        val webSettings = webView!!.settings
+        val webSettings = webView?.settings ?: return
         webSettings.databaseEnabled = true
         webSettings.domStorageEnabled = true
         webSettings.javaScriptEnabled = true
@@ -181,7 +185,7 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
             }
 
             val message = String.format(format, *args)
-            internalWebView!!.loadUrl(message)
+            internalWebView?.loadUrl(message)
         }
     }
 
@@ -200,7 +204,7 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
                 return false
             }
 
-            return backButtonListener == null || backButtonListener!!.onBackPressed(webView.url)
+            return backButtonListener == null || backButtonListener?.onBackPressed(webView.url) ?: true
         } else {
             val webView = getChildAt(childCount - 1) as WebView
             if (webView.canGoBack()) {
@@ -224,7 +228,7 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         if (requestCode == FORM_REQUEST_CODE) {
             val result = if (data == null || resultCode != Activity.RESULT_OK) null else data.data
             if (uploadMessage != null) {
-                uploadMessage!!.onReceiveValue(result)
+                uploadMessage?.onReceiveValue(result)
                 uploadMessage = null
             }
 
@@ -237,9 +241,9 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
                         results = arrayOf(Uri.parse(dataString))
                     }
 
-                    uploadMessages!!.onReceiveValue(results)
+                    uploadMessages?.onReceiveValue(results)
                 } else {
-                    uploadMessages!!.onReceiveValue(null)
+                    uploadMessages?.onReceiveValue(null)
                 }
                 uploadMessages = null
             }
@@ -261,7 +265,7 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = contentMimeType
-        activityWeakReference!!.startActivityForResult(Intent.createChooser(intent, "Choose File"), FORM_REQUEST_CODE)
+        activityWeakReference?.startActivityForResult(Intent.createChooser(intent, "Choose File"), FORM_REQUEST_CODE)
     }
 
     private fun getParameters(uri: String): Map<String, String>? {
@@ -309,20 +313,20 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             val uri = Uri.parse(url)
 
-            return webViewHandler != null && webViewHandler!!.shouldOverrideUrlLoading(view, url, uri, uri.scheme,
-                    uri.host, getParameters(url))
+            return webViewHandler != null && webViewHandler?.shouldOverrideUrlLoading(view, url, uri, uri.scheme,
+                    uri.host, getParameters(url)) ?: false
         }
 
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
             if (webViewHandler != null) {
-                webViewHandler!!.onPageFinished(view, url)
+                webViewHandler?.onPageFinished(view, url)
             }
         }
 
         override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
             return if (shouldInterceptRequestListener != null) {
-                shouldInterceptRequestListener!!.shouldInterceptRequest(view, url)
+                shouldInterceptRequestListener?.shouldInterceptRequest(view, url)
             } else super.shouldInterceptRequest(view, url)
 
         }
@@ -330,14 +334,14 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
             if (receivedErrorListener != null) {
-                receivedErrorListener!!.onReceiveError(false, request, error)
+                receivedErrorListener?.onReceiveError(false, request, error)
             }
         }
 
         override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
             super.onReceivedHttpError(view, request, errorResponse)
             if (receivedErrorListener != null) {
-                receivedErrorListener!!.onReceiveError(true, request, errorResponse)
+                receivedErrorListener?.onReceiveError(true, request, errorResponse)
             }
         }
     }
@@ -366,7 +370,8 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         }
 
         override fun onJsAlert(view: WebView, url: String, message: String, result: android.webkit.JsResult): Boolean {
-            AlertDialog.Builder(activityWeakReference!!)
+            if (activityWeakReference == null) return true
+            AlertDialog.Builder(activityWeakReference)
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok) { _, _ -> result.confirm() }
                     .show()
@@ -374,7 +379,9 @@ class EnhanceWebView(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         }
 
         override fun onJsConfirm(view: WebView, url: String, message: String, result: android.webkit.JsResult): Boolean {
-            AlertDialog.Builder(activityWeakReference!!)
+            if (activityWeakReference == null) return true
+
+            AlertDialog.Builder(activityWeakReference)
                     .setMessage(message)
                     .setNegativeButton(android.R.string.no) { _, _ -> result.cancel() }
                     .setPositiveButton(android.R.string.ok) { _, _ -> result.confirm() }

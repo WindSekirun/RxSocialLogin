@@ -1,4 +1,4 @@
-# RxSocialLogin [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin)
+# RxSocialLogin [![](https://jitpack.io/v/WindSekirun/RxSocialLogin.svg)](https://jitpack.io/#WindSekirun/RxSocialLogin) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d32b1de5eab242d297aa8e8bfe3275a3)](https://www.codacy.com/app/pyxis/RxSocialLogin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WindSekirun/RxSocialLogin&amp;utm_campaign=Badge_Grade)
 
  [![](https://img.shields.io/badge/Android%20Arsenal-RxSocialLogin-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7028) [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -29,6 +29,7 @@ This library is an improved version of [@WindSekirun](https://github.com/windsek
 
 | Platform                                                       | Data                                                       | Version  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----- |
+| [Discord]() | id, name | 1.3.0 |
 | [Disqus](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Disqus) | id, name, email, nickname, profilePicture, accessToken                    | 1.0.0 |
 | [Facebook](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Facebook) | id, name, email, profilePicture, gender, firstName, accessToken           | 0.5.0 |
 | [Foursquare](https://github.com/WindSekirun/RxSocialLogin/wiki/Guide-to-Foursquare) | id, name, email, firstName, gender, birthDay, profilePicture, accessToken | 1.0.0 |
