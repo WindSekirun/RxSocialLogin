@@ -11,11 +11,12 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffff"
         android:orientation="vertical"
-        tools:context="com.github.windsekirun.rxsociallogin.test.MainActivity"
-        tools:layout_editor_absoluteY="81dp">
+        tools:context="com.github.windsekirun.rxsociallogin.test.main.MainActivity">
 
         <TextView
+            android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
@@ -27,6 +28,13 @@
             android:textColor="#ffffff"
             android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolBar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

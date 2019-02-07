@@ -18,5 +18,5 @@ enum class PlatformType : Serializable {
     VK,
     WINDOWS,
     WORDPRESS,
-    YAHOO
+    YAHOO;
 }

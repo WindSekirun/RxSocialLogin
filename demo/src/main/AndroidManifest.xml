@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.github.windsekirun.rxsociallogin.test.MainActivity">
+        <activity android:name="com.github.windsekirun.rxsociallogin.test.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
