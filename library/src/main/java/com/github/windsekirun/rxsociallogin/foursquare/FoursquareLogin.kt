@@ -1,7 +1,7 @@
 package com.github.windsekirun.rxsociallogin.foursquare
 
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.foursquare.android.nativeoauth.FoursquareOAuth
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
@@ -15,7 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
-class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class FoursquareLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
     private val config: FoursquareConfig by lazy { getPlatformConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

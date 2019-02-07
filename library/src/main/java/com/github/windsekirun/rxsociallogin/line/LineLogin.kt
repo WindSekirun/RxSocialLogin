@@ -2,7 +2,7 @@ package com.github.windsekirun.rxsociallogin.line
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
@@ -12,7 +12,7 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.linecorp.linesdk.LineApiResponseCode
 import com.linecorp.linesdk.auth.LineLoginApi
 
-class LineLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class LineLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE) onResultLineLogin(data)

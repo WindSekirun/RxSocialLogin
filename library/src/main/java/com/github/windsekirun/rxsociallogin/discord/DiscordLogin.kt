@@ -2,7 +2,7 @@ package com.github.windsekirun.rxsociallogin.discord
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
 import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
@@ -21,7 +21,7 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class DiscordLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class DiscordLogin constructor(activity: androidx.fragment.app.FragmentActivity) : BaseSocialLogin(activity) {
     private val config: DiscordConfig by lazy { getPlatformConfig(PlatformType.DISCORD) as DiscordConfig }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
