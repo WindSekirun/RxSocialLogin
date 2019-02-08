@@ -1,6 +1,8 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
+import com.github.windsekirun.rxsociallogin.discord.DiscordConfig
+import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareConfig
@@ -111,6 +113,10 @@ class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(applicat
               setup: YahooConfig.() -> Unit = {}) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
+
+    fun discord(clientId: String, clientSecret: String, redirectUri: String, setup: DiscordConfig.() -> Unit =  {}) {
+        typeMap[PlatformType.DISCORD] = DiscordConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
 }
 
 class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application) {
@@ -168,6 +174,12 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
     fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
               setup: ConfigFunction<YahooConfig> = EmptyFunction()) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun discord(clientId: String, clientSecret: String, redirectUri: String,
+              setup: ConfigFunction<DiscordConfig> = EmptyFunction()) {
+        typeMap[PlatformType.DISCORD] = DiscordConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     internal class EmptyFunction<T> : ConfigFunction<T> {

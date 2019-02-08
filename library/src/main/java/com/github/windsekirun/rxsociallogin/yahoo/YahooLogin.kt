@@ -19,11 +19,6 @@ class YahooLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<
     override fun getRequestCode(): Int = OAuthConstants.YAHOO_REQUEST_CODE
     override fun getPlatformType(): PlatformType = PlatformType.YAHOO
 
-    override fun getBasicToken(): String {
-        val token = "${config.clientId}:${config.clientSecret}"
-        return String(Base64.encode(token.toByteArray(), Base64.URL_SAFE)).replace("\n", "")
-    }
-
     override fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val idToken = jsonObject?.getJSONString("id_token") ?: ""

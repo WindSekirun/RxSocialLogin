@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.R
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -87,8 +87,14 @@ class LoginOAuthActivity : AppCompatActivity() {
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String, uri: Uri, scheme: String, host: String, parameters: Map<String, String>?): Boolean {
                 try {
-                    if (!url.contains("?code=")) return false
-                    requestOAuthToken(url.getCode())
+                    if (parameters == null) { // fallback when url string is not valid
+                        if (!url.contains("?code=")) return false
+                        requestOAuthToken(url.getCode())
+                        return false
+                    }
+
+                    if (!parameters.containsKey("code")) return false
+                    requestOAuthToken(parameters["code"] ?: url.getCode()) // discord not have ?code
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -119,6 +125,7 @@ class LoginOAuthActivity : AppCompatActivity() {
                 header = "Authorization" to "Basic $authorizationValue"
             }
             PlatformType.DISCORD -> {
+                parameters["code"] = code
                 header = "Content-Type" to "application/x-www-form-urlencoded"
             }
             else -> {

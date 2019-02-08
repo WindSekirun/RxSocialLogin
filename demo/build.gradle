@@ -39,6 +39,8 @@ android {
         resValue "string", "foursquare_api_secret", properties.getProperty("default.foursquare.secret", "")
         resValue "string", "twitch_api_key", properties.getProperty("default.twitch.api", "")
         resValue "string", "twitch_api_secret", properties.getProperty("default.twitch.secret", "")
+        resValue "string", "discord_api_key", properties.getProperty("default.discord.api", "")
+        resValue "string", "discord_api_secret", properties.getProperty("default.discord.secret", "")
         multiDexEnabled true
     }
 

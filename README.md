@@ -202,6 +202,10 @@ Place this statement in AndroidManifest.xml to solve this conflicts. we hope mic
 <uses-sdk tools:overrideLibrary="com.microsoft.identity.msal"/>
 ```
 
+#### ERR_CLEARTEXT_NOT_PERMITTED error on OAuth connection
+
+add `android:usesCleartextTraffic="true"` statement in AndroidManifest.xml
+
 ## Author & Contributor
 
 * Author: [@WindSekirun](https://github.com/windsekirun), E-mail [pyxis@uzuki.live](mailto:pyxis@uzuki.live)

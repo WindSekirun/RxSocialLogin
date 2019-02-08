@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.base
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Base64
 import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
@@ -48,10 +49,6 @@ abstract class BaseOAuthSocialLogin<T : OAuthConfig>(activity: FragmentActivity)
        tryLogin()
     }
 
-    protected open fun getBasicToken(): String {
-        return ""
-    }
-
     protected fun tryLogin() {
         val parameters = hashMapOf(
                 "redirect_uri" to config.redirectUri,
@@ -68,8 +65,15 @@ abstract class BaseOAuthSocialLogin<T : OAuthConfig>(activity: FragmentActivity)
             parameters.remove("grant_type")
         }
 
+        val basicToken = if (getPlatformType() == PlatformType.YAHOO) {
+            val token = "${config.clientId}:${config.clientSecret}"
+            String(Base64.encode(token.toByteArray(), Base64.URL_SAFE)).replace("\n", "")
+        } else {
+            ""
+        }
+
         LoginOAuthActivity.startOAuthActivity(activity, getRequestCode(),
-                getPlatformType(), getAuthUrl(), config.activityTitle, getOAuthUrl(), parameters, getBasicToken())
+                getPlatformType(), getAuthUrl(), config.activityTitle, getOAuthUrl(), parameters, basicToken)
     }
 
     protected fun getState() = randomString(22)
