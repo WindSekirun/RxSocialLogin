@@ -43,6 +43,8 @@ android {
         resValue "string", "discord_api_secret", properties.getProperty("default.discord.secret", "")
         resValue "string", "bitbucket_api_key", properties.getProperty("default.bitbucket.api", "")
         resValue "string", "bitbucket_api_secret", properties.getProperty("default.bitbucket.secret", "")
+        resValue "string", "gitlab_api_key", properties.getProperty("default.gitlab.api", "")
+        resValue "string", "gitlab_api_secret", properties.getProperty("default.gitlab.secret", "")
         multiDexEnabled true
     }
 

@@ -40,7 +40,7 @@ class GitlabLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin
             return
         }
 
-        val requestUrl = "https://discordapp.com/api/v6/users/@me"
+        val requestUrl = "https://gitlab.com/api/v4/user"
         val disposable = requestUrl.httpGet()
                 .header("Content-Type" to "application/json")
                 .header("Authorization" to "Bearer $accessToken")
@@ -65,13 +65,12 @@ class GitlabLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin
             return
         }
 
-        val avatar = jsonObject.getJSONString("avatar")
         val id = jsonObject.getJSONString("id")
-        val profilePicture = "https://cdn.discordapp.com/avatars/$id/$avatar.png?size=512"
+        val profilePicture = jsonObject.getJSONString("avatar_url")
 
         val item = LoginResultItem().apply {
             this.id = id
-            this.name = jsonObject.getJSONString("username")
+            this.name = jsonObject.getJSONString("name")
             this.email = jsonObject.getJSONString("email")
             this.nickname = jsonObject.getJSONString("username")
             this.profilePicture = profilePicture

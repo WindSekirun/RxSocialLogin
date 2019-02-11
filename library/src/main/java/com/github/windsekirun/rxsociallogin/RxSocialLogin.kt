@@ -16,6 +16,7 @@ import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
+import com.github.windsekirun.rxsociallogin.gitlab.GitlabLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
@@ -96,6 +97,7 @@ object RxSocialLogin {
                 TWITCH -> TwitchLogin(fragmentActivity)
                 WINDOWS -> WindowsLogin(fragmentActivity)
                 DISCORD -> DiscordLogin(fragmentActivity)
+                GITLAB -> GitlabLogin(fragmentActivity)
             }
         }.toMap().toMutableMap()
 
