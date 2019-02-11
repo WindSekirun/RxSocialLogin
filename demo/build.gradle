@@ -45,6 +45,8 @@ android {
         resValue "string", "bitbucket_api_secret", properties.getProperty("default.bitbucket.secret", "")
         resValue "string", "gitlab_api_key", properties.getProperty("default.gitlab.api", "")
         resValue "string", "gitlab_api_secret", properties.getProperty("default.gitlab.secret", "")
+        resValue "string", "amazon_api_key", properties.getProperty("default.amazon.api", "")
+        resValue "string", "amazon_api_secret", properties.getProperty("default.amazon.secret", "")
         multiDexEnabled true
     }
 

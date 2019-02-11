@@ -86,6 +86,8 @@ class MainApplication : Application() {
             gitlab(getString(R.string.gitlab_api_key), getString(R.string.gitlab_api_secret), getString(R.string.gitlab_redirect_uri)) {
                 activityTitle = "Login to Gitlab"
             }
+
+            amazon()
         }
     }
 }

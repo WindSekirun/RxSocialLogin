@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
+import com.github.windsekirun.rxsociallogin.amazon.AmazonConfig
 import com.github.windsekirun.rxsociallogin.bitbucket.BitbucketConfig
 import com.github.windsekirun.rxsociallogin.discord.DiscordConfig
 import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
@@ -62,6 +63,10 @@ open class BaseConfigDSLBuilder(val application: Application) {
 
     fun windows(clientId: String) {
         typeMap[PlatformType.WINDOWS] = WindowsConfig.apply(clientId)
+    }
+
+    fun amazon() {
+        typeMap[PlatformType.AMAZON] = AmazonConfig.apply()
     }
 
     internal fun build() {
