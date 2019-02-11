@@ -71,7 +71,7 @@ class DiscordLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogi
 
         val item = LoginResultItem().apply {
             this.id = id
-            this.name = jsonObject.getJSONString("name")
+            this.name = jsonObject.getJSONString("username")
             this.email = jsonObject.getJSONString("email")
             this.nickname = jsonObject.getJSONString("username")
             this.profilePicture = profilePicture
