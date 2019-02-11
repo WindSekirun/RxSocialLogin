@@ -22,11 +22,12 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
  */
 class AmazonLogin constructor(activity: FragmentActivity) : BaseSocialLogin<AmazonConfig>(activity) {
     private val requestContext: RequestContext by lazy { RequestContext.create(activity) }
+    private var requestCode: Int = 0
 
     init {
         requestContext.registerListener(object : AuthorizeListener() {
             override fun onSuccess(p0: AuthorizeResult?) {
-                tryLogin()
+                fetchProfile()
             }
 
             override fun onCancel(p0: AuthCancellation?) {
@@ -43,13 +44,32 @@ class AmazonLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Amaz
     override fun getPlatformType(): PlatformType = PlatformType.AMAZON
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (this.requestCode == 123) {
+            this.requestCode = -1
+            val scopes = arrayOf(ProfileScope.profile(), ProfileScope.postalCode())
+            AuthorizationManager.getToken(activity, scopes, object : Listener<AuthorizeResult, AuthError> {
+                override fun onSuccess(result: AuthorizeResult) {
+                    if (result.accessToken != null) {
+                        /* The user is signed in */
+                        fetchProfile()
+                    } else {
+                        /* The user is not signed in */
+                    }
+                }
 
+                override fun onError(ae: AuthError) {
+                    /* The user is not signed in */
+                }
+            })
+        }
     }
 
     override fun login() {
         AuthorizationManager.authorize(AuthorizeRequest.Builder(requestContext)
                 .addScopes(ProfileScope.profile())
                 .build())
+
+        requestCode = 123
     }
 
     override fun logout(clearToken: Boolean) {
@@ -65,7 +85,7 @@ class AmazonLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Amaz
         })
     }
 
-    private fun tryLogin() {
+    private fun fetchProfile() {
         User.fetch(activity, object : Listener<User, AuthError> {
             override fun onSuccess(p0: User?) {
                 if (p0 == null) {

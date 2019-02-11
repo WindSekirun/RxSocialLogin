@@ -9,7 +9,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "com.github.windsekirun.sociallogintest"
+        applicationId "com.github.windsekirun.rxsociallogin.test"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -45,8 +45,8 @@ android {
         resValue "string", "bitbucket_api_secret", properties.getProperty("default.bitbucket.secret", "")
         resValue "string", "gitlab_api_key", properties.getProperty("default.gitlab.api", "")
         resValue "string", "gitlab_api_secret", properties.getProperty("default.gitlab.secret", "")
-        resValue "string", "amazon_api_key", properties.getProperty("default.amazon.api", "")
-        resValue "string", "amazon_api_secret", properties.getProperty("default.amazon.secret", "")
+        resValue "string", "paypal_api_key", properties.getProperty("default.paypal.api", "")
+        resValue "string", "paypal_api_secret", properties.getProperty("default.paypal.secret", "")
         multiDexEnabled true
     }
 

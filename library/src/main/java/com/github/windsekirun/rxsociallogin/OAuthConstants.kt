@@ -36,4 +36,8 @@ object OAuthConstants {
     const val GITLAB_URL = "https://gitlab.com/oauth/authorize"
     const val GITLAB_OAUTH = "https://gitlab.com/oauth/token"
     const val GITLAB_REQUEST_CODE = 108
+
+    const val PAYPAL_URL = ""
+    const val PAYPAL_OAUTH = ""
+    const val PAYPAL_REQUEST_CODE = 109
 }
