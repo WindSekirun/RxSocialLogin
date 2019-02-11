@@ -46,7 +46,7 @@ abstract class BaseOAuthSocialLogin<T : OAuthConfig>(activity: FragmentActivity)
     }
 
     override fun login() {
-       tryLogin()
+        tryLogin()
     }
 
     protected fun tryLogin() {
@@ -65,7 +65,13 @@ abstract class BaseOAuthSocialLogin<T : OAuthConfig>(activity: FragmentActivity)
             parameters.remove("grant_type")
         }
 
-        val basicToken = if (getPlatformType() == PlatformType.YAHOO) {
+        if (getPlatformType() == PlatformType.BITBUCKET) {
+            parameters.remove("redirect_uri")
+            parameters.remove("client_id")
+            parameters.remove("client_secret")
+        }
+
+        val basicToken = if (getPlatformType() == PlatformType.YAHOO || getPlatformType() == PlatformType.BITBUCKET) {
             val token = "${config.clientId}:${config.clientSecret}"
             String(Base64.encode(token.toByteArray(), Base64.URL_SAFE)).replace("\n", "")
         } else {

@@ -78,6 +78,10 @@ class MainApplication : Application() {
             discord(getString(R.string.discord_api_key), getString(R.string.discord_api_secret), getString(R.string.discord_redirect_uri)) {
                 activityTitle = "Login to Discord"
             }
+
+            bitbucket(getString(R.string.bitbucket_api_key), getString(R.string.bitbucket_api_secret), getString(R.string.bitbucket_redirect_uri)) {
+                activityTitle = "Login to Bitbucket"
+            }
         }
     }
 }

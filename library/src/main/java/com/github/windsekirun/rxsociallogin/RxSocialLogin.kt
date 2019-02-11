@@ -9,6 +9,7 @@ import androidx.annotation.CheckResult
 import androidx.fragment.app.FragmentActivity
 import com.facebook.FacebookSdk
 import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.bitbucket.BitbucketLogin
 import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
@@ -78,6 +79,7 @@ object RxSocialLogin {
     fun initialize(fragmentActivity: FragmentActivity) {
         val map = configMap.map {
             it.key to when (it.key) {
+                BITBUCKET -> BitbucketLogin(fragmentActivity)
                 KAKAO -> KakaoLogin(fragmentActivity)
                 GOOGLE -> GoogleLogin(fragmentActivity)
                 FACEBOOK -> FacebookLogin(fragmentActivity)

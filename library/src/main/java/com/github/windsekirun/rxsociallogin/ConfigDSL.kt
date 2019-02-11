@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
+import com.github.windsekirun.rxsociallogin.bitbucket.BitbucketConfig
 import com.github.windsekirun.rxsociallogin.discord.DiscordConfig
 import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
@@ -117,6 +118,10 @@ class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(applicat
     fun discord(clientId: String, clientSecret: String, redirectUri: String, setup: DiscordConfig.() -> Unit =  {}) {
         typeMap[PlatformType.DISCORD] = DiscordConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
+
+    fun bitbucket(clientId: String, clientSecret: String, redirectUri: String, setup: BitbucketConfig.() -> Unit =  {}) {
+        typeMap[PlatformType.BITBUCKET] = BitbucketConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
 }
 
 class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application) {
@@ -180,6 +185,12 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
     fun discord(clientId: String, clientSecret: String, redirectUri: String,
               setup: ConfigFunction<DiscordConfig> = EmptyFunction()) {
         typeMap[PlatformType.DISCORD] = DiscordConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun bitbucket(clientId: String, clientSecret: String, redirectUri: String,
+                setup: ConfigFunction<BitbucketConfig> = EmptyFunction()) {
+        typeMap[PlatformType.BITBUCKET] = BitbucketConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     internal class EmptyFunction<T> : ConfigFunction<T> {

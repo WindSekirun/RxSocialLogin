@@ -41,6 +41,8 @@ android {
         resValue "string", "twitch_api_secret", properties.getProperty("default.twitch.secret", "")
         resValue "string", "discord_api_key", properties.getProperty("default.discord.api", "")
         resValue "string", "discord_api_secret", properties.getProperty("default.discord.secret", "")
+        resValue "string", "bitbucket_api_key", properties.getProperty("default.bitbucket.api", "")
+        resValue "string", "bitbucket_api_secret", properties.getProperty("default.bitbucket.secret", "")
         multiDexEnabled true
     }
 

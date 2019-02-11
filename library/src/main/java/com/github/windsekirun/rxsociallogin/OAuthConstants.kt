@@ -28,4 +28,8 @@ object OAuthConstants {
     const val DISCORD_URL = "https://discordapp.com/api/oauth2/authorize"
     const val DISCORD_OAUTH = "https://discordapp.com/api/oauth2/token"
     const val DISCORD_REQUEST_CODE = 106
+
+    const val BITBUCKET_URL = "https://bitbucket.org/site/oauth2/authorize"
+    const val BITBUCEKT_OAUTH = "https://bitbucket.org/site/oauth2/access_token"
+    const val BITBUCKET_REQUEST_CODE = 107
 }
