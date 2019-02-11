@@ -67,7 +67,7 @@ class DiscordLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogi
 
         val avatar = jsonObject.getJSONString("avatar")
         val id = jsonObject.getJSONString("id")
-        val profilePicture = "https://cdn.discordapp.com/avatars/$id$avatar.png"
+        val profilePicture = "https://cdn.discordapp.com/avatars/$id/$avatar.png?size=512"
 
         val item = LoginResultItem().apply {
             this.id = id
