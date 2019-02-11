@@ -32,4 +32,8 @@ object OAuthConstants {
     const val BITBUCKET_URL = "https://bitbucket.org/site/oauth2/authorize"
     const val BITBUCEKT_OAUTH = "https://bitbucket.org/site/oauth2/access_token"
     const val BITBUCKET_REQUEST_CODE = 107
+
+    const val GITLAB_URL = "https://gitlab.com/oauth/authorize"
+    const val GITLAB_OAUTH = "https://gitlab.com/oauth/token"
+    const val GITLAB_REQUEST_CODE = 108
 }

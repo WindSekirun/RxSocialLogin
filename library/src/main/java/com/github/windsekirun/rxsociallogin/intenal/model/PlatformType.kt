@@ -9,6 +9,7 @@ enum class PlatformType : Serializable {
     FACEBOOK,
     FOURSQUARE,
     GITHUB,
+    GITLAB,
     GOOGLE,
     KAKAO,
     LINE,

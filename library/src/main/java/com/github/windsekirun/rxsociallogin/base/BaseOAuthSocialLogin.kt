@@ -51,24 +51,24 @@ abstract class BaseOAuthSocialLogin<T : OAuthConfig>(activity: FragmentActivity)
 
     protected fun tryLogin() {
         val parameters = hashMapOf(
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret,
-                "grant_type" to "authorization_code")
+                REDIRECT_URI to config.redirectUri,
+                CLIENT_ID to config.clientId,
+                CLIENT_SECRET to config.clientSecret,
+                GRANT_TYPE to AUTHORIZATION_CODE)
 
         if (getPlatformType() == PlatformType.DISCORD) {
             parameters["scope"] = "identify email"
         }
 
         if (getPlatformType() == PlatformType.GITHUB) {
-            parameters.remove("redirect_uri")
-            parameters.remove("grant_type")
+            parameters.remove(REDIRECT_URI)
+            parameters.remove(GRANT_TYPE)
         }
 
         if (getPlatformType() == PlatformType.BITBUCKET) {
-            parameters.remove("redirect_uri")
-            parameters.remove("client_id")
-            parameters.remove("client_secret")
+            parameters.remove(REDIRECT_URI)
+            parameters.remove(CLIENT_ID)
+            parameters.remove(CLIENT_SECRET)
         }
 
         val basicToken = if (getPlatformType() == PlatformType.YAHOO || getPlatformType() == PlatformType.BITBUCKET) {
@@ -83,4 +83,12 @@ abstract class BaseOAuthSocialLogin<T : OAuthConfig>(activity: FragmentActivity)
     }
 
     protected fun getState() = randomString(22)
+
+    companion object {
+        const val REDIRECT_URI = "redirect_uri"
+        const val CLIENT_ID = "client_id"
+        const val CLIENT_SECRET = "client_secret"
+        const val GRANT_TYPE = "grant_type"
+        const val AUTHORIZATION_CODE = "authorization_code"
+    }
 }

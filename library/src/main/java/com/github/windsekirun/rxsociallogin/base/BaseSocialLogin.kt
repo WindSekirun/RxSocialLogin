@@ -23,7 +23,7 @@ abstract class BaseSocialLogin<T : SocialConfig> constructor(val activity: Fragm
 
     abstract fun getPlatformType(): PlatformType
 
-    val config: T by lazy { getPlatformConfig(getPlatformType()) as T }
+    @Suppress("UNCHECKED_CAST") val config: T by lazy { getPlatformConfig(getPlatformType()) as T }
 
     protected val kakaoSDKAdapter: KakaoSDKAdapter by lazy { KakaoSDKAdapter(activity.applicationContext) }
     protected val compositeDisposable = CompositeDisposable()

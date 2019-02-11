@@ -40,12 +40,11 @@ class MainFragment : Fragment() {
         // observe result of RxSocialLogin
         RxSocialLogin.result()
                 .subscribe { item, throwable ->
-                    if (item == null) {
+                    if (item != null) {
+                        ResultDialogFragment.show(requireActivity(), item)
+                    } else if (throwable != null) {
                         showErrorDialog(throwable)
-                        return@subscribe
                     }
-
-                    ResultDialogFragment.show(requireActivity(), item)
                 }.addTo(compositeDisposable)
 
 
