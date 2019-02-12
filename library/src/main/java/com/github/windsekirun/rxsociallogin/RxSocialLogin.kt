@@ -74,6 +74,7 @@ object RxSocialLogin {
 
     /**
      * Initialize 'Social module object' in once by Configs on Application class
+     * and register Lifecycle Event for handling proper lifecycle-aware process in library.
      *
      * @param fragmentActivity [FragmentActivity] to initialize individual Social module object.
      */
@@ -103,8 +104,22 @@ object RxSocialLogin {
             }
         }.toMap().toMutableMap()
 
+        map.values.map {
+            it.addLifecycleEvent(fragmentActivity.lifecycle)
+        }.toMutableList()
+
         moduleMap.clear()
         moduleMap.putAll(map)
+    }
+
+    /**
+     * remove lifecycle event in Modules
+     */
+    @JvmStatic
+    fun removeLifecycleEvent(fragmentActivity: FragmentActivity) {
+        moduleMap.values.map {
+            it.removeLifecycleEvent(fragmentActivity.lifecycle)
+        }.toMutableList()
     }
 
     /**
@@ -198,7 +213,7 @@ object RxSocialLogin {
             throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
         }
 
-        configMap[type] = config;
+        configMap[type] = config
     }
 
     internal fun initializeInternal(application: Application, map: Map<PlatformType, SocialConfig>) {

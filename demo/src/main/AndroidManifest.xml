@@ -15,7 +15,8 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.github.windsekirun.rxsociallogin.test.main.MainActivity">
+        <activity android:name="com.github.windsekirun.rxsociallogin.test.main.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

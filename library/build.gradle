@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion 28
@@ -39,8 +40,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // RichUtils
     implementation 'com.github.WindSekirun:RichUtilsKt:2.3.1'
-    implementation "android.arch.lifecycle:runtime:1.1.1"
-    implementation group: 'android.arch.lifecycle', name: 'common-java8', version: '1.1.1'
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     // fuel
@@ -84,6 +83,10 @@ dependencies {
     implementation 'com.chibatching.kotpref:initializer:2.6.0'
     // guava
     implementation 'com.google.guava:guava:22.0-android'
+    // lifecycle
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
+    implementation group: 'android.arch.lifecycle', name: 'common-java8', version: '1.1.1'
 }
 
 task sourcesJar(type: Jar) {

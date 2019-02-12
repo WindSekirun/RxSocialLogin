@@ -2,6 +2,7 @@ package com.github.windsekirun.rxsociallogin.amazon
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
 import com.amazon.identity.auth.device.AuthError
 import com.amazon.identity.auth.device.api.Listener
 import com.amazon.identity.auth.device.api.authorization.*
@@ -18,11 +19,10 @@ import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
  * Class: AmazonLogin
  * Created by Pyxis on 2019-02-11.
  *
- * Description:
+ * Description: https://login.amazon.com/android
  */
 class AmazonLogin constructor(activity: FragmentActivity) : BaseSocialLogin<AmazonConfig>(activity) {
     private val requestContext: RequestContext by lazy { RequestContext.create(activity) }
-    private var requestCode: Int = 0
 
     init {
         requestContext.registerListener(object : AuthorizeListener() {
@@ -44,32 +44,13 @@ class AmazonLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Amaz
     override fun getPlatformType(): PlatformType = PlatformType.AMAZON
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (this.requestCode == 123) {
-            this.requestCode = -1
-            val scopes = arrayOf(ProfileScope.profile(), ProfileScope.postalCode())
-            AuthorizationManager.getToken(activity, scopes, object : Listener<AuthorizeResult, AuthError> {
-                override fun onSuccess(result: AuthorizeResult) {
-                    if (result.accessToken != null) {
-                        /* The user is signed in */
-                        fetchProfile()
-                    } else {
-                        /* The user is not signed in */
-                    }
-                }
 
-                override fun onError(ae: AuthError) {
-                    /* The user is not signed in */
-                }
-            })
-        }
     }
 
     override fun login() {
         AuthorizationManager.authorize(AuthorizeRequest.Builder(requestContext)
                 .addScopes(ProfileScope.profile())
                 .build())
-
-        requestCode = 123
     }
 
     override fun logout(clearToken: Boolean) {
@@ -83,6 +64,30 @@ class AmazonLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Amaz
 
             }
         })
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
+        val scopes = arrayOf(ProfileScope.profile(), ProfileScope.postalCode())
+        AuthorizationManager.getToken(activity, scopes, object : Listener<AuthorizeResult, AuthError> {
+            override fun onSuccess(result: AuthorizeResult) {
+                if (result.accessToken != null) {
+                    /* The user is signed in */
+                    fetchProfile()
+                } else {
+                    /* The user is not signed in */
+                }
+            }
+
+            override fun onError(ae: AuthError) {
+                /* The user is not signed in */
+            }
+        })
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        requestContext.onResume()
     }
 
     private fun fetchProfile() {

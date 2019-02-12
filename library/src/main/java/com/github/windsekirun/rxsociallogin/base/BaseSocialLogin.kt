@@ -2,12 +2,14 @@ package com.github.windsekirun.rxsociallogin.base
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.model.SocialConfig
-import com.github.windsekirun.rxsociallogin.intenal.utils.weak
 import com.github.windsekirun.rxsociallogin.kakao.KakaoSDKAdapter
 import io.reactivex.disposables.CompositeDisposable
 
@@ -18,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * Description:
  */
-abstract class BaseSocialLogin<T : SocialConfig> constructor(val activity: FragmentActivity) {
+abstract class BaseSocialLogin<T : SocialConfig> constructor(val activity: FragmentActivity) : DefaultLifecycleObserver {
     internal var responseListener: OnResponseListener? = null
 
     abstract fun getPlatformType(): PlatformType
@@ -39,6 +41,14 @@ abstract class BaseSocialLogin<T : SocialConfig> constructor(val activity: Fragm
     @JvmOverloads
     open fun logout(clearToken: Boolean = false) {
 
+    }
+
+    open fun addLifecycleEvent(lifecycle: Lifecycle) {
+        lifecycle.addObserver(this)
+    }
+
+    open fun removeLifecycleEvent(lifecycle: Lifecycle) {
+        lifecycle.removeObserver(this)
     }
 
     protected fun callbackAsFail(exception: Exception) {

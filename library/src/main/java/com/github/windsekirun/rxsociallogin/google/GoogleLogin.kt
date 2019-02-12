@@ -2,10 +2,10 @@ package com.github.windsekirun.rxsociallogin.google
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
+import androidx.lifecycle.LifecycleOwner
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
 import com.github.windsekirun.rxsociallogin.intenal.utils.signInWithCredential
@@ -32,7 +32,7 @@ class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Goog
         val googleSignInOptions = builder.build()
 
         GoogleApiClient.Builder(activity)
-                .enableAutoManage(activity) {  }
+                .enableAutoManage(activity) { }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
     }
@@ -59,6 +59,14 @@ class GoogleLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Goog
 
     override fun logout(clearToken: Boolean) {
         if (googleApiClient.isConnected) googleApiClient.clearDefaultAccountAndReconnect()
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+        if (googleApiClient.isConnected) {
+            googleApiClient.stopAutoManage(activity)
+            googleApiClient.disconnect()
+        }
     }
 
     private fun authWithFirebase(acct: GoogleSignInAccount) {

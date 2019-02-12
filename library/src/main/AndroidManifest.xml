@@ -6,9 +6,6 @@
 
     <application>
 
-        <activity android:name=".disqus.DisqusOAuthActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
-
         <activity android:name=".intenal.oauth.LoginOAuthActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
