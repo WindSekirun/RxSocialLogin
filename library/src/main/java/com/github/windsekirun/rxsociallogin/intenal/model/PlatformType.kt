@@ -12,6 +12,7 @@ enum class PlatformType : Serializable {
     GITHUB,
     GITLAB,
     GOOGLE,
+    INSTAGRAM,
     KAKAO,
     LINE,
     LINKEDIN,

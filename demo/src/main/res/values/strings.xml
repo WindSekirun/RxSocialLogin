@@ -8,6 +8,7 @@
     <string name="discord_redirect_uri">http://example.com</string>
     <string name="bitbucket_redirect_uri"></string>
     <string name="gitlab_redirect_uri">http://example.com</string>
+    <string name="instagram_redirect_uri">http://example.com</string>
 
     <string name="id_format">ID: %s</string>
 </resources>

@@ -88,6 +88,10 @@ class MainApplication : Application() {
             }
 
             amazon()
+
+            instagram(getString(R.string.instagram_api_key), getString(R.string.instagram_api_secret), getString(R.string.instagram_redirect_uri)) {
+                activityTitle = "Login to Instagram"
+            }
         }
     }
 }

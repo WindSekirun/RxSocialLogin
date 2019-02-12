@@ -37,7 +37,7 @@ object OAuthConstants {
     const val GITLAB_OAUTH = "https://gitlab.com/oauth/token"
     const val GITLAB_REQUEST_CODE = 108
 
-    const val PAYPAL_URL = ""
-    const val PAYPAL_OAUTH = ""
-    const val PAYPAL_REQUEST_CODE = 109
+    const val INSTAGRAM_URL = "https://api.instagram.com/oauth/authorize/"
+    const val INSTAGRAM_OAUTH = "https://api.instagram.com/oauth/access_token"
+    const val INSTAGRAM_REQUEST_CODE = 109
 }
