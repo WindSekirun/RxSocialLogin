@@ -158,7 +158,7 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin<Kakao
 
                 val item = LoginResultItem().apply {
                     this.id = id
-                    this.nickname = nickname
+                    this.name = nickname
                     this.profilePicture = profilePicture
                     this.thumbnailPicture = thumbnailPicture
                     this.email = email

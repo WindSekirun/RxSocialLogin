@@ -11,4 +11,5 @@
     <string name="instagram_redirect_uri">http://example.com</string>
 
     <string name="id_format">ID: %s</string>
+    <string name="main_title">RxSocialLogin (%s platforms)</string>
 </resources>

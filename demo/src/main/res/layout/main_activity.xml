@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="activity"
+            type="com.github.windsekirun.rxsociallogin.test.main.MainActivity"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +26,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="RxSocialLogin"
+            android:text="@{@string/main_title(activity.platformCount)}"
             android:textColor="#ffffff"
             android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent" />
