@@ -9,7 +9,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "com.github.windsekirun.sociallogintest"
+        applicationId "com.github.windsekirun.rxsociallogin.test"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -21,7 +21,7 @@ android {
         resValue "string", "line_api_channel", properties.getProperty("default.line.api", "")
         resValue "string", "twitter_api_id", properties.getProperty("default.twitter.api", "")
         resValue "string", "twitter_api_secret", properties.getProperty("default.twitter.secret", "")
-        resValue "string", "server_client_id", properties.getProperty("default.google.token", "")
+        resValue "string", "google_api_token", properties.getProperty("default.google.token", "")
         resValue "string", "github_api_key", properties.getProperty("default.github.api", "")
         resValue "string", "github_api_secret", properties.getProperty("default.github.secret", "")
         resValue "string", "linkedin_api_key", properties.getProperty("default.linkedin.api", "")
@@ -39,6 +39,14 @@ android {
         resValue "string", "foursquare_api_secret", properties.getProperty("default.foursquare.secret", "")
         resValue "string", "twitch_api_key", properties.getProperty("default.twitch.api", "")
         resValue "string", "twitch_api_secret", properties.getProperty("default.twitch.secret", "")
+        resValue "string", "discord_api_key", properties.getProperty("default.discord.api", "")
+        resValue "string", "discord_api_secret", properties.getProperty("default.discord.secret", "")
+        resValue "string", "bitbucket_api_key", properties.getProperty("default.bitbucket.api", "")
+        resValue "string", "bitbucket_api_secret", properties.getProperty("default.bitbucket.secret", "")
+        resValue "string", "gitlab_api_key", properties.getProperty("default.gitlab.api", "")
+        resValue "string", "gitlab_api_secret", properties.getProperty("default.gitlab.secret", "")
+        resValue "string", "instagram_api_key", properties.getProperty("default.instagram.api", "")
+        resValue "string", "instagram_api_secret", properties.getProperty("default.instagram.secret", "")
         multiDexEnabled true
     }
 
@@ -54,26 +62,39 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        exclude 'META-INF/library_release.kotlin_module'
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:customtabs:28.0.0'
-    implementation 'com.github.WindSekirun:RichUtilsKt:2.3.1'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.github.WindSekirun:RichUtilsKt:2.3.2'
+    implementation 'com.github.WindSekirun:BindAdapters:0.2.1-androidx'
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     // optional
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
     // optional
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
     // optional
@@ -81,7 +102,7 @@ dependencies {
     implementation project(path: ':library')
     // google
     implementation 'com.google.firebase:firebase-auth:15.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     // VK
     implementation 'com.vk:androidsdk:1.6.9'
     // Microsoft - msal

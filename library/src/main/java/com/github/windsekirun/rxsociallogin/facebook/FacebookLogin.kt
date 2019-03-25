@@ -2,22 +2,22 @@ package com.github.windsekirun.rxsociallogin.facebook
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.google.gson.Gson
 import pyxis.uzuki.live.richutilskt.utils.getJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin<FacebookConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.FACEBOOK
+
     private val callbackManager: CallbackManager = CallbackManager.Factory.create()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -27,14 +27,13 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
     }
 
     override fun login() {
-        val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
         if (config.requireEmail) config.requestOptions.add("email")
         if (config.requireFriends) config.requestOptions.add("user_friends")
 
         if (config.requireWritePermissions) {
-            LoginManager.getInstance().logInWithPublishPermissions(activity!!, config.requestOptions)
+            LoginManager.getInstance().logInWithPublishPermissions(activity, config.requestOptions)
         } else {
-            LoginManager.getInstance().logInWithReadPermissions(activity!!, config.requestOptions)
+            LoginManager.getInstance().logInWithReadPermissions(activity, config.requestOptions)
         }
 
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -62,8 +61,6 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
     }
 
     private fun getUserInfo() {
-        val config = getPlatformConfig(PlatformType.FACEBOOK) as FacebookConfig
-
         val accessToken = AccessToken.getCurrentAccessToken()
 
         val callback: GraphRequest.GraphJSONObjectCallback = GraphRequest.GraphJSONObjectCallback { obj, _ ->
@@ -73,7 +70,12 @@ class FacebookLogin constructor(activity: FragmentActivity) : BaseSocialLogin(ac
             }
 
             val data = getJSONObject(getJSONObject(obj, "picture"), "data")
-            val profilePicture = data!!.getJSONString("url")
+            if (data == null) {
+                callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FAILED_RESULT))
+                return@GraphJSONObjectCallback
+            }
+
+            val profilePicture = data.getJSONString("url")
 
             val item = LoginResultItem().apply {
                 this.id = obj.getJSONString("id")

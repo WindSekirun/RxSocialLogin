@@ -20,9 +20,7 @@ class MainApplication : Application() {
         super.onCreate()
 
         initSocialLogin {
-            disqus(getString(R.string.disqus_api_key),
-                    getString(R.string.disqus_api_secret),
-                    getString(R.string.disqus_redirect_uri)) {
+            disqus(getString(R.string.disqus_api_key), getString(R.string.disqus_api_secret), getString(R.string.disqus_redirect_uri)) {
                 activityTitle = "Login to Disqus"
             }
 
@@ -39,55 +37,60 @@ class MainApplication : Application() {
                 activityTitle = "Login to Github"
             }
 
-            google(getString(R.string.google_api_key)) {
+            google(getString(R.string.google_api_token)) {
                 requireEmail = true
             }
 
             kakao {
-//                requireAgeRange = true
                 requireBirthday = true
-//                requireEmail = true
-//                requireGender = true
             }
 
             line(getString(R.string.line_api_channel))
 
-            linkedin(getString(R.string.linkedin_api_key),
-                    getString(R.string.linkedin_api_secret),
-                    getString(R.string.linkedin_redirect_uri)) {
+            linkedin(getString(R.string.linkedin_api_key), getString(R.string.linkedin_api_secret), getString(R.string.linkedin_redirect_uri)) {
                 requireEmail = true
                 activityTitle = "Login to LinkedIn"
             }
 
-            naver(getString(R.string.naver_api_id),
-                    getString(R.string.naver_api_secret),
-                    getString(R.string.app_name))
+            naver(getString(R.string.naver_api_id), getString(R.string.naver_api_secret), getString(R.string.app_name))
 
-//            twitch(getString(R.string.twitch_api_key),
-//                    getString(R.string.twitch_api_secret),
-//                    getString(R.string.twitch_redirect_uri)) {
-//                requireEmail = true
-//                activityTitle = "Login to Twitch"
-//            }
+            twitch(getString(R.string.twitch_api_key), getString(R.string.twitch_api_secret), getString(R.string.twitch_redirect_uri)) {
+                requireEmail = true
+                activityTitle = "Login to Twitch"
+            }
 
             twitter(getString(R.string.twitter_api_id), getString(R.string.twitter_api_secret))
 
-//            vk {
-//                requireEmail = true
-//            }
+            vk {
+                requireEmail = true
+            }
 
-//            windows(getString(R.string.windows_api_key))
+            windows(getString(R.string.windows_api_key))
 
-            wordpress(getString(R.string.wordpress_api_key),
-                    getString(R.string.wordpress_api_secret),
-                    getString(R.string.wordpress_redirect_uri)) {
+            wordpress(getString(R.string.wordpress_api_key), getString(R.string.wordpress_api_secret), getString(R.string.wordpress_redirect_uri)) {
                 activityTitle = "Login to Wordpress"
             }
 
-            yahoo(getString(R.string.yahoo_api_key),
-                    getString(R.string.yahoo_api_secret),
-                    getString(R.string.yahoo_redirect_uri)) {
+            yahoo(getString(R.string.yahoo_api_key), getString(R.string.yahoo_api_secret), getString(R.string.yahoo_redirect_uri)) {
                 activityTitle = "Login to Yahoo"
+            }
+
+            discord(getString(R.string.discord_api_key), getString(R.string.discord_api_secret), getString(R.string.discord_redirect_uri)) {
+                activityTitle = "Login to Discord"
+            }
+
+            bitbucket(getString(R.string.bitbucket_api_key), getString(R.string.bitbucket_api_secret), getString(R.string.bitbucket_redirect_uri)) {
+                activityTitle = "Login to Bitbucket"
+            }
+
+            gitlab(getString(R.string.gitlab_api_key), getString(R.string.gitlab_api_secret), getString(R.string.gitlab_redirect_uri)) {
+                activityTitle = "Login to Gitlab"
+            }
+
+            amazon()
+
+            instagram(getString(R.string.instagram_api_key), getString(R.string.instagram_api_secret), getString(R.string.instagram_redirect_uri)) {
+                activityTitle = "Login to Instagram"
             }
         }
     }

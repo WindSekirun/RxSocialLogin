@@ -1,17 +1,13 @@
 package com.github.windsekirun.rxsociallogin.disqus
 
-import android.app.Activity
-import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
 import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,41 +16,20 @@ import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 import pyxis.uzuki.live.richutilskt.utils.isEmpty
 
-class DisqusLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: DisqusConfig by lazy { getPlatformConfig(PlatformType.DISQUS) as DisqusConfig }
+class DisqusLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<DisqusConfig>(activity) {
+    override fun getAuthUrl(): String = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
+            "scope=read&response_type=code&redirect_uri=${config.redirectUri}"
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.DISQUS_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.DISQUS_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
-        }
-    }
-
-    override fun login() {
-        val authUrl = "${OAuthConstants.DISQUS_URL}?client_id=${config.clientId}&" +
-                "scope=read&response_type=code&redirect_uri=${config.redirectUri}"
-        val oauthUrl = OAuthConstants.DISQUS_OAUTH
-        val parameters = listOf(
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret,
-                "grant_type" to "authorization_code")
-        val title = config.activityTitle
-
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.DISQUS_REQUEST_CODE,
-                PlatformType.DISQUS, authUrl, title, oauthUrl, map)
-    }
+    override fun getOAuthUrl(): String = OAuthConstants.DISQUS_OAUTH
+    override fun getPlatformType(): PlatformType = PlatformType.DISQUS
+    override fun getRequestCode(): Int = OAuthConstants.DISQUS_REQUEST_CODE
 
     override fun logout(clearToken: Boolean) {
         super.logout(clearToken)
         clearCookies()
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun analyzeResult(jsonStr: String) {
         val accessTokenResult = jsonStr.createJSONObject()
 
         if (accessTokenResult == null) {

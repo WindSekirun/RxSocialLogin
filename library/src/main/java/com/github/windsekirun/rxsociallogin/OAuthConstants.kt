@@ -24,4 +24,20 @@ object OAuthConstants {
     const val TWITCH_URL = "https://id.twitch.tv/oauth2/authorize"
     const val TWITCH_OAUTH = "https://id.twitch.tv/oauth2/token"
     const val TWITCH_REQUEST_CODE = 105
+
+    const val DISCORD_URL = "https://discordapp.com/api/oauth2/authorize"
+    const val DISCORD_OAUTH = "https://discordapp.com/api/oauth2/token"
+    const val DISCORD_REQUEST_CODE = 106
+
+    const val BITBUCKET_URL = "https://bitbucket.org/site/oauth2/authorize"
+    const val BITBUCEKT_OAUTH = "https://bitbucket.org/site/oauth2/access_token"
+    const val BITBUCKET_REQUEST_CODE = 107
+
+    const val GITLAB_URL = "https://gitlab.com/oauth/authorize"
+    const val GITLAB_OAUTH = "https://gitlab.com/oauth/token"
+    const val GITLAB_REQUEST_CODE = 108
+
+    const val INSTAGRAM_URL = "https://api.instagram.com/oauth/authorize/"
+    const val INSTAGRAM_OAUTH = "https://api.instagram.com/oauth/access_token"
+    const val INSTAGRAM_REQUEST_CODE = 109
 }

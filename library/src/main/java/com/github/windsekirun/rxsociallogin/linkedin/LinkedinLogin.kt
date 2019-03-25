@@ -1,67 +1,42 @@
 package com.github.windsekirun.rxsociallogin.linkedin
 
-import android.app.Activity
-import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.OAuthConstants
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_FAILED_RESULT
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.EXCEPTION_USER_CANCELLED
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseOAuthSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
-import com.github.windsekirun.rxsociallogin.intenal.oauth.LoginOAuthActivity
 import com.github.windsekirun.rxsociallogin.intenal.utils.clearCookies
-import com.github.windsekirun.rxsociallogin.intenal.utils.randomString
 import com.github.windsekirun.rxsociallogin.intenal.utils.toResultObservable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.createJSONObject
 import pyxis.uzuki.live.richutilskt.utils.getJSONString
 
-class LinkedinLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: LinkedinConfig by lazy { getPlatformConfig(PlatformType.LINKEDIN) as LinkedinConfig }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE) {
-            val jsonStr = data!!.getStringExtra(LoginOAuthActivity.RESPONSE_JSON) ?: "{}"
-            analyzeResult(jsonStr)
-        } else if (requestCode == OAuthConstants.LINKEDIN_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
-            callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED))
-        }
-    }
-
-    override fun login() {
-        val state = randomString(22)
-
-        var authUrl = "${OAuthConstants.LINKEDIN_URL}?response_type=code&" +
-                "client_id=${config.clientId}&redirect_uri=${config.redirectUri}&" +
-                "state=$state&scope=r_basicprofile"
-
-        if (config.requireEmail) authUrl += "%20r_emailaddress"
-
-        val title = config.activityTitle
-        val oauthUrl = OAuthConstants.LINKEDIN_OAUTH
-        val parameters = listOf(
-                "grant_type" to "authorization_code",
-                "redirect_uri" to config.redirectUri,
-                "client_id" to config.clientId,
-                "client_secret" to config.clientSecret)
-        val map = hashMapOf(*parameters.toTypedArray())
-
-        LoginOAuthActivity.startOAuthActivity(activity, OAuthConstants.LINKEDIN_REQUEST_CODE,
-                PlatformType.LINKEDIN, authUrl, title, oauthUrl, map)
-    }
+class LinkedinLogin constructor(activity: FragmentActivity) : BaseOAuthSocialLogin<LinkedinConfig>(activity) {
+    override fun getOAuthUrl(): String = OAuthConstants.LINKEDIN_OAUTH
+    override fun getPlatformType(): PlatformType = PlatformType.LINKEDIN
+    override fun getRequestCode(): Int = OAuthConstants.LINKEDIN_REQUEST_CODE
 
     override fun logout(clearToken: Boolean) {
         super.logout(clearToken)
         clearCookies()
     }
 
-    private fun analyzeResult(jsonStr: String) {
+    override fun getAuthUrl(): String {
+        var authUrl = "${OAuthConstants.LINKEDIN_URL}?response_type=code&" +
+                "client_id=${config.clientId}&redirect_uri=${config.redirectUri}&" +
+                "state=${getState()}&scope=r_basicprofile"
+
+        if (config.requireEmail) authUrl += "%20r_emailaddress"
+
+        return authUrl
+    }
+
+    override fun analyzeResult(jsonStr: String) {
         val jsonObject = jsonStr.createJSONObject()
         val accessToken = jsonObject?.getJSONString("access_token") ?: ""
         if (accessToken.isEmpty()) {

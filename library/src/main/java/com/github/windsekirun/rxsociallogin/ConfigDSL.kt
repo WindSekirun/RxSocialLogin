@@ -1,11 +1,16 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
+import com.github.windsekirun.rxsociallogin.amazon.AmazonConfig
+import com.github.windsekirun.rxsociallogin.bitbucket.BitbucketConfig
+import com.github.windsekirun.rxsociallogin.discord.DiscordConfig
 import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareConfig
 import com.github.windsekirun.rxsociallogin.github.GithubConfig
+import com.github.windsekirun.rxsociallogin.gitlab.GitlabConfig
 import com.github.windsekirun.rxsociallogin.google.GoogleConfig
+import com.github.windsekirun.rxsociallogin.instagram.InstagramConfig
 import com.github.windsekirun.rxsociallogin.intenal.impl.ConfigFunction
 import com.github.windsekirun.rxsociallogin.intenal.impl.invoke
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -60,6 +65,10 @@ open class BaseConfigDSLBuilder(val application: Application) {
         typeMap[PlatformType.WINDOWS] = WindowsConfig.apply(clientId)
     }
 
+    fun amazon() {
+        typeMap[PlatformType.AMAZON] = AmazonConfig.apply()
+    }
+
     internal fun build() {
         RxSocialLogin.initializeInternal(application, typeMap)
     }
@@ -110,6 +119,22 @@ class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(applicat
     fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
               setup: YahooConfig.() -> Unit = {}) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun discord(clientId: String, clientSecret: String, redirectUri: String, setup: DiscordConfig.() -> Unit = {}) {
+        typeMap[PlatformType.DISCORD] = DiscordConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun bitbucket(clientId: String, clientSecret: String, redirectUri: String, setup: BitbucketConfig.() -> Unit = {}) {
+        typeMap[PlatformType.BITBUCKET] = BitbucketConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun gitlab(clientId: String, clientSecret: String, redirectUri: String, setup: GitlabConfig.() -> Unit = {}) {
+        typeMap[PlatformType.GITLAB] = GitlabConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
+    }
+
+    fun instagram(clientId: String, clientSecret: String, redirectUri: String, setup: InstagramConfig.() -> Unit = {}) {
+        typeMap[PlatformType.INSTAGRAM] = InstagramConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
 }
 
@@ -168,6 +193,30 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
     fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
               setup: ConfigFunction<YahooConfig> = EmptyFunction()) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun discord(clientId: String, clientSecret: String, redirectUri: String,
+                setup: ConfigFunction<DiscordConfig> = EmptyFunction()) {
+        typeMap[PlatformType.DISCORD] = DiscordConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun bitbucket(clientId: String, clientSecret: String, redirectUri: String,
+                  setup: ConfigFunction<BitbucketConfig> = EmptyFunction()) {
+        typeMap[PlatformType.BITBUCKET] = BitbucketConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun gitlab(clientId: String, clientSecret: String, redirectUri: String,
+               setup: ConfigFunction<GitlabConfig> = EmptyFunction()) {
+        typeMap[PlatformType.GITLAB] = GitlabConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun instagram(clientId: String, clientSecret: String, redirectUri: String,
+               setup: ConfigFunction<InstagramConfig> = EmptyFunction()) {
+        typeMap[PlatformType.INSTAGRAM] = InstagramConfig.apply(clientId, clientSecret, redirectUri, setup)
     }
 
     internal class EmptyFunction<T> : ConfigFunction<T> {

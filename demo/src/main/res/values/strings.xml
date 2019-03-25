@@ -5,4 +5,11 @@
     <string name="twitch_redirect_uri">http://example.com/oauth/callback</string>
     <string name="wordpress_redirect_uri">http://example.com/oauth/callback</string>
     <string name="yahoo_redirect_uri">http://example.com</string>
+    <string name="discord_redirect_uri">http://example.com</string>
+    <string name="bitbucket_redirect_uri"></string>
+    <string name="gitlab_redirect_uri">http://example.com</string>
+    <string name="instagram_redirect_uri">http://example.com</string>
+
+    <string name="id_format">ID: %s</string>
+    <string name="main_title">RxSocialLogin (%s platforms)</string>
 </resources>

@@ -1,12 +1,11 @@
 package com.github.windsekirun.rxsociallogin.foursquare
 
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.foursquare.android.nativeoauth.FoursquareOAuth
 import com.github.kittinunf.fuel.httpGet
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -15,8 +14,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pyxis.uzuki.live.richutilskt.utils.*
 
-class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
-    private val config: FoursquareConfig by lazy { getPlatformConfig(PlatformType.FOURSQUARE) as FoursquareConfig }
+class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin<FoursquareConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.FOURSQUARE
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CONNECT_REQUEST_CODE) {
@@ -24,7 +23,7 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
             if (codeResponse.code != null && !codeResponse.code.isEmpty()) {
                 val intent = FoursquareOAuth.getTokenExchangeIntent(activity, config.clientId,
                         config.clientSecret, codeResponse.code)
-                activity!!.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
+                activity.startActivityForResult(intent, EXCHANGE_REQUEST_CODE)
             } else {
                 callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_USER_CANCELLED))
             }
@@ -40,8 +39,8 @@ class FoursquareLogin constructor(activity: FragmentActivity) : BaseSocialLogin(
 
     override fun login() {
         val intent = FoursquareOAuth.getConnectIntent(activity, config.clientId)
-        if (intent.resolveActivity(activity!!.packageManager) != null) {
-            activity!!.startActivityForResult(intent, CONNECT_REQUEST_CODE)
+        if (intent.resolveActivity(activity.packageManager) != null) {
+            activity.startActivityForResult(intent, CONNECT_REQUEST_CODE)
         } else {
             callbackAsFail(LoginFailedException(RxSocialLogin.EXCEPTION_FOURSQUARE_INTENT))
         }

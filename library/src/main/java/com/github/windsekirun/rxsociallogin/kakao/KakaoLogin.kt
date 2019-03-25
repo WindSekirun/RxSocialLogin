@@ -1,10 +1,9 @@
 package com.github.windsekirun.rxsociallogin.kakao
 
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import androidx.fragment.app.FragmentActivity
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
-import com.github.windsekirun.rxsociallogin.RxSocialLogin.getPlatformConfig
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -20,7 +19,8 @@ import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 import java.util.*
 
-class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin<KakaoConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.KAKAO
     private var sessionCallback: SessionCallback? = null
 
     companion object {
@@ -34,11 +34,11 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
         checkSession()
 
         // issue #38 Check 'NotSupportError' on KakaoLogin
-        if (activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
-                activity!!.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
+        if (activity.packageManager.isPackageInstalled(PACKAGE_KAKAO_TALK) ||
+                activity.packageManager.isPackageInstalled(PACKAGE_KAKAO_STORY)) {
             // if either KakaoTalk or KakaoStory is installed, so we can use TalkAuthService, StoryAuthService
             if (data != null && data.extras != null) {
-                val bundle = data.extras!!
+                val bundle = data.extras ?: return
                 val errorType = bundle.getString(EXTRA_ERROR_TYPE)
                 val errorDes = bundle.getString(EXTRA_ERROR_DESCRIPTION)
 
@@ -64,8 +64,6 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
 
         session.addCallback(sessionCallback)
         if (!session.checkAndImplicitOpen()) {
-            val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
-
             session.open(config.authType, activity)
         }
     }
@@ -111,8 +109,6 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
     }
 
     private fun requestMe() {
-        val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
-
         val requestOptions = ArrayList<String>()
         requestOptions.add("properties.nickname")
         requestOptions.add("properties.profile_image")
@@ -162,7 +158,7 @@ class KakaoLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activ
 
                 val item = LoginResultItem().apply {
                     this.id = id
-                    this.nickname = nickname
+                    this.name = nickname
                     this.profilePicture = profilePicture
                     this.thumbnailPicture = thumbnailPicture
                     this.email = email

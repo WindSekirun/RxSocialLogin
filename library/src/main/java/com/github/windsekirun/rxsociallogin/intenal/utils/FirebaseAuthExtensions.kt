@@ -36,7 +36,7 @@ internal fun FirebaseAuth.signInWithCredential(credential: AuthCredential, activ
 
                         emitter.onNext(handleSignInResult(user, platformType))
                     } else {
-                        emitter.onError(it.exception!!)
+                        emitter.onError(it.exception ?: Exception(RxSocialLogin.EXCEPTION_UNKNOWN_ERROR))
                     }
                 }
     }

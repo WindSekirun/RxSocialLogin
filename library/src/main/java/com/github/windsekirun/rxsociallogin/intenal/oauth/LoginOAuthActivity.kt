@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.github.kittinunf.fuel.httpPost
 import com.github.windsekirun.rxsociallogin.R
 import com.github.windsekirun.rxsociallogin.intenal.model.PlatformType
@@ -18,7 +18,6 @@ import com.github.windsekirun.rxsociallogin.intenal.webview.EnhanceWebView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_oauth.*
 
 class LoginOAuthActivity : AppCompatActivity() {
     private lateinit var disposable: Disposable
@@ -28,10 +27,12 @@ class LoginOAuthActivity : AppCompatActivity() {
     private lateinit var parameters: HashMap<String, String>
     private lateinit var platformType: PlatformType
     private lateinit var authorizationValue: String
+    private lateinit var webView: EnhanceWebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_oauth)
+        webView = findViewById(R.id.webView)
 
         init()
     }
@@ -62,14 +63,20 @@ class LoginOAuthActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun init() {
+        if (intent == null) {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+            return
+        }
+
         if (intent.extras == null) {
             setResult(Activity.RESULT_CANCELED)
             finish()
             return
         }
 
-        authUrl = intent.extras.getString(EXTRA_AUTH_URL)
-        oauthUrl = intent.extras.getString(EXTRA_OAUTH_URL)
+        authUrl = intent.extras.getString(EXTRA_AUTH_URL) ?: ""
+        oauthUrl = intent.extras.getString(EXTRA_OAUTH_URL) ?: ""
         platformType = intent.extras.getSerializable(EXTRA_PLATFORM) as PlatformType
         parameters = intent.extras.getSerializable(EXTRA_OAUTH_PARAMETERS) as java.util.HashMap<String, String>
         title = intent.extras.getString(EXTRA_TITLE)
@@ -80,8 +87,14 @@ class LoginOAuthActivity : AppCompatActivity() {
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String, uri: Uri, scheme: String, host: String, parameters: Map<String, String>?): Boolean {
                 try {
-                    if (!url.contains("?code=")) return false
-                    requestOAuthToken(url.getCode())
+                    if (parameters == null) { // fallback when url string is not valid
+                        if (!url.contains("?code=")) return false
+                        requestOAuthToken(url.getCode())
+                        return false
+                    }
+
+                    if (!parameters.containsKey("code")) return false
+                    requestOAuthToken(parameters["code"] ?: url.getCode()) // discord not have ?code
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -110,6 +123,10 @@ class LoginOAuthActivity : AppCompatActivity() {
             PlatformType.YAHOO -> {
                 parameters["code"] = code
                 header = "Authorization" to "Basic $authorizationValue"
+            }
+            PlatformType.DISCORD -> {
+                parameters["code"] = code
+                header = "Content-Type" to "application/x-www-form-urlencoded"
             }
             else -> {
                 parameters["code"] = code

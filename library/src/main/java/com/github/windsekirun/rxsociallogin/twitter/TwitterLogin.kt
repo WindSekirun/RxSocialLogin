@@ -1,8 +1,8 @@
 package com.github.windsekirun.rxsociallogin.twitter
 
 import android.content.Intent
-import android.support.v4.app.FragmentActivity
-import com.github.windsekirun.rxsociallogin.BaseSocialLogin
+import androidx.fragment.app.FragmentActivity
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
 import com.github.windsekirun.rxsociallogin.RxSocialLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
@@ -11,7 +11,9 @@ import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import com.twitter.sdk.android.core.models.User
 
-class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin(activity) {
+class TwitterLogin constructor(activity: FragmentActivity) : BaseSocialLogin<TwitterConfig>(activity) {
+    override fun getPlatformType(): PlatformType = PlatformType.TWITTER
+
     private val twitterAuthClient = TwitterAuthClient()
     private val twitterApiClient: TwitterApiClient by lazy { TwitterCore.getInstance().apiClient }
 

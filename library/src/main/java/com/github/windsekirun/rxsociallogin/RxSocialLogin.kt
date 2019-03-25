@@ -5,15 +5,21 @@ package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
 import android.content.Intent
-import android.support.annotation.CheckResult
-import android.support.v4.app.FragmentActivity
+import androidx.annotation.CheckResult
+import androidx.fragment.app.FragmentActivity
 import com.facebook.FacebookSdk
+import com.github.windsekirun.rxsociallogin.amazon.AmazonLogin
+import com.github.windsekirun.rxsociallogin.base.BaseSocialLogin
+import com.github.windsekirun.rxsociallogin.bitbucket.BitbucketLogin
+import com.github.windsekirun.rxsociallogin.discord.DiscordLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareLogin
 import com.github.windsekirun.rxsociallogin.github.GithubLogin
+import com.github.windsekirun.rxsociallogin.gitlab.GitlabLogin
 import com.github.windsekirun.rxsociallogin.google.GoogleLogin
+import com.github.windsekirun.rxsociallogin.instagram.InstagramLogin
 import com.github.windsekirun.rxsociallogin.intenal.exception.LoginFailedException
 import com.github.windsekirun.rxsociallogin.intenal.impl.OnResponseListener
 import com.github.windsekirun.rxsociallogin.intenal.model.LoginResultItem
@@ -46,7 +52,7 @@ import java.util.*
 
 object RxSocialLogin {
     private var configMap: MutableMap<PlatformType, SocialConfig> = HashMap()
-    private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin> = WeakHashMap()
+    private var moduleMap: WeakHashMap<PlatformType, BaseSocialLogin<*>> = WeakHashMap()
     private var application: Application? by weak(null)
 
     const val EXCEPTION_FAILED_RESULT = "Failed to get results."
@@ -69,6 +75,7 @@ object RxSocialLogin {
 
     /**
      * Initialize 'Social module object' in once by Configs on Application class
+     * and register Lifecycle Event for handling proper lifecycle-aware process in library.
      *
      * @param fragmentActivity [FragmentActivity] to initialize individual Social module object.
      */
@@ -76,6 +83,8 @@ object RxSocialLogin {
     fun initialize(fragmentActivity: FragmentActivity) {
         val map = configMap.map {
             it.key to when (it.key) {
+                AMAZON -> AmazonLogin(fragmentActivity)
+                BITBUCKET -> BitbucketLogin(fragmentActivity)
                 KAKAO -> KakaoLogin(fragmentActivity)
                 GOOGLE -> GoogleLogin(fragmentActivity)
                 FACEBOOK -> FacebookLogin(fragmentActivity)
@@ -91,11 +100,28 @@ object RxSocialLogin {
                 FOURSQUARE -> FoursquareLogin(fragmentActivity)
                 TWITCH -> TwitchLogin(fragmentActivity)
                 WINDOWS -> WindowsLogin(fragmentActivity)
+                DISCORD -> DiscordLogin(fragmentActivity)
+                GITLAB -> GitlabLogin(fragmentActivity)
+                INSTAGRAM -> InstagramLogin(fragmentActivity)
             }
         }.toMap().toMutableMap()
 
+        map.values.map {
+            it.addLifecycleEvent(fragmentActivity.lifecycle)
+        }.toMutableList()
+
         moduleMap.clear()
         moduleMap.putAll(map)
+    }
+
+    /**
+     * remove lifecycle event in Modules
+     */
+    @JvmStatic
+    fun removeLifecycleEvent(fragmentActivity: FragmentActivity) {
+        moduleMap.values.map {
+            it.removeLifecycleEvent(fragmentActivity.lifecycle)
+        }.toMutableList()
     }
 
     /**
@@ -156,7 +182,7 @@ object RxSocialLogin {
             }
         }
 
-        val newMap = mutableMapOf<PlatformType, BaseSocialLogin>()
+        val newMap = mutableMapOf<PlatformType, BaseSocialLogin<*>>()
 
         moduleMap.forEach {
             val moduleObject = it.value
@@ -189,7 +215,7 @@ object RxSocialLogin {
             throw LoginFailedException(EXCEPTION_CONFIG_MISSING)
         }
 
-        configMap[type] = config;
+        configMap[type] = config
     }
 
     internal fun initializeInternal(application: Application, map: Map<PlatformType, SocialConfig>) {
