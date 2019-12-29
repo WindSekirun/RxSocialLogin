@@ -64,7 +64,7 @@ Add the following dependencies to the `build.gradle` of the module you want to u
 
 ```groovy
 dependencies {
-	implementation 'com.github.WindSekirun:RxSocialLogin:1.2.1'
+	implementation 'com.github.WindSekirun:RxSocialLogin:1.2.5'
 	// androidx
         implementation 'com.github.WindSekirun:RxSocialLogin:1.2.5-androidx'
     
