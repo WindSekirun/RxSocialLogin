@@ -38,7 +38,7 @@ dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // RichUtils
-    implementation 'com.github.WindSekirun:RichUtilsKt:2.4.0-remove-inapp'
+    implementation 'com.github.WindSekirun:RichUtilsKt:2.4.0-exclude-inapp'
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     // fuel
