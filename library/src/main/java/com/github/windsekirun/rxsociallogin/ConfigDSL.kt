@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin
 
 import android.app.Application
+import com.github.windsekirun.rxsociallogin.apple.AppleConfig
 import com.github.windsekirun.rxsociallogin.disqus.DisqusConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.foursquare.FoursquareConfig
@@ -111,6 +112,10 @@ class ConfigDSLBuilder(application: Application) : BaseConfigDSLBuilder(applicat
               setup: YahooConfig.() -> Unit = {}) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, invoke(setup))
     }
+
+    fun apple(scopes: Array<AppleConfig.Scope>, setup: AppleConfig.() -> Unit = {}){
+        typeMap[PlatformType.APPLE] = AppleConfig.apply(scopes, invoke(setup))
+    }
 }
 
 class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application) {
@@ -168,6 +173,11 @@ class ConfigBuilder(application: Application) : BaseConfigDSLBuilder(application
     fun yahoo(clientId: String, clientSecret: String, redirectUri: String,
               setup: ConfigFunction<YahooConfig> = EmptyFunction()) {
         typeMap[PlatformType.YAHOO] = YahooConfig.apply(clientId, clientSecret, redirectUri, setup)
+    }
+
+    @JvmOverloads
+    fun apple(scopes: Array<AppleConfig.Scope>, setup: AppleConfig.() -> Unit = {}){
+        typeMap[PlatformType.APPLE] = AppleConfig.apply(scopes, invoke(setup))
     }
 
     internal class EmptyFunction<T> : ConfigFunction<T> {

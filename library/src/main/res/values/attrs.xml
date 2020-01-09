@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AppleLoginButton">
+        <attr name="imageWidth" format="reference|integer"/>
+        <attr name="imageHeight" format="reference|integer"/>
+        <attr name="imageBackgroundColor" format="enum">
+            <enum name="black" value="0"/>
+            <enum name="white" value="1"/>
+        </attr>
+        <attr name="imageBorderRadius" format="reference|integer"/>
+        <attr name="imageScale" format="reference|integer"/>
+        <attr name="hasBorder" format="reference|boolean"/>
+        <attr name="buttonType" format="enum">
+            <enum name="typeSignIn" value="0"/>
+            <enum name="typeContinue" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>

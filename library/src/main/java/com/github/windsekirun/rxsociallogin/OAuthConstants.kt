@@ -24,4 +24,6 @@ object OAuthConstants {
     const val TWITCH_URL = "https://id.twitch.tv/oauth2/authorize"
     const val TWITCH_OAUTH = "https://id.twitch.tv/oauth2/token"
     const val TWITCH_REQUEST_CODE = 105
+
+    const val APPLE_DOMAIN = "apple.com"
 }

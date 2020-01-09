@@ -1,6 +1,7 @@
 package com.github.windsekirun.rxsociallogin.test
 
 import android.app.Application
+import com.github.windsekirun.rxsociallogin.apple.AppleConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.initSocialLogin
 
@@ -89,6 +90,8 @@ class MainApplication : Application() {
                     getString(R.string.yahoo_redirect_uri)) {
                 activityTitle = "Login to Yahoo"
             }
+
+            apple(arrayOf(AppleConfig.Scope.EMAIL, AppleConfig.Scope.NAME))
         }
     }
 }

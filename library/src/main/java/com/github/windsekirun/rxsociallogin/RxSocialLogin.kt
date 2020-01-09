@@ -8,6 +8,7 @@ import android.content.Intent
 import androidx.annotation.CheckResult
 import androidx.fragment.app.FragmentActivity
 import com.facebook.FacebookSdk
+import com.github.windsekirun.rxsociallogin.apple.AppleLogin
 import com.github.windsekirun.rxsociallogin.disqus.DisqusLogin
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig
 import com.github.windsekirun.rxsociallogin.facebook.FacebookLogin
@@ -76,6 +77,7 @@ object RxSocialLogin {
     fun initialize(fragmentActivity: androidx.fragment.app.FragmentActivity) {
         val map = configMap.map {
             it.key to when (it.key) {
+                APPLE -> AppleLogin(fragmentActivity)
                 KAKAO -> KakaoLogin(fragmentActivity)
                 GOOGLE -> GoogleLogin(fragmentActivity)
                 FACEBOOK -> FacebookLogin(fragmentActivity)

@@ -183,6 +183,14 @@
         app:layout_constraintTop_toBottomOf="@+id/btnTwitch"
         app:srcCompat="@drawable/ic_yahoo" />
 
+    <ImageView
+        android:id="@+id/btnApple"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnTwitter"
+        app:layout_constraintStart_toStartOf="@id/btnTwitter"
+        app:srcCompat="@drawable/ic_apple" />
 
     <TextView
         android:id="@+id/textView2"
@@ -194,7 +202,7 @@
         android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/btnYahoo" />
+        app:layout_constraintTop_toBottomOf="@+id/btnApple" />
 
     <ScrollView
         android:layout_width="0dp"

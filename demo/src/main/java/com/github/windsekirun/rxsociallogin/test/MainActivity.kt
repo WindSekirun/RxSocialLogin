@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity() {
             RxSocialLogin.login(PlatformType.YAHOO)
         }
 
+        btnApple.setOnClickListener {
+            RxSocialLogin.login(PlatformType.APPLE)
+        }
+
         RxSocialLogin.initialize(this)
 
         RxSocialLogin.result(this)
