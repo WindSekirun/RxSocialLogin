@@ -58,6 +58,12 @@ class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
 
     override fun login() {
         checkSession()
+
+        if (sessionCallback != null) {
+            Session.getCurrentSession().removeCallback(sessionCallback)
+            sessionCallback = null
+        }
+
         sessionCallback = SessionCallback()
 
         val session = Session.getCurrentSession()
