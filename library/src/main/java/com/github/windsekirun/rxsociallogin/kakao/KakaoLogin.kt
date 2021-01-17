@@ -59,15 +59,10 @@ class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
     override fun login() {
         checkSession()
 
-        if (sessionCallback != null) {
-            Session.getCurrentSession().removeCallback(sessionCallback)
-            sessionCallback = null
-        }
-
+        removeSessionCallback()
         sessionCallback = SessionCallback()
 
         val session = Session.getCurrentSession()
-
         session.addCallback(sessionCallback)
         if (!session.checkAndImplicitOpen()) {
             val config = getPlatformConfig(PlatformType.KAKAO) as KakaoConfig
@@ -80,9 +75,7 @@ class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
         super.onDestroy()
         checkSession()
 
-        if (sessionCallback != null) {
-            Session.getCurrentSession().removeCallback(sessionCallback)
-        }
+        removeSessionCallback()
     }
 
     override fun logout(clearToken: Boolean) {
@@ -183,5 +176,12 @@ class KakaoLogin constructor(activity: androidx.fragment.app.FragmentActivity) :
                 callbackAsSuccess(item)
             }
         })
+    }
+
+    private fun removeSessionCallback() {
+        if (sessionCallback != null) {
+            Session.getCurrentSession().removeCallback(sessionCallback)
+            sessionCallback = null
+        }
     }
 }
