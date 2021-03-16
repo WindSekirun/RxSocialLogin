@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.twitter.sdk.android:twitter:3.3.0'
     // Google
     implementation 'com.google.android.gms:play-services-auth:15.0.0'
-    implementation 'com.google.firebase:firebase-auth:15.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
@@ -82,6 +82,8 @@ dependencies {
     implementation 'com.chibatching.kotpref:initializer:2.6.0'
     // guava
     implementation 'com.google.guava:guava:22.0-android'
+
+    implementation 'com.github.sooakim:rxfirebase:1.0.1'
 }
 
 task sourcesJar(type: Jar) {

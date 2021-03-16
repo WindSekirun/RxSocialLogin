@@ -3,6 +3,7 @@ package com.github.windsekirun.rxsociallogin.test;
 import android.app.Application;
 
 import com.github.windsekirun.rxsociallogin.RxSocialLogin;
+import com.github.windsekirun.rxsociallogin.apple.AppleConfig;
 import com.github.windsekirun.rxsociallogin.facebook.FacebookConfig;
 
 import java.util.ArrayList;
@@ -87,6 +88,11 @@ public class JavaApplication extends Application {
                     getString(R.string.yahoo_api_secret),
                     getString(R.string.yahoo_redirect_uri),
                     config -> config.setActivityTitle("Login to Yahoo"));
+
+            AppleConfig.Scope[] appleScopes = new AppleConfig.Scope[2];
+            appleScopes[0] = AppleConfig.Scope.EMAIL;
+            appleScopes[1] = AppleConfig.Scope.NAME;
+            builder.apple(appleScopes);
         });
     }
 }

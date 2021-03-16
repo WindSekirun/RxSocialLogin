@@ -42,7 +42,7 @@ class GoogleLogin constructor(activity: androidx.fragment.app.FragmentActivity) 
         if (requestCode == REQUEST_CODE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                val account = task.getResult(ApiException::class.java)
+                val account = task.getResult(ApiException::class.java) ?: return
                 authWithFirebase(account)
             } catch (e: ApiException) {
                 callbackAsFail(LoginFailedException(EXCEPTION_USER_CANCELLED, e))
